@@ -1,0 +1,13 @@
+.author {
+	width: 300px;
+	background-color: rgba(0, 0, 0, 0.03);
+
+	margin: 8px;
+	padding: 8px;
+	border-radius: 4px 4px;
+	border: 0.5px #dddddd solid;
+}
+
+.author:hover {
+	background-color: rgba(0, 0, 0, 0.1);
+}
