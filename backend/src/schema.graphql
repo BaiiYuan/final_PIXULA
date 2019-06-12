@@ -1,0 +1,57 @@
+type Query {
+  users(id: ID, account: String, password: String): [User!]!
+  images(author: ID): [Image!]!
+}
+
+type Mutation {
+  createUser(data: CreateUserInput!): User!
+  deleteUser(id: ID!): User!
+  updateUser(id: ID!, password: String!): User!
+  createImage(data: CreateImageInput!): Image!
+  deleteImage(id: ID!): Image!
+  updateImage(id: ID!, data: UpdateImageInput!): Image!
+}
+
+type Subscription {
+  image(author: ID!): ImageSubscriptionPayload!
+}
+
+input CreateUserInput {
+  account: String!
+  password: String!
+}
+
+input CreateImageInput {
+  id: ID!
+  author: ID!
+  filename: String!
+}
+
+input UpdateImageInput {
+  id: ID!
+  filename: String
+}
+
+type User {
+  id: ID!
+  account: String!
+  password: String!
+  images: [Image!]!
+}
+
+type Image {
+  id: ID!
+  author: User!
+  filename: String!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+type ImageSubscriptionPayload {
+  mutation: MutationType!
+  data: Image!
+}
