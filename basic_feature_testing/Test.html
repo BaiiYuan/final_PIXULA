@@ -2,10 +2,20 @@
 <html>
 <head>
     <title>Image Filter in JS</title>
+    <link rel="shortcut icon" href="./favicon.png">
+    <link href="./css/style.css" rel="stylesheet" media="screen">
+    <link href="./css/mobile-style.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="tmp.css">
+
 </head>
 <body>
-    <img id="image" src="https://i.imgur.com/LZUEDmb.jpg" height="300"><br>
-    <canvas id="canvas1" width="400px" height="400px" style="display: none;"></canvas> <br>
+
+    <div id="div_filter">
+        <img id="image" src="https://i.imgur.com/LZUEDmb.jpg" height="400">
+        <canvas id="canvas1" width="400px" height="400px"></canvas>
+    </div>
+
+
     <label>blur</label>
     <input type="range" name="blur" min="0" max="10" value="0" step="0.1" onchange="applyFilter()" data-filter="blur" data-scale="px"><br>
     <label>brightness</label>
@@ -27,14 +37,22 @@
     <br>
     <br>
     <button onclick="download_img()">Download</button>
+    <button onclick="transfer_img()">Transfer</button>
+    <br>
+    <div class="dropzone">
+        <div class="info"></div>
+    </div>
 
+    <script type="text/javascript" src="./js/imgur.js"></script>
+    <script type="text/javascript" src="./js/upload.js"></script>
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/gh/silvia-odwyer/pixels.js/dist/Pixels.js'></script>
     <script type="text/javascript">
-        var image = document.getElementById('image');
         var filterControls = document.querySelectorAll('input[type=range]');
+        var image = document.getElementById("image")
 
         var canvas = document.getElementById('canvas1');
         var ctx = canvas.getContext('2d');
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        // ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
         function applyFilter() {
             var computedFilters = '';
@@ -48,6 +66,7 @@
             var img = new Image();
             img.setAttribute('crossOrigin', 'anonymous');
             img.src = "https://i.imgur.com/LZUEDmb.jpg";
+            // console.log(image.style)
             img.onload = function() {
 
                 var computedFilters = '';
@@ -58,12 +77,24 @@
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                 out = canvas.toDataURL("image/png");
 
-                var link = document.createElement('a');
-                link.download = "processed-image.png";
-                link.href = out;
-                link.click();
+                // var link = document.createElement('a');
+                // link.download = "processed-image.png";
+                // link.href = out;
+                // link.click();
             };
         };
+
+        function transfer_img() {
+            // var filter = document.getElementById('div_filter');
+            // filter.classList.add("earlybird");
+
+
+
+            var img = document.getElementById("image");
+
+            pixelsJS.filterImg(img, "horizontal_lines");
+        };
+
     </script>
 </body>
 </html>
