@@ -25,7 +25,6 @@ class Home extends Component {
 
     this.applyFilter = this.applyFilter.bind(this);
     this.download_img = this.download_img.bind(this);
-    this.transfer_img = this.transfer_img.bind(this);
     this.initFilter = this.initFilter.bind(this);
     this.parseFIlterCss = this.parseFIlterCss.bind(this);
   }
@@ -101,22 +100,11 @@ class Home extends Component {
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       var out = canvas.toDataURL("image/png");
 
-      // var link = document.createElement('a');
-      // link.download = "processed-image.png";
-      // link.href = out;
-      // link.click();
+      var link = document.createElement('a');
+      link.download = "processed-image.png";
+      link.href = out;
+      link.click();
     };
-  };
-
-  transfer_img(e) {
-    // var filter = document.getElementById('div_filter');
-    // filter.classList.add("earlybird");
-
-
-
-    var img = document.getElementById("image");
-
-    // pixelsJS.filterImg(img, "horizontal_lines");
   };
 
   parseFIlterCss(e, css) {
@@ -190,8 +178,6 @@ class Home extends Component {
 
           <br />
           <button onClick={this.download_img}>Download</button>
-          <button onClick={this.transfer_img}>Transfer</button>
-
 
 
           <h3>Style Button</h3>
