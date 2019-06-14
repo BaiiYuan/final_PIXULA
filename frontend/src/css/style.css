@@ -361,6 +361,7 @@ h1, h2, h3, h4, h5, h6, figure {
   background: rgba(254, 232, 86, 0.9) !important;
   color: #000 !important;
 }
+
 #fh5co-header .display-tc .btn:hover, #fh5co-header .display-tc .btn:focus,
 .fh5co-cover .display-tc .btn:hover,
 .fh5co-cover .display-tc .btn:focus {
@@ -1521,4 +1522,20 @@ input[type="text"] {
 }
 .js-fullheight {
   height: 900px;
+}
+
+label#largeFile:after {
+
+  content:"Upload your image";
+
+}
+
+
+#file {
+    width: 0px;
+    height: 0px;
+}
+label#largeFile input#file {
+    width: 0px;
+    height: 0px;
 }

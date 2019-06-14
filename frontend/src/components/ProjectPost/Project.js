@@ -9,7 +9,36 @@ import {
 import "../../css/style.css" 
 import { BrowserRouter } from 'react-router-dom'
 import BasicInput from "../BasicInput.js"
-
+function input_param(name, min, max, step, datascale)
+{
+    this.name = name;
+    this.min = min;
+    this.max = max;
+    this.step = step;
+    this.datascale = datascale;
+}
+var input_param_list = [
+    new input_param("blur", "0", "10", "0.1", "px"), 
+    new input_param("brightness", "0", "2", "0.01", ""), 
+    new input_param("contrast", "0", "2", "0.01", ""), 
+    new input_param("grayscale", "0", "1", "0.01", ""), 
+    new input_param("hue_rotate", "-180", "180", "1", "deg"), 
+    new input_param("invert", "0", "1", "0.01", ""), 
+    new input_param("opacity", "0", "1", "0.01", ""), 
+    new input_param("saturate", "0", "1", "0.01", ""), 
+    new input_param("sepia", "0", "1", "0.01", ""), 
+]
+var css_filters = {
+    "1997": "sepia(.5) hue-rotate(-30) saturate(1.40)", 
+    "aden": "sepia(.2) brightness(1.15) saturate(1.4)", 
+    "amaro": "sepia(.35) contrast(1.1) brightness(1.2) saturate(1.3)", 
+    "earlybird": "sepia(.25) contrast(1.25) brightness(1.15) saturate(.9) hue-rotate(-5)", 
+    "moon": "brightness(1.4) contrast(.95) saturate(0) sepia(.35)", 
+    "toaster": "sepia(.25) contrast(1.5) brightness(.95) hue-rotate(-15)", 
+    "xpro-ii": "sepia(.45) contrast(1.25) brightness(1.75) saturate(1.3) hue-rotate(-5)", 
+    "clarendon": "sepia(.15) contrast(1.25) brightness(1.25) hue-rotate(5)", 
+    "rise": "sepia(.25) contrast(1.25) brightness(1.2) saturate(.9)"
+}
 
 export default class Project extends Component {
     constructor(props) {
@@ -170,93 +199,62 @@ export default class Project extends Component {
   render(){
     const { id } = this.props.match.params;
       return(
-	<div id="fh5co-portfolio">
-		<div class="container">
-			<div class="row animate-box">
-				<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-					<h2>{this.props.project_list[id].title}</h2>
-					<p>{this.props.project_list[id].description}</p>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-4">
-					<div class="fh5co-portfolio animate-box">
-						<div className="portfolio-entry" style={{backgroundImage: 'url(' + this.props.project_list[id].image + ')'}}></div>
-					</div>
-				</div>
-				
-			</div>
-            
-		</div>
-        <section id="container" >
-          <form>
-            <input type="file" className="input-image" onChange={this.uploadImage.bind(this)}/>
-          </form>
-          <div id="div_filter">
-              <img id="image" src={`https://i.imgur.com/${this.state.image_id}.png`} height="300" style={{display: this.state.image_id ? 'block' : 'none' }}/>
-              <canvas id="canvas1" height="300px" style={{display: 'none'}}></canvas>
-          </div>
+    <div>
+        <div id="fh5co-header">
+            <div class="container">
+                <div class="row animate-box">
+                    <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+                        <h2>{this.props.project_list[id].title}</h2>
+                        <p>{this.props.project_list[id].description}</p>
+                    </div>
+                </div>
 
-          <BasicInput
-            name="blur" min="0" max="10" value={this.state.blur[1]} step="0.1"
-            datafilter="blur" datascale="px" onChange={(e) => this.applyFilter(e)}
-          />
-          <BasicInput
-            name="brightness" min="0" max="2" value={this.state["brightness"][1]} step="0.01"
-            datafilter="brightness" datascale="" onChange={(e) => this.applyFilter(e)}
-          />
-          <BasicInput
-            name="contrast" min="0" max="2" value={this.state.contrast[1]} step="0.01"
-            datafilter="contrast" datascale="" onChange={(e) => this.applyFilter(e)}
-          />
-          <BasicInput
-            name="grayscale" min="0" max="1" value={this.state.grayscale[1]} step="0.01"
-            datafilter="grayscale" datascale="" onChange={(e) => this.applyFilter(e)}
-          />
-          <BasicInput
-            name="hue_rotate" min="-180" max="180" value={this.state.hue_rotate[1]} step="1"
-            datafilter="hue-rotate" datascale="deg" onChange={(e) => this.applyFilter(e)}
-          />
-          <BasicInput
-            name="invert" min="0" max="1" value={this.state.invert[1]} step="0.01"
-            datafilter="invert" datascale="" onChange={(e) => this.applyFilter(e)}
-          />
-          <BasicInput
-            name="opacity" min="0" max="1" value={this.state.opacity[1]} step="0.01"
-            datafilter="opacity" datascale="" onChange={(e) => this.applyFilter(e)}
-          />
-          <BasicInput
-            name="saturate" min="0" max="1" value={this.state.saturate[1]} step="0.01"
-            datafilter="saturate" datascale="" onChange={(e) => this.applyFilter(e)}
-          />
-          <BasicInput
-            name="sepia" min="0" max="1" value={this.state.sepia[1]} step="0.01"
-            datafilter="sepia" datascale="" onChange={(e) => this.applyFilter(e)}
-          />
+                <div class="col-md-12 text-center animate-box">
+                    <p>
+                        <label id="largeFile" className="btn btn-secondary btn-lg btn-learn" style = {{display: this.state.image_id ? "none": ""}}>
+                            <input type="file" id="file" className="btn btn-primary btn-lg btn-learn" className="input-image" 
+                            onChange={this.uploadImage.bind(this)}
+                            />
+                        </label>
 
-          <br />
-          <button onClick={this.download_img}>Download</button>
+                        <img id="image" src={this.state.image_id ? `https://i.imgur.com/${this.state.image_id}.png`: ""} 
+                        style = {{display: this.state.image_id ? "": "none"}}
+                        alt="Please upload an image to start this project." 
+                        class="img-responsive img-rounded"/>
+                        <canvas id="canvas1" height="300px" style={{display: 'none'}}></canvas>
+                    </p>
+                </div>
+            </div>
+	    </div>
 
+          
 
-          <h3>Style Button</h3>
-          <button onClick={() => this.resetFilter()}>Origin</button>
-          <button onClick={(e) => this.parseFIlterCss(e, "sepia(.5) hue-rotate(-30) saturate(1.40)")}>1977</button>
-          <button onClick={(e) => this.parseFIlterCss(e, "sepia(.2) brightness(1.15) saturate(1.4)")}>aden</button>
-          <button onClick={(e) => this.parseFIlterCss(e, "sepia(.35) contrast(1.1) brightness(1.2) saturate(1.3)")}>amaro</button>
-          <button onClick={(e) => this.parseFIlterCss(e, "sepia(.25) contrast(1.25) brightness(1.15) saturate(.9) hue-rotate(-5)")}>earlybird</button>
-          <button onClick={(e) => this.parseFIlterCss(e, "brightness(1.4) contrast(.95) saturate(0) sepia(.35)")}>moon</button>
-          <button onClick={(e) => this.parseFIlterCss(e, "sepia(.25) contrast(1.5) brightness(.95) hue-rotate(-15)")}>toaster</button>
-          <button onClick={(e) => this.parseFIlterCss(e, "sepia(.45) contrast(1.25) brightness(1.75) saturate(1.3) hue-rotate(-5)")}>xpro-ii</button>
-          <button onClick={(e) => this.parseFIlterCss(e, "sepia(.15) contrast(1.25) brightness(1.25) hue-rotate(5)")}>clarendon</button>
-          <button onClick={(e) => this.parseFIlterCss(e, "sepia(.25) contrast(1.25) brightness(1.2) saturate(.9)")}>rise</button>
+        {input_param_list.map(e =>
+        <BasicInput
+            name={e.name} min={e.min} max={e.max} value={this.state[e.name][1]} step={e.step}
+            datafilter={e.name} datascale="" onChange={(i) => this.applyFilter(i)}
+        />
+        )}
 
-          <br />
-          <br />
-          <br />
-          <div className="dropzone">
-              <div className="info"></div>
-          </div>
-        </section>
+        <br />
+        <button onClick={this.download_img}>Download</button>
+
+        <div id="fh5co-started">
+		<div class="overlay"></div>
+            <div class="container">
+                <div class="row animate-box">
+                    <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+                        <h2>Style Button</h2>
+                        <button class="btn btn-default btn-lg" onClick={() => this.resetFilter()}>Origin</button>
+                        {Object.keys(css_filters).map(e =>
+                            <button class="btn btn-default btn-lg" onClick={(i) => this.parseFIlterCss(i, css_filters[e])}>{e}</button> 
+                        )}
+                    </div>
+                </div>
+            </div>
+	    </div>
+       
+
 	</div>
           
         
