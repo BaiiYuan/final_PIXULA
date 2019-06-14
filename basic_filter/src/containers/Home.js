@@ -14,46 +14,32 @@ class Home extends Component {
     this.state = {
       blur: ["blur", 0, "px"],
       brightness: ["brightness", 1, ""],
-      contrast: ["contrast", NaN, ""],
-      grayscale: ["grayscale", NaN, ""],
-      hue_rotate: ["hue-rotate", NaN, "deg"],
-      invert: ["invert", NaN, ""],
-      opacity: ["opacity", NaN, ""],
-      saturate: ["saturate", NaN, ""],
-      sepia: ["sepia", NaN, ""],
+      contrast: ["contrast", 1, ""],
+      grayscale: ["grayscale", 0, ""],
+      hue_rotate: ["hue-rotate", 0, "deg"],
+      invert: ["invert", 0, ""],
+      opacity: ["opacity", 1, ""],
+      saturate: ["saturate", 1, ""],
+      sepia: ["sepia", 0, ""],
     }
 
     this.applyFilter = this.applyFilter.bind(this);
     this.download_img = this.download_img.bind(this);
-    this.initFilter = this.initFilter.bind(this);
+    this.getOrginFilter = this.getOrginFilter.bind(this);
     this.parseFIlterCss = this.parseFIlterCss.bind(this);
   }
 
-
-  initFilter() {
-    this.setState({
-      blur: ["blur", NaN, "px"],
-      brightness: ["brightness", NaN, ""],
-      contrast: ["contrast", NaN, ""],
-      grayscale: ["grayscale", NaN, ""],
-      hue_rotate: ["hue-rotate", NaN, "deg"],
-      invert: ["invert", NaN, ""],
-      opacity: ["opacity", NaN, ""],
-      saturate: ["saturate", NaN, ""],
-      sepia: ["sepia", NaN, ""],
-    }, this.useStateOnimage);
-  }
-  getClearFilter() {
+  getOrginFilter() {
     return {
-      blur: ["blur", NaN, "px"],
-      brightness: ["brightness", NaN, ""],
-      contrast: ["contrast", NaN, ""],
-      grayscale: ["grayscale", NaN, ""],
-      hue_rotate: ["hue-rotate", NaN, "deg"],
-      invert: ["invert", NaN, ""],
-      opacity: ["opacity", NaN, ""],
-      saturate: ["saturate", NaN, ""],
-      sepia: ["sepia", NaN, ""],
+      blur: ["blur", 0, "px"],
+      brightness: ["brightness", 1, ""],
+      contrast: ["contrast", 1, ""],
+      grayscale: ["grayscale", 0, ""],
+      hue_rotate: ["hue-rotate", 0, "deg"],
+      invert: ["invert", 0, ""],
+      opacity: ["opacity", 1, ""],
+      saturate: ["saturate", 1, ""],
+      sepia: ["sepia", 0, ""],
     }
   }
 
@@ -109,7 +95,7 @@ class Home extends Component {
 
   parseFIlterCss(e, css) {
     let cssArr = css.split(" ")
-    var obj = this.getClearFilter()
+    var obj = this.getOrginFilter()
     cssArr.forEach(function(element) {
       var name = element.split("(")[0]
       if (name === "hue-rotate") {
@@ -120,12 +106,13 @@ class Home extends Component {
       tmp[1] = value
       obj[name] = tmp
     });
-    // console.log(obj)
+    console.log(obj)
     this.setState(obj, this.useStateOnimage)
   }
 
   resetFilter() {
-    this.initFilter()
+    var obj = this.getOrginFilter()
+    this.setState(obj, this.useStateOnimage)
   }
 
   render() {
@@ -146,31 +133,31 @@ class Home extends Component {
             datafilter="brightness" datascale="" onChange={(e) => this.applyFilter(e)}
           />
           <BasicInput
-            name="contrast" min="0" max="2" value="1" step="0.01"
+            name="contrast" min="0" max="2" value={this.state.contrast[1]} step="0.01"
             datafilter="contrast" datascale="" onChange={(e) => this.applyFilter(e)}
           />
           <BasicInput
-            name="grayscale" min="0" max="1" value="0" step="0.01"
+            name="grayscale" min="0" max="1" value={this.state.grayscale[1]} step="0.01"
             datafilter="grayscale" datascale="" onChange={(e) => this.applyFilter(e)}
           />
           <BasicInput
-            name="hue_rotate" min="-180" max="180" value="0" step="1"
+            name="hue_rotate" min="-180" max="180" value={this.state.hue_rotate[1]} step="1"
             datafilter="hue-rotate" datascale="deg" onChange={(e) => this.applyFilter(e)}
           />
           <BasicInput
-            name="invert" min="0" max="1" value="0" step="0.01"
+            name="invert" min="0" max="1" value={this.state.invert[1]} step="0.01"
             datafilter="invert" datascale="" onChange={(e) => this.applyFilter(e)}
           />
           <BasicInput
-            name="opacity" min="0" max="1" value="1" step="0.01"
+            name="opacity" min="0" max="1" value={this.state.opacity[1]} step="0.01"
             datafilter="opacity" datascale="" onChange={(e) => this.applyFilter(e)}
           />
           <BasicInput
-            name="saturate" min="0" max="1" value="1" step="0.01"
+            name="saturate" min="0" max="1" value={this.state.saturate[1]} step="0.01"
             datafilter="saturate" datascale="" onChange={(e) => this.applyFilter(e)}
           />
           <BasicInput
-            name="sepia" min="0" max="1" value="0" step="0.01"
+            name="sepia" min="0" max="1" value={this.state.sepia[1]} step="0.01"
             datafilter="sepia" datascale="" onChange={(e) => this.applyFilter(e)}
           />
 

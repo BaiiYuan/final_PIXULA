@@ -13,6 +13,12 @@ class BasicInput extends Component {
     this.props.onChange(e)
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.value !== prevProps.value) {
+      this.setState({value: this.props.value});
+    }
+}
+
   render() {
     return (
       <div>
