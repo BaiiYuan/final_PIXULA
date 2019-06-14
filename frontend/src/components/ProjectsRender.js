@@ -11,6 +11,7 @@ import { BrowserRouter } from 'react-router-dom'
 
 export default class ProjectsRender extends Component {
   render(){
+  	console.log(this.props.user_id)
       return(
 		<div id="fh5co-portfolio">
 		<div class="container">
