@@ -39,17 +39,19 @@ export default class ProjectsRender extends Component {
 			{project_list.map(e => 
 					<div class="col-md-4">
 					<div class="fh5co-portfolio animate-box">
-						<a href="#">
 							<div className="portfolio-entry" style={{backgroundImage: 'url(' + e.image + ')'}}></div>
 							<div className="portfolio-text">
 								<h3>{e.title}</h3>
 								<ul class="stuff">
 									<li><i class="icon-heart2"></i>200</li>
 									<li><i class="icon-eye2"></i>248</li>
-									<li><i class="icon-download3"></i>240</li>
+									<li>
+									<NavLink key={project_list.indexOf(e)} to={"/Projects/" + (project_list.indexOf(e))} class="icon-arrow-right22">
+											Edit<i class="icon-arrow-right22"></i>
+									</NavLink>
+									</li>
 								</ul>
 							</div> 
-						</a>
 					</div>
 				</div>
 			)}

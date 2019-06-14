@@ -11,6 +11,7 @@ import { BrowserRouter } from 'react-router-dom'
 import HomeRender from "../../components/HomeRender"
 import LoginRender from "../../components/LoginRender"
 import ProjectsRender from "../../components/ProjectsRender"
+import Project from "../../components/ProjectPost/Project"
 
 
 class App extends Component {
@@ -51,7 +52,7 @@ class App extends Component {
       
       <Switch>
         <Route exact path="/projects" component={ProjectsRender} />
-        <Route path="/articles/:id?" component={HomeRender} />
+        <Route path="/projects/:id?" component={Project} />
         <Route path="/home" component={HomeRender} />
         <Route path="/login" component={LoginRender} />
         <Redirect from="/" to="/home" />
@@ -64,7 +65,7 @@ class App extends Component {
         <div class="row copyright">
           <div class="col-md-12 text-center">
             <p>
-              <small class="block">&copy; 2016 Free HTML5. All Rights Reserved.</small> 
+              <small class="block">If you're seeing this, you are probably viewing a half-completed website.</small> 
               <small class="block">Designed by <a href="http://freehtml5.co/" target="_blank">FreeHTML5.co</a> Demo Images: <a href="http://unsplash.co/" target="_blank">Unsplash</a></small>
             </p>
             <p>
