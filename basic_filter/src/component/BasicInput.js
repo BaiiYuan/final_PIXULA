@@ -8,17 +8,15 @@ class BasicInput extends Component {
       value: this.props.value,
     }
   }
-  applyFilter = (e) => {
+  applyFilter(e) {
     this.setState({value: e.target.value});
     this.props.onChange(e)
   }
-
   componentDidUpdate(prevProps) {
     if (this.props.value !== prevProps.value) {
       this.setState({value: this.props.value});
     }
-}
-
+  }
   render() {
     return (
       <div>
