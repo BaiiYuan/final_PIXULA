@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
 import { Query, Mutation } from 'react-apollo'
+import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 
 import {
   IMAGES_QUERY, LOGIN_QUERY 
 } from '../../graphql'
 
-import "../css/style.css" 
+import "../../css/style.css" 
+import { BrowserRouter } from 'react-router-dom'
+import HomeRender from "../../components/HomeRender"
+import LoginRender from "../../components/LoginRender"
 
 
 class App extends Component {
@@ -18,6 +22,8 @@ class App extends Component {
  
   render() {
     return (
+      <BrowserRouter>
+
       <body>
 		
       {/*<div class="fh5co-loader"></div>*/}
@@ -31,9 +37,9 @@ class App extends Component {
               </div>
               <div class="col-xs-10 text-right menu-1">
                 <ul>
-                  <li class="active"><a href="index.html">Home</a></li>
-                  <li><a href="portfolio.html">Portfolio</a></li>
-                  <li class="btn-cta"><a href="#"><span>Login</span></a></li>
+                  <li class="active"><NavLink to="/home">Home</NavLink></li>
+                  <li><NavLink to="/projects">Projects</NavLink></li>
+                  <li class="btn-cta"><NavLink to="/login"><span>Login</span></NavLink></li>
                 </ul>
               </div>
             </div>
@@ -41,19 +47,15 @@ class App extends Component {
           </div>
         </div>
       </nav>
-    
-      <header id="fh5co-header" class="fh5co-cover js-fullheight" role="banner">
-        <div class="container">
-            <div class="col-md-8 col-md-offset-2 text-center">
-              <div class="display-t js-fullheight">
-                <div class="display-tc js-fullheight animate-box" data-animate-effect="fadeIn">
-                  <h1>Creativity Is A Wild Mind &amp; A Disciplined Eye</h1>
-                  <p><a class="btn btn-primary btn-lg btn-demo" href="#"> View Demo</a> <a class="btn btn-primary btn-lg btn-learn">Learn More</a></p>
-                </div>
-              </div>
-            </div>
-        </div>
-      </header>
+      
+      <Switch>
+        <Route exact path="/articles" component={HomeRender} />
+        <Route path="/articles/:id?" component={HomeRender} />
+        <Route path="/home" component={HomeRender} />
+        <Route path="/login" component={LoginRender} />
+        <Redirect from="/" to="/home" />
+      </Switch>
+
     
       <div id="fh5co-features">
         <div class="container">
@@ -190,6 +192,8 @@ class App extends Component {
       
     
       </body>
+      </BrowserRouter>
+
     )
   }
 }
