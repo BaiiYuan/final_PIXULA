@@ -21,12 +21,15 @@ class Home extends Component {
       opacity: ["opacity", 1, ""],
       saturate: ["saturate", 1, ""],
       sepia: ["sepia", 0, ""],
+      image_id: NaN,//"LZUEDmb",
     }
 
     this.applyFilter = this.applyFilter.bind(this);
     this.download_img = this.download_img.bind(this);
     this.getOrginFilter = this.getOrginFilter.bind(this);
     this.parseFIlterCss = this.parseFIlterCss.bind(this);
+    this.uploadImage = this.uploadImage.bind(this);
+
   }
 
   getOrginFilter() {
@@ -57,8 +60,9 @@ class Home extends Component {
     activeState = Object.keys(activeState).map(function(keyName, keyIndex) {
       return activeState[keyName]
     })
-    activeState = activeState.filter(s => s[1]);
+    activeState = activeState.filter(s => s[1] && Array.isArray(s));
     activeState = activeState.map(s => s[0]+"("+s[1]+s[2]+") ")
+    // console.log(activeState.join(""))
     return activeState.join("")
   }
 
@@ -70,7 +74,7 @@ class Home extends Component {
   applyFilter(e) {
     this.setStateWithEvent(e)
     this.useStateOnimage()
-
+    console.log(this.state.image_id)
   };
 
   download_img(e) {
@@ -80,7 +84,7 @@ class Home extends Component {
 
     var img = new Image();
     img.setAttribute('crossOrigin', 'anonymous');
-    img.src = "https://i.imgur.com/LZUEDmb.jpg";
+    img.src = `https://i.imgur.com/${this.state.image_id}.png`;
     // console.log(image.style)
     img.onload = function() {
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
@@ -115,13 +119,62 @@ class Home extends Component {
     this.setState(obj, this.useStateOnimage)
   }
 
+  uploadImage() {
+    const r = new XMLHttpRequest()
+    const d = new FormData()
+    const e = document.getElementsByClassName('input-image')[0].files[0]
+    var u
+    var uploadImageID
+
+    const client = 'b411ccbe2c93f6e'
+
+    d.append('image', e)
+
+    r.open('POST', 'https://api.imgur.com/3/image/')
+    r.setRequestHeader('Authorization', `Client-ID ${client}`)
+    r.onreadystatechange = function () {
+      if(r.status === 200 && r.readyState === 4) {
+        let res = JSON.parse(r.responseText)
+
+        // u = `https://i.imgur.com/${res.data.id}.png`
+        // console.log(res.data.id)
+
+        // const d = document.createElement('div')
+        // d.className = 'image'
+        // document.getElementsByTagName('body')[0].appendChild(d)
+
+        // const i = document.createElement('img')
+        // i.className = 'image-src'
+        // i.src = u
+        // document.getElementsByClassName('image')[0].appendChild(i)
+
+        // const a = document.createElement('a')
+        // a.className= 'image-link'
+        // a.href = u
+        // document.getElementsByClassName('image')[0].appendChild(a)
+
+        // const p = document.createElement('p')
+        // p.className = 'image-url'
+        // p.innerHTML = u
+        // document.getElementsByClassName('image-link')[0].appendChild(p)
+
+        this.setState({image_id: res.data.id})
+      }
+    }.bind(this)
+    r.send(d)
+    // this.setState({image_id: res.data.id})
+  }
+
   render() {
     return (
       <BrowserRouter>
         <section id="container" >
+          <form>
+            <input type="file" className="input-image" onChange={this.uploadImage.bind(this)}/>
+          </form>
           <div id="div_filter">
-              <img id="image" src="https://i.imgur.com/LZUEDmb.jpg" height="300" />
-              <canvas id="canvas1" height="300px"></canvas>
+              <img id="image" src={`https://i.imgur.com/${this.state.image_id}.png`} height="300" style={{display: this.state.image_id ? 'block' : 'none' }}/>
+              <canvas id="canvas1" height="300px" style={{display: 'none'}}></canvas>
           </div>
 
           <BasicInput
