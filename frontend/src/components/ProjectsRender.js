@@ -8,21 +8,6 @@ import {
 
 import "../css/style.css" 
 import { BrowserRouter } from 'react-router-dom'
-var images =  "../images/portfolio-2.jpg";
-
-function projectObj(title, image) {
-  this.title = title;
-  this.image = image;
-}
-
-var project_list = [
-  new projectObj("Project 1", "../images/portfolio-1.jpg"),
-  new projectObj("Project 2", "../images/portfolio-2.jpg"), 
-  new projectObj("Project 3", "../images/portfolio-3.jpg"),
-  new projectObj("Project 4", "../images/portfolio-4.jpg"),
-  new projectObj("Project 5", "../images/portfolio-5.jpg"),
-  new projectObj("Project 6", "../images/portfolio-6.jpg"),
-];
 
 export default class ProjectsRender extends Component {
   render(){
@@ -36,17 +21,18 @@ export default class ProjectsRender extends Component {
 				</div>
 			</div>
 			<div class="row">
-			{project_list.map(e => 
+			{this.props.project_list.map(e => 
 					<div class="col-md-4">
 					<div class="fh5co-portfolio animate-box">
 							<div className="portfolio-entry" style={{backgroundImage: 'url(' + e.image + ')'}}></div>
 							<div className="portfolio-text">
 								<h3>{e.title}</h3>
+								<p>{e.description}</p>
 								<ul class="stuff">
 									<li><i class="icon-heart2"></i>200</li>
 									<li><i class="icon-eye2"></i>248</li>
 									<li>
-									<NavLink key={project_list.indexOf(e)} to={"/Projects/" + (project_list.indexOf(e))} class="icon-arrow-right22">
+									<NavLink key={this.props.project_list.indexOf(e)} to={"/Projects/" + (this.props.project_list.indexOf(e))} class="icon-arrow-right22">
 											Edit<i class="icon-arrow-right22"></i>
 									</NavLink>
 									</li>

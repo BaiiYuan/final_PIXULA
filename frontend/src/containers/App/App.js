@@ -13,6 +13,22 @@ import LoginRender from "../../components/LoginRender"
 import ProjectsRender from "../../components/ProjectsRender"
 import Project from "../../components/ProjectPost/Project"
 
+var template_text = "some description";
+
+function projectObj(title, description, image) {
+	this.title = title;
+	this.description = template_text;
+  this.image = image;
+}
+
+var project_list = [
+  new projectObj("Project 1", template_text, "../images/portfolio-1.jpg"),
+  new projectObj("Project 2", template_text, "../images/portfolio-2.jpg"), 
+  new projectObj("Project 3", template_text, "../images/portfolio-3.jpg"),
+  new projectObj("Project 4", template_text, "../images/portfolio-4.jpg"),
+  new projectObj("Project 5", template_text, "../images/portfolio-5.jpg"),
+  new projectObj("Project 6", template_text, "../images/portfolio-6.jpg"),
+];
 
 class App extends Component {
   state = {
@@ -35,7 +51,7 @@ class App extends Component {
           <div class="container">
             <div class="row">
               <div class="col-xs-2">
-                <div id="fh5co-logo"><a href="index.html">Baiyuan<span>.</span></a></div>
+                <div id="fh5co-logo"><NavLink to="/home">Baiyuan<span>.</span></NavLink></div>
               </div>
               <div class="col-xs-10 text-right menu-1">
                 <ul>
@@ -51,8 +67,8 @@ class App extends Component {
       </nav>
       
       <Switch>
-        <Route exact path="/projects" component={ProjectsRender} />
-        <Route path="/projects/:id?" component={Project} />
+        <Route exact path="/projects" component={() => <ProjectsRender  project_list = {project_list}/>} />
+        <Route path="/projects/:id?" component={(props) => <Project {...props} project_list = {project_list}/>} />
         <Route path="/home" component={HomeRender} />
         <Route path="/login" component={LoginRender} />
         <Redirect from="/" to="/home" />
