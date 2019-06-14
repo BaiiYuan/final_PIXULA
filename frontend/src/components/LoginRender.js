@@ -29,12 +29,12 @@ export default class LoginRender extends Component {
               </div>
               <div class="col-md-7 col-md-push-1 animate-box">
                 <div class="row">
-                  <div class="col-md-12">
+                  <div class="col-md-10">
                     <div class="form-group">
                       <input type="text" class="form-control" placeholder="Account Name"/>
                     </div>
                   </div>
-                  <div class="col-md-12">
+                  <div class="col-md-10">
                     <div class="form-group">
                       <input type="text" class="form-control" placeholder="Password"/>
                     </div>
