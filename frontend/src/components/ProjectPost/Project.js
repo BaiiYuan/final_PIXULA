@@ -241,16 +241,12 @@ export default class Project extends Component {
 
         <div id="fh5co-started">
 		<div class="overlay"></div>
-            <div class="container">
-                <div class="row animate-box">
-                    <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-                        <h2>Style Button</h2>
-                        <button class="btn btn-default btn-lg" onClick={() => this.resetFilter()}>Origin</button>
-                        {Object.keys(css_filters).map(e =>
-                            <button class="btn btn-default btn-lg" onClick={(i) => this.parseFIlterCss(i, css_filters[e])}>{e}</button> 
-                        )}
-                    </div>
-                </div>
+            <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+                <h2>Style Button</h2>
+                <button class="btn btn-default btn-sm" onClick={() => this.resetFilter()}>Origin</button>
+                {Object.keys(css_filters).map(e =>
+                    <button class="btn btn-default btn-sm" onClick={(i) => this.parseFIlterCss(i, css_filters[e])}>{e}</button> 
+                )}
             </div>
 	    </div>
        
