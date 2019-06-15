@@ -27,10 +27,12 @@ export default class ProjectsRender extends Component {
 	                if (!loading && !error) {
 	                	if (data.projects !== undefined) {
 	                		return (
-	                			data.projects.map(e => 
+	                			data.projects.map(e => {
+	                				console.log(e)
+	                				return (
 									<div class="col-md-4">
 										<div class="fh5co-portfolio animate-box">
-												<div className="portfolio-entry" style={{backgroundImage: 'url(' + e.image + ')'}}></div>
+												<div className="portfolio-entry" style={{backgroundImage: 'url(' + e.image_id + ')'}}></div>
 												<div className="portfolio-text">
 													<h3>{e.title}</h3>
 													<p>{e.description}</p>
@@ -46,6 +48,8 @@ export default class ProjectsRender extends Component {
 												</div> 
 										</div>
 									</div>
+									)
+									}
 								)
 	                		)
 	                	} 
