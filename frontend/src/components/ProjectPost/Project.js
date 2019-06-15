@@ -52,7 +52,8 @@ export default class Project extends Component {
           invert: ["invert", 0, ""],
           opacity: ["opacity", 1, ""],
           saturate: ["saturate", 1, ""],
-          sepia: ["sepia", 0, ""]
+          sepia: ["sepia", 0, ""], 
+          //image_id: ""
         }
     
         this.applyFilter = this.applyFilter.bind(this);
@@ -166,29 +167,6 @@ export default class Project extends Component {
         r.onreadystatechange = function () {
           if(r.status === 200 && r.readyState === 4) {
             let res = JSON.parse(r.responseText)
-    
-            // u = `https://i.imgur.com/${res.data.id}.png`
-            // console.log(res.data.id)
-    
-            // const d = document.createElement('div')
-            // d.className = 'image'
-            // document.getElementsByTagName('body')[0].appendChild(d)
-    
-            // const i = document.createElement('img')
-            // i.className = 'image-src'
-            // i.src = u
-            // document.getElementsByClassName('image')[0].appendChild(i)
-    
-            // const a = document.createElement('a')
-            // a.className= 'image-link'
-            // a.href = u
-            // document.getElementsByClassName('image')[0].appendChild(a)
-    
-            // const p = document.createElement('p')
-            // p.className = 'image-url'
-            // p.innerHTML = u
-            // document.getElementsByClassName('image-link')[0].appendChild(p)
-    
             this.setState({image_id: res.data.id})
           }
         }.bind(this)
@@ -223,6 +201,7 @@ export default class Project extends Component {
               }
 
               this.setState(new_state)
+              console.log(this.state, project.invert)
 
 
             }
