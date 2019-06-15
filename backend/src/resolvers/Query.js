@@ -19,6 +19,11 @@ const Query = {
     return db.projects.filter(project => {
       return project.author === args.author
     })
+  },
+  project(parent, args, { db }, info) {
+    return db.projects.find(project => {
+      return project.id === args.id
+    })
   }
 }
 
