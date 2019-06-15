@@ -1,4 +1,4 @@
-const Image = {
+const Project = {
   author(parent, args, { db }, info) {
     return db.users.find(user => {
       return user.id === parent.author
@@ -6,4 +6,4 @@ const Image = {
   }
 }
 
-export { Image as default }
+export { Project as default }
