@@ -106,7 +106,7 @@ render(){
                     <div class="row animate-box">
                         <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
                             <input type="text" className="our_input_text_h2" 
-                            placeholder="Click to edit title"
+                            placeholder="Click to add title"
                             onChange={e => this.setState({title: e.target.value})} />
                             <input type="text" class="our_input_text_p" 
                               placeholder="Click to add description."

@@ -239,10 +239,12 @@ export default class Project extends Component {
                   <div class="row animate-box">
                       <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
                           <input type="text" className="our_input_text_h2" 
-                            placeholder={this.props.project_list[id].title}
+                            placeholder={this.state.title}
+                            value={this.state.title}
                             onChange={e => this.setState({title: e.target.value})} />
                             <input type="text" class="our_input_text_p" 
-                              placeholder={this.props.project_list[id].description}
+                              placeholder={this.state.description}
+                              value={this.state.description}
                               onChange={e => this.setState({description: e.target.value})}/>
                       </div>
                   </div>
