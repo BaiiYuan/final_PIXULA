@@ -27,37 +27,53 @@ export default class ProjectsRender extends Component {
 	                if (!loading && !error) {
 	                	if (data.projects !== undefined) {
 	                		return (
-	                			data.projects.map(e => {
-	                				console.log(e)
-	                				return (
-									<div class="col-md-4">
-										<div class="fh5co-portfolio animate-box">
-												<div className="portfolio-entry" style={{backgroundImage: 'url(' + e.image_id + ')'}}></div>
-												<div className="portfolio-text">
-													<h3>{e.title}</h3>
-													<p>{e.description}</p>
-													<ul class="stuff">
-														<li><i class="icon-heart2"></i>200</li>
-														<li><i class="icon-eye2"></i>248</li>
-														<li>
-														<NavLink key={data.projects.indexOf(e)} to={"/Projects/" + (data.projects.indexOf(e))} class="icon-arrow-right22">
-																Edit<i class="icon-arrow-right22"></i>
-														</NavLink>
-														</li>
-													</ul>
-												</div> 
-										</div>
-									</div>
-									)
-									}
-								)
+	                			data.projects.map(e => 
+													<div class="col-md-4">
+														<div class="fh5co-portfolio animate-box">
+																<div className="portfolio-entry" style={{backgroundImage: 'url(' + e.image_id + ')'}}></div>
+																<div className="portfolio-text">
+																	<h3>{e.title}</h3>
+																	<p>{e.description}</p>
+																	<ul class="stuff">
+																		<li><i class="icon-heart2"></i>200</li>
+																		<li><i class="icon-eye2"></i>248</li>
+																		<li>
+																		<NavLink key={data.projects.indexOf(e)} to={"/Projects/" + (data.projects.indexOf(e))} class="icon-arrow-right22">
+																				Edit<i class="icon-arrow-right22"></i>
+																		</NavLink>
+																		</li>
+																	</ul>
+																</div> 
+														</div>
+													</div>
+												)
 	                		)
-	                	} 
+										} 
 	                }
-
+								
 	                return <div></div>
              	}}
 			</Query>
+
+			<div class="col-md-4">
+				<div class="fh5co-portfolio animate-box">
+						<div className="portfolio-entry" style={{backgroundImage: 'url(../images/add.png)'}}></div>
+						<div className="portfolio-text">
+							<h3>Add new</h3>
+							<p>new project</p>
+							<ul class="stuff">
+								<li><i class="icon-heart2"></i>200</li>
+								<li><i class="icon-eye2"></i>248</li>
+								<li>
+								<NavLink to={"/New/"} class="icon-arrow-right22">
+										Edit<i class="icon-arrow-right22"></i>
+								</NavLink>
+								</li>
+							</ul>
+						</div> 
+				</div>
+			</div>
+
 			</div>
 		</div>
 	</div>

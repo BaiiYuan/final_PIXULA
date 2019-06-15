@@ -53,7 +53,7 @@ export default class Project extends Component {
           opacity: ["opacity", 1, ""],
           saturate: ["saturate", 1, ""],
           sepia: ["sepia", 0, ""],
-          image_id: NaN,//"LZUEDmb",
+          image_id: "tDwPQWl",//"LZUEDmb",
         }
     
         this.applyFilter = this.applyFilter.bind(this);
