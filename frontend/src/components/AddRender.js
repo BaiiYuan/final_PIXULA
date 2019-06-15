@@ -13,8 +13,13 @@ export default class AddRender extends Component {
       super(props);
       this.state = {
         image_id: NaN,//"LZUEDmb",
+        title: "",
+        description: ""
       }
   
+    }
+    save() {
+      console.log("Save!")
     }
   
     setStateWithEvent(e) {
@@ -93,6 +98,12 @@ render(){
             <div id="fh5co-header">
                 <div class="container">
                     <div class="row animate-box">
+                      <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+                        <h2>Step 1</h2>
+                        <p>Name your project, description, and upload the wource image!</p>
+                      </div>
+                    </div>
+                    <div class="row animate-box">
                         <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
                             <h2>New project title</h2>
                             <p>New project description</p>
@@ -115,6 +126,14 @@ render(){
                         </p>
                     </div>
                 </div>
+          </div>
+          <div id="fh5co-started">
+            <div class="overlay"></div>
+                    <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+                        <h2>Step 2</h2>
+                        <p>Start the project!</p>
+                        <button class="btn btn-default btn-sm" onClick={() => this.save()}>Create project</button>
+              </div>
           </div>
         </div>
         
