@@ -86,15 +86,15 @@ export const UPDATE_PROJECT_MUTATION = gql`
     $title: String!
     $description: String!
     $image_id: String!
-    $blur: Float!
-    $brightness: Float!
-    $contrast: Float!
-    $grayscale: Float!
-    $hue_rotate: Float!
-    $invert: Float!
-    $opacity: Float!
-    $saturate: Float!
-    $sepia: Float!
+    $blur: String!
+    $brightness: String!
+    $contrast: String!
+    $grayscale: String!
+    $hue_rotate: String!
+    $invert: String!
+    $opacity: String!
+    $saturate: String!
+    $sepia: String!
   ) {
     updateProject(
       id: $id

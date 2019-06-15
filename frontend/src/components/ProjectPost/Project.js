@@ -3,7 +3,8 @@ import { Query, Mutation, renderToStringWithData } from 'react-apollo'
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 
 import {
-  PROJECT_INFO_QUERY
+  PROJECT_INFO_QUERY,
+  UPDATE_PROJECT_MUTATION
 } from '../../graphql'
 
 import "../../css/style.css" 
@@ -106,7 +107,6 @@ export default class Project extends Component {
       applyFilter(e) {
         this.setStateWithEvent(e)
         this.useStateOnimage()
-        console.log(this.state.image_id)
       };
     
       download_img(e) {
@@ -167,12 +167,37 @@ export default class Project extends Component {
         r.onreadystatechange = function () {
           if(r.status === 200 && r.readyState === 4) {
             let res = JSON.parse(r.responseText)
-            this.setState({image_id: res.data.id})
+
+            console.log(this.state.image_id)
+            console.log(res.data.id)
+            this.setState({image_id: `https://i.imgur.com/${res.data.id}.png`})
           }
         }.bind(this)
         r.send(d)
         // this.setState({image_id: res.data.id})
       }
+
+  handleSave = e => {
+    this.uploadImage()
+    this.updateProject({
+      variables: {
+        id: this.props.match.params.id,
+        title: this.state.title,
+        description: this.state.description,
+        image_id: this.state.image_id,
+        blur: this.state.blur[1],
+        brightness: this.state.brightness[1],
+        contrast: this.state.contrast[1],
+        grayscale: this.state.grayscale[1],
+        hue_rotate: this.state.hue_rotate[1],
+        invert: this.state.invert[1],
+        opacity: this.state.opacity[1],
+        saturate: this.state.saturate[1],
+        sepia: this.state.sepia[1]
+      }
+    })
+  }
+
   render(){
     const { id } = this.props.match.params
     console.log(id)
@@ -213,6 +238,12 @@ export default class Project extends Component {
     } else {
       return (
         <div>
+          <Mutation mutation={UPDATE_PROJECT_MUTATION}>
+            {updateProject => {
+              this.updateProject = updateProject
+              return <div></div>
+            }}
+          </Mutation>
           <div id="fh5co-header">
               <div class="container">
                   <div class="row animate-box">
@@ -258,7 +289,7 @@ export default class Project extends Component {
 
           <br />
           <button onClick={this.download_img}>Download</button>
-          <button onClick={() => {}}>Save</button>
+          <button onClick={this.handleSave}>Save</button>
 
           <div id="fh5co-started">
       <div class="overlay"></div>

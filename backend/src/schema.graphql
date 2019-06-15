@@ -34,15 +34,15 @@ input UpdateProjectInput {
   title: String!
   description: String!
   image_id: String!
-  blur: Float!
-  brightness: Float!
-  contrast: Float!
-  grayscale: Float!
-  hue_rotate: Float!
-  invert: Float!
-  opacity: Float!
-  saturate: Float!
-  sepia: Float!
+  blur: String!
+  brightness: String!
+  contrast: String!
+  grayscale: String!
+  hue_rotate: String!
+  invert: String!
+  opacity: String!
+  saturate: String!
+  sepia: String!
 }
 
 type User {
@@ -58,15 +58,15 @@ type Project {
   title: String!
   description: String!
   image_id: String!
-  blur: Float!
-  brightness: Float!
-  contrast: Float!
-  grayscale: Float!
-  hue_rotate: Float!
-  invert: Float!
-  opacity: Float!
-  saturate: Float!
-  sepia: Float!
+  blur: String!
+  brightness: String!
+  contrast: String!
+  grayscale: String!
+  hue_rotate: String!
+  invert: String!
+  opacity: String!
+  saturate: String!
+  sepia: String!
 
 
 }
