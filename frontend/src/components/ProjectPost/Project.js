@@ -246,6 +246,7 @@ export default class Project extends Component {
                               placeholder={this.state.description}
                               value={this.state.description}
                               onChange={e => this.setState({description: e.target.value})}/>
+
                       </div>
                   </div>
 

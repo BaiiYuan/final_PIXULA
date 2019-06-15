@@ -1,7 +1,8 @@
 type Query {
   users(id: ID, account: String, password: String): [User!]!
   projects(author: ID!): [Project!]!
-  project(id: ID!): Project
+  project(id: ID!): Project!
+  project_id(author: ID!, title: String!): Project!
 }
 
 type Mutation {
@@ -27,6 +28,12 @@ input CreateProjectInput {
   title: String!
   description: String!
   image_id: String!
+}
+
+input UpdateProjectInput {
+  title: String!
+  description: String!
+  image_id: String!
   blur: Float!
   brightness: Float!
   contrast: Float!
@@ -36,12 +43,6 @@ input CreateProjectInput {
   opacity: Float!
   saturate: Float!
   sepia: Float!
-}
-
-input UpdateProjectInput {
-  id: ID!
-  title: String
-  description: String
 }
 
 type User {

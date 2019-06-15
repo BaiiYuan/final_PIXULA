@@ -72,7 +72,7 @@ class App extends Component {
         <Route exact path="/projects" component={() => <ProjectsRender  project_list = {project_list}  user_id={this.state.user_id} />} />
         <Route path="/projects/:id?" component={(props) => <Project {...props} project_list = {project_list}/>} />
         <Route path="/home" component={HomeRender} />
-        <Route path="/new" component={AddRender} />
+        <Route path="/new" component={(props) => <AddRender {...props} user_id={this.state.user_id} />} />
         <Route path="/login" component={(props) => <LoginRender {...props} login_action_handler={user_id => {this.setState({user_id: user_id})}} />} />
         <Redirect from="/" to="/home" />
       </Switch>

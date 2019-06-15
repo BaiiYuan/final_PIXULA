@@ -47,7 +47,6 @@ const Mutation = {
   createProject(parent, args, { db, pubsub }, info) {
     const { author, title } = args.data
     const userExists = db.users.some(user => user.id === author)
-
     if (!userExists) {
       throw new Error('User not found')
     }
@@ -55,11 +54,20 @@ const Mutation = {
     const titleTaken = db.projects.some(project => project.title === title && project.author === author)
 
     if (titleTaken) {
-      throw new Error('Filename has been used')
+      throw new Error('Title has been used')
     }
-
+    
     const project = {
       id: uuidv4(),
+      blur: 0,
+      brightness: 1,
+      contrast: 1,
+      grayscale: 0,
+      hue_rotate: 0,
+      invert: 0,
+      opacity: 1,
+      saturate: 1,
+      sepia: 0,
       ...args.data
     }
 
@@ -100,15 +108,19 @@ const Mutation = {
       throw new Error('project not found')
     }
 
-    project.id = data.id
+    project.title = data.title
+    project.description = data.description
+    project.image_id = data.image_id
+    project.blur = data.blur
+    project.brightness = data.brightness
+    project.contrast = data.contrast
+    project.grayscale = data.grayscale
+    project.hue_rotate = data.hue_rotate
+    project.invert = data.invert
+    project.opacity = data.opacity
+    project.saturate = data.saturate
+    project.sepia = data.sepia
 
-    if (data.title) {
-      project.title = data.title
-    }
-
-    if (data.description) {
-      project.description = data.description
-    }
 
     pubsub.publish(`project ${project.author}`, {
       project: {
