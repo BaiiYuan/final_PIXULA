@@ -1,4 +1,4 @@
-export { IMAGES_QUERY, LOGIN_QUERY } from './queries'
+export { PROJECTS_QUERY, LOGIN_QUERY } from './queries'
 
 export {
 	CREATE_USER_MUTATION,
