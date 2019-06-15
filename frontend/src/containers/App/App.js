@@ -34,7 +34,8 @@ class App extends Component {
   state = {
     formTitle: '',
     formBody: '',
-    authorId: 1
+    authorId: 1,
+    user_id: ''
   }
 
  
@@ -67,10 +68,10 @@ class App extends Component {
       </nav>
       
       <Switch>
-        <Route exact path="/projects" component={() => <ProjectsRender  project_list = {project_list}/>} />
+        <Route exact path="/projects" component={() => <ProjectsRender  project_list = {project_list}  user_id={this.state.user_id} />} />
         <Route path="/projects/:id?" component={(props) => <Project {...props} project_list = {project_list}/>} />
         <Route path="/home" component={HomeRender} />
-        <Route path="/login" component={LoginRender} />
+        <Route path="/login" component={(props) => <LoginRender {...props} login_action_handler={user_id => {this.setState({user_id: user_id})}} />} />
         <Redirect from="/" to="/home" />
       </Switch>
 

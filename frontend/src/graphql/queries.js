@@ -1,10 +1,11 @@
 import { gql } from 'apollo-boost'
 
-export const IMAGES_QUERY = gql`
-  query Image($author: ID!) {
-    images(author: $author) {
-      id
-      filename
+export const PROJECTS_QUERY = gql`
+  query Project($author: ID!) {
+    projects(author: $author) {
+      title
+      description
+      image_id
     }
   }
 `
