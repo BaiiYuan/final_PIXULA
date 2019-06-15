@@ -26,7 +26,7 @@ const Mutation = {
 
     const deletedUsers = db.users.splice(userIndex, 1)
 
-    db.images = db.images.filter(image => image.author !== args.id)
+    db.projects = db.projects.filter(project => project.author !== args.id)
 
     return deletedUsers[0]
   },
@@ -44,75 +44,80 @@ const Mutation = {
 
     return user
   },
-  createImage(parent, args, { db, pubsub }, info) {
-    const { author, filename } = args.data
+  createProject(parent, args, { db, pubsub }, info) {
+    const { author, title } = args.data
     const userExists = db.users.some(user => user.id === author)
 
     if (!userExists) {
       throw new Error('User not found')
     }
 
-    const filenameTaken = db.images.some(image => image.filename === filename && image.author === author)
+    const titleTaken = db.projects.some(project => project.title === title && project.author === author)
 
-    if (filenameTaken) {
+    if (titleTaken) {
       throw new Error('Filename has been used')
     }
 
-    const image = {
+    const project = {
+      id: uuidv4(),
       ...args.data
     }
 
-    db.images.push(image)
+    db.projects.push(project)
 
-    pubsub.publish(`image ${image.author}`, {
-      image: {
+    pubsub.publish(`project ${project.author}`, {
+      project: {
         mutation: 'CREATED',
-        data: image
+        data: project
       }
     })
 
-    return image
+    return project
   },
-  deleteImage(parent, args, { db, pubsub }, info) {
-    const imageIndex = db.images.findIndex(image => image.id === args.id)
+  deleteProject(parent, args, { db, pubsub }, info) {
+    const projectIndex = db.projects.findIndex(project => project.id === args.id)
 
-    if (imageIndex === -1) {
-      throw new Error('Image not found')
+    if (projectIndex === -1) {
+      throw new Error('Project not found')
     }
 
-    const [image] = db.images.splice(imageIndex, 1)
+    const [project] = db.projects.splice(projectIndex, 1)
 
-    pubsub.publish(`image ${image.author}`, {
-      image: {
+    pubsub.publish(`project ${project.author}`, {
+      project: {
         mutation: 'DELETED',
-        data: image
+        data: project
       }
     })
 
-    return image
+    return project
   },
-  updateImage(parent, args, { db, pubsub }, info) {
+  updateProject(parent, args, { db, pubsub }, info) {
     const { id, data } = args
-    const image = db.images.find(image => image.id === id)
+    const project = db.projects.find(project => project.id === id)
 
-    if (!image) {
-      throw new Error('image not found')
+    if (!project) {
+      throw new Error('project not found')
     }
 
-    image.id = data.id
+    project.id = data.id
 
-    if (data.filename) {
-      image.filename = data.filename
+    if (data.title) {
+      project.title = data.title
     }
 
-    pubsub.publish(`image ${image.author}`, {
-      image: {
+    if (data.description) {
+      project.description = data.description
+    }
+
+    pubsub.publish(`project ${project.author}`, {
+      project: {
         mutation: 'UPDATED',
-        data: image
+        data: project
       }
     })
 
-    return image
+    return project
   }
 }
 

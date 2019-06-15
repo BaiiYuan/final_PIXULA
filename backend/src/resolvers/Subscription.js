@@ -1,5 +1,5 @@
 const Subscription = {
-  image: {
+  project: {
     subscribe(parent, args, { db, pubsub }, info) {
       const author = db.users.find(author => author.id === args.author)
 
@@ -7,7 +7,7 @@ const Subscription = {
         throw new Error('Author not found')
       }
 
-      return pubsub.asyncIterator(`image ${args.author}`)
+      return pubsub.asyncIterator(`project ${args.author}`)
     }
   }
 }

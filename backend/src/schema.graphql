@@ -1,19 +1,19 @@
 type Query {
   users(id: ID, account: String, password: String): [User!]!
-  images(author: ID): [Image!]!
+  projects(author: ID!): [Project!]!
 }
 
 type Mutation {
   createUser(data: CreateUserInput!): User!
   deleteUser(id: ID!): User!
   updateUser(id: ID!, password: String!): User!
-  createImage(data: CreateImageInput!): Image!
-  deleteImage(id: ID!): Image!
-  updateImage(id: ID!, data: UpdateImageInput!): Image!
+  createProject(data: CreateProjectInput!): Project!
+  deleteProject(id: ID!): Project!
+  updateProject(id: ID!, data: UpdateProjectInput!): Project!
 }
 
 type Subscription {
-  image(author: ID!): ImageSubscriptionPayload!
+  project(author: ID!): ProjectSubscriptionPayload!
 }
 
 input CreateUserInput {
@@ -21,28 +21,52 @@ input CreateUserInput {
   password: String!
 }
 
-input CreateImageInput {
-  id: ID!
+input CreateProjectInput {
   author: ID!
-  filename: String!
+  title: String!
+  description: String!
+  image_id: String!
+  blur: Float!
+  brightness: Float!
+  contrast: Float!
+  grayscale: Float!
+  hue_rotate: Float!
+  invert: Float!
+  opacity: Float!
+  saturate: Float!
+  sepia: Float!
 }
 
-input UpdateImageInput {
+input UpdateProjectInput {
   id: ID!
-  filename: String
+  title: String
+  description: String
 }
 
 type User {
   id: ID!
   account: String!
   password: String!
-  images: [Image!]!
+  projects: [Project!]!
 }
 
-type Image {
+type Project {
   id: ID!
   author: User!
-  filename: String!
+  title: String!
+  description: String!
+  image_id: String!
+  blur: Float!
+  brightness: Float!
+  contrast: Float!
+  grayscale: Float!
+  hue_rotate: Float!
+  invert: Float!
+  opacity: Float!
+  saturate: Float!
+  sepia: Float!
+
+
 }
 
 enum MutationType {
@@ -51,7 +75,7 @@ enum MutationType {
   DELETED
 }
 
-type ImageSubscriptionPayload {
+type ProjectSubscriptionPayload {
   mutation: MutationType!
-  data: Image!
+  data: Project!
 }

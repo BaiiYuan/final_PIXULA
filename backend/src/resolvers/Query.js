@@ -15,13 +15,9 @@ const Query = {
     })
 
   },
-  images(parent, args, { db }, info) {
-    if (!args.author) {
-      return db.images
-    }
-
-    return db.images.filter(image => {
-      return image.author === args.author
+  projects(parent, args, { db }, info) {
+    return db.projects.filter(project => {
+      return project.author === args.author
     })
   }
 }
