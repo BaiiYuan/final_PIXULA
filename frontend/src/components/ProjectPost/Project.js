@@ -279,6 +279,7 @@ export default class Project extends Component {
 
           <br />
           <button onClick={this.download_img}>Download</button>
+          <button onClick={() => {}}>Save</button>
 
           <div id="fh5co-started">
       <div class="overlay"></div>
