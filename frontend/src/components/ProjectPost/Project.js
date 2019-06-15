@@ -238,8 +238,8 @@ export default class Project extends Component {
               <div class="container">
                   <div class="row animate-box">
                       <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-                          <h2>{this.props.project_list[id].title}</h2>
-                          <p>{this.props.project_list[id].description}</p>
+                          <h2>{this.state.title}</h2>
+                          <p>{this.state.description}</p>
                       </div>
                   </div>
 
