@@ -19,7 +19,7 @@ export default class AddRender extends Component {
   
     }
     save() {
-      console.log("Save!")
+      console.log(this.state)
     }
   
     setStateWithEvent(e) {
@@ -105,8 +105,12 @@ render(){
                     </div>
                     <div class="row animate-box">
                         <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-                            <h2>New project title</h2>
-                            <p>New project description</p>
+                            <input type="text" className="our_input_text_h2" 
+                            placeholder="Click to edit title"
+                            onChange={e => this.setState({title: e.target.value})} />
+                            <input type="text" class="our_input_text_p" 
+                              placeholder="Click to add description."
+                              onChange={e => this.setState({description: e.target.value})}/>
                         </div>
                     </div>
 
