@@ -1,6 +1,7 @@
 type Query {
   users(id: ID, account: String, password: String): [User!]!
   projects(author: ID!): [Project!]!
+  project(id: ID!): Project
 }
 
 type Mutation {

@@ -3,7 +3,7 @@ import { Query, Mutation, renderToStringWithData } from 'react-apollo'
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 
 import {
-  IMAGES_QUERY, LOGIN_QUERY 
+  LOGIN_QUERY 
 } from '../graphql'
 
 import "../css/style.css" 

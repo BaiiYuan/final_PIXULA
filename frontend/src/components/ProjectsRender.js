@@ -3,7 +3,7 @@ import { Query, Mutation, renderToStringWithData } from 'react-apollo'
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 
 import {
-  PROJECTS_QUERY, LOGIN_QUERY 
+  PROJECTS_QUERY
 } from '../graphql'
 
 import "../css/style.css" 
@@ -40,7 +40,7 @@ export default class ProjectsRender extends Component {
 														<li><i class="icon-heart2"></i>200</li>
 														<li><i class="icon-eye2"></i>248</li>
 														<li>
-														<NavLink key={data.projects.indexOf(e)} to={"/Projects/" + (data.projects.indexOf(e))} class="icon-arrow-right22">
+														<NavLink key={e.id} to={"/Projects/" + e.id} class="icon-arrow-right22">
 																Edit<i class="icon-arrow-right22"></i>
 														</NavLink>
 														</li>
