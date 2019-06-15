@@ -206,7 +206,25 @@ export default class Project extends Component {
             if (!loading && !error) {
               console.log(data)
               let { project } = data
-              this.setState(project)
+
+              let new_state = {
+                title: project.title,
+                description: project.description,
+                blur: ["blur", project.blur, "px"],
+                brightness: ["brightness", project.brightness, ""],
+                contrast: ["contrast", project.contrast, ""],
+                grayscale: ["grayscale", project.grayscale, ""],
+                hue_rotate: ["hue-rotate", project.hue_rotate, "deg"],
+                invert: ["invert", project.invert, ""],
+                opacity: ["opacity", project.opacity, ""],
+                saturate: ["saturate", project.saturate, ""],
+                sepia: ["sepia", project.sepia, ""],
+                image_id: project.image_id
+              }
+
+              this.setState(new_state)
+
+
             }
 
             return <div></div>
