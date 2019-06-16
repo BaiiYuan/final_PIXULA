@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import { Query, Mutation, renderToStringWithData } from 'react-apollo'
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import * as mi from '@magenta/image';
 
 import {
   PROJECT_INFO_QUERY,
   UPDATE_PROJECT_MUTATION
 } from '../../graphql'
 
-import "../../css/style.css" 
+import "../../css/style.css"
 import { BrowserRouter } from 'react-router-dom'
 import BasicInput from "../BasicInput.js"
 function input_param(name, min, max, step, datascale)
@@ -19,27 +21,38 @@ function input_param(name, min, max, step, datascale)
     this.datascale = datascale;
 }
 var input_param_list = [
-    new input_param("blur", "0", "10", "0.1", "px"), 
-    new input_param("brightness", "0", "2", "0.01", ""), 
-    new input_param("contrast", "0", "2", "0.01", ""), 
-    new input_param("grayscale", "0", "1", "0.01", ""), 
-    new input_param("hue_rotate", "-180", "180", "1", "deg"), 
-    new input_param("invert", "0", "1", "0.01", ""), 
-    new input_param("opacity", "0", "1", "0.01", ""), 
-    new input_param("saturate", "0", "1", "0.01", ""), 
-    new input_param("sepia", "0", "1", "0.01", ""), 
+    new input_param("blur", "0", "10", "0.1", "px"),
+    new input_param("brightness", "0", "2", "0.01", ""),
+    new input_param("contrast", "0", "2", "0.01", ""),
+    new input_param("grayscale", "0", "1", "0.01", ""),
+    new input_param("hue_rotate", "-180", "180", "1", "deg"),
+    new input_param("invert", "0", "1", "0.01", ""),
+    new input_param("opacity", "0", "1", "0.01", ""),
+    new input_param("saturate", "0", "1", "0.01", ""),
+    new input_param("sepia", "0", "1", "0.01", ""),
 ]
 var css_filters = {
-    "1997": "sepia(.5) hue-rotate(-30) saturate(1.40)", 
-    "aden": "sepia(.2) brightness(1.15) saturate(1.4)", 
-    "amaro": "sepia(.35) contrast(1.1) brightness(1.2) saturate(1.3)", 
-    "earlybird": "sepia(.25) contrast(1.25) brightness(1.15) saturate(.9) hue-rotate(-5)", 
-    "moon": "brightness(1.4) contrast(.95) saturate(0) sepia(.35)", 
-    "toaster": "sepia(.25) contrast(1.5) brightness(.95) hue-rotate(-15)", 
-    "xpro-ii": "sepia(.45) contrast(1.25) brightness(1.75) saturate(1.3) hue-rotate(-5)", 
-    "clarendon": "sepia(.15) contrast(1.25) brightness(1.25) hue-rotate(5)", 
+    "1997": "sepia(.5) hue-rotate(-30) saturate(1.40)",
+    "aden": "sepia(.2) brightness(1.15) saturate(1.4)",
+    "amaro": "sepia(.35) contrast(1.1) brightness(1.2) saturate(1.3)",
+    "earlybird": "sepia(.25) contrast(1.25) brightness(1.15) saturate(.9) hue-rotate(-5)",
+    "moon": "brightness(1.4) contrast(.95) saturate(0) sepia(.35)",
+    "toaster": "sepia(.25) contrast(1.5) brightness(.95) hue-rotate(-15)",
+    "xpro-ii": "sepia(.45) contrast(1.25) brightness(1.75) saturate(1.3) hue-rotate(-5)",
+    "clarendon": "sepia(.15) contrast(1.25) brightness(1.25) hue-rotate(5)",
     "rise": "sepia(.25) contrast(1.25) brightness(1.2) saturate(.9)"
 }
+function style_param(name, link)
+{
+    this.name = name;
+    this.link = link;
+}
+var style_param_list = [
+  new style_param("None", NaN),
+  new style_param("Shriek", "https://cdn.glitch.com/93893683-46da-4058-829c-a05792722f2b%2Fstyle.jpg"),
+  new style_param("Starry Night", "http://vr.theatre.ntu.edu.tw/fineart/painter-wt/vangogh/vangogh-1889-2x.jpg"),
+]
+var model = new mi.ArbitraryStyleTransferNetwork();
 
 export default class Project extends Component {
     constructor(props) {
@@ -53,18 +66,22 @@ export default class Project extends Component {
           invert: ["invert", 0, ""],
           opacity: ["opacity", 1, ""],
           saturate: ["saturate", 1, ""],
-          sepia: ["sepia", 0, ""], 
+          sepia: ["sepia", 0, ""],
+          styleIndex: 0,
+          styleStrength: 1.,
+          styleImageLink: style_param_list[0].link,
           //image_id: ""
         }
-    
+
         this.applyFilter = this.applyFilter.bind(this);
         this.download_img = this.download_img.bind(this);
         this.getOrginFilter = this.getOrginFilter.bind(this);
         this.parseFIlterCss = this.parseFIlterCss.bind(this);
         this.uploadImage = this.uploadImage.bind(this);
-    
+        this.changeStyleStrength = this.changeStyleStrength.bind(this);
+        this.doStylized = this.doStylized.bind(this);
       }
-    
+
       getOrginFilter() {
         return {
           blur: ["blur", 0, "px"],
@@ -78,7 +95,7 @@ export default class Project extends Component {
           sepia: ["sepia", 0, ""],
         }
       }
-    
+
       setStateWithEvent(e) {
         // console.log(e.target.name, this.state[e.target.name])
         var tmp = this.state[e.target.name]
@@ -87,7 +104,7 @@ export default class Project extends Component {
         obj[e.target.name] = tmp
         this.setState(obj)
       }
-    
+
       getAciveState() {
         var activeState = this.state
         activeState = Object.keys(activeState).map(function(keyName, keyIndex) {
@@ -98,37 +115,37 @@ export default class Project extends Component {
         // console.log(activeState.join(""))
         return activeState.join("")
       }
-    
+
       useStateOnimage() {
         var image = document.getElementById("image")
         image.style.filter =  this.getAciveState();
       }
-    
+
       applyFilter(e) {
         this.setStateWithEvent(e)
         this.useStateOnimage()
       };
-    
+
       download_img(e) {
         var canvas = document.getElementById('canvas1');
         var ctx = canvas.getContext('2d');
         ctx.filter = this.getAciveState();
-    
+
         var img = new Image();
         img.setAttribute('crossOrigin', 'anonymous');
-        img.src = `https://i.imgur.com/${this.state.image_id}.png`;
+        img.src = this.state.image_id;
         // console.log(image.style)
         img.onload = function() {
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
           var out = canvas.toDataURL("image/png");
-    
+
           var link = document.createElement('a');
           link.download = "processed-image.png";
           link.href = out;
           link.click();
         };
       };
-    
+
       parseFIlterCss(e, css) {
         let cssArr = css.split(" ")
         var obj = this.getOrginFilter()
@@ -145,23 +162,21 @@ export default class Project extends Component {
         console.log(obj)
         this.setState(obj, this.useStateOnimage)
       }
-    
+
       resetFilter() {
         var obj = this.getOrginFilter()
         this.setState(obj, this.useStateOnimage)
       }
-    
-      uploadImage() {
+
+      uploadImage(image) {
         const r = new XMLHttpRequest()
         const d = new FormData()
-        const e = document.getElementsByClassName('input-image')[0].files[0]
-        var u
         var uploadImageID
-    
+
         const client = 'b411ccbe2c93f6e'
-    
-        d.append('image', e)
-    
+        console.log(image)
+        d.append('image', image)
+
         r.open('POST', 'https://api.imgur.com/3/image/')
         r.setRequestHeader('Authorization', `Client-ID ${client}`)
         r.onreadystatechange = function () {
@@ -169,16 +184,48 @@ export default class Project extends Component {
             let res = JSON.parse(r.responseText)
 
             console.log(this.state.image_id)
-            console.log(res.data.id)
-            this.setState({image_id: `https://i.imgur.com/${res.data.id}.png`})
+            console.log(res.data)
+            this.setState({image_id: res.data.link})
           }
         }.bind(this)
         r.send(d)
         // this.setState({image_id: res.data.id})
       }
 
+      selectStyle(e) {
+        // console.log(e.target.value)
+        this.setState({styleImageLink: style_param_list[e.target.value].link})
+      }
+
+      changeStyleStrength(e) {
+        // console.log(e.target.value)
+        this.setState({styleStrength: e.target.value})
+      }
+
+      doStylized(e) {
+        const contentImg = new Image();
+        contentImg.crossOrigin = "anonymous";
+        contentImg.src = "https://i.imgur.com/LZUEDmb.jpg";
+        const styleImg = new Image();
+        styleImg.crossOrigin = "anonymous";
+        styleImg.src = this.state.styleImageLink; // "https://i.imgur.com/7kLiJb7.png";
+        let styleStrength = this.state.styleStrength
+
+        var stylizedCanvas = document.getElementById('stylized');
+        function stylize() {
+          console.log(model)
+          model.stylize(contentImg, styleImg, styleStrength).then((imageData) => {
+            stylizedCanvas.getContext('2d').putImageData(imageData, 0, 0);
+          });
+        }
+        model.initialize().then(stylize);
+      }
+
   handleSave = e => {
-    this.uploadImage()
+    var img = new Image();
+    console.log(img)
+    img.src = this.state.image_id;
+    this.uploadImage(img)
     this.updateProject({
       variables: {
         id: this.props.match.params.id,
@@ -225,14 +272,11 @@ export default class Project extends Component {
                 image_id: project.image_id
               }
 
-              this.setState(new_state)
-              console.log(this.state, project.invert)
-
-
+              this.setState(new_state, this.useStateOnimage)
             }
 
             return <div></div>
-          }} 
+          }}
       </Query>
       )
     } else {
@@ -248,11 +292,11 @@ export default class Project extends Component {
               <div class="container">
                   <div class="row animate-box">
                       <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-                          <input type="text" className="our_input_text_h2" 
+                          <input type="text" className="our_input_text_h2"
                             placeholder={this.state.title}
                             value={this.state.title}
                             onChange={e => this.setState({title: e.target.value})} />
-                            <input type="text" class="our_input_text_p" 
+                            <input type="text" class="our_input_text_p"
                               placeholder={this.state.description}
                               value={this.state.description}
                               onChange={e => this.setState({description: e.target.value})}/>
@@ -263,14 +307,14 @@ export default class Project extends Component {
                   <div class="col-md-12 text-center animate-box">
                       <p>
                           <label id="largeFile" className="btn btn-secondary btn-lg btn-learn" style = {{display: this.state.image_id ? "none": ""}}>
-                              <input type="file" id="file" className="btn btn-primary btn-lg btn-learn" className="input-image" 
-                              onChange={this.uploadImage.bind(this)}
+                              <input type="file" id="file" className="btn btn-primary btn-lg btn-learn" className="input-image"
+                              onChange={(e) => this.uploadImage(e.target.files[0])}
                               />
                           </label>
 
-                          <img id="image" src={this.state.image_id ? this.state.image_id: ""} 
+                          <img id="image" src={this.state.image_id ? this.state.image_id: ""}
                           style = {{display: this.state.image_id ? "": "none"}}
-                          alt="Please upload an image to start this project." 
+                          alt="Please upload an image to start this project."
                           class="img-responsive img-rounded"/>
                           <canvas id="canvas1" height="300px" style={{display: 'none'}}></canvas>
                       </p>
@@ -278,7 +322,7 @@ export default class Project extends Component {
               </div>
         </div>
 
-            
+
 
           {input_param_list.map(e =>
           <BasicInput
@@ -287,23 +331,39 @@ export default class Project extends Component {
           />
           )}
 
+          <FormGroup>
+            <Label for="styleRangeLabel">Style Transfer</Label>
+            <Input type="select" name="styleSelect" id="exampleSelect" onChange={(e) => this.selectStyle(e)}>
+                {style_param_list.map((e, index) =>
+                   <option value={index} >{e.name}</option>
+                )}
+            </Input><br />
+            <img src={this.state.styleImageLink} height="300" style = {{display: this.state.styleImageLink ? "": "none"}}/> <br />
+            <Label for="styleStrengthLabel">Strength</Label>
+            <Input type="range" min="0" max="1" step="0.01" value={this.state.styleStrength} onChange={this.changeStyleStrength}/>
+            <Button onClick={this.doStylized}> Stylized! </Button>
+            <canvas id="stylized" height="700px" width="700px"/> <br />
+          </FormGroup>
+
           <br />
-          <button onClick={this.download_img}>Download</button>
-          <button onClick={this.handleSave}>Save</button>
+          <Button onClick={this.download_img}>Download</Button>
+          <Button onClick={this.handleSave}>Save</Button>
+
 
           <div id="fh5co-started">
+
       <div class="overlay"></div>
               <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
                   <h2>Style Button</h2>
                   <button class="btn btn-default btn-sm" onClick={() => this.resetFilter()}>Origin</button>
                   {Object.keys(css_filters).map(e =>
-                      <button class="btn btn-default btn-sm" onClick={(i) => this.parseFIlterCss(i, css_filters[e])}>{e}</button> 
+                      <button class="btn btn-default btn-sm" onClick={(i) => this.parseFIlterCss(i, css_filters[e])}>{e}</button>
                   )}
               </div>
         </div>
     </div>
     )}
-          
+
   }
 
 }

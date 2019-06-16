@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { InputGroup, InputGroupAddon, InputGroupText, Input } from 'reactstrap';
 
 class BasicInput extends Component {
   constructor(props) {
@@ -8,19 +9,29 @@ class BasicInput extends Component {
       value: this.props.value,
     }
   }
+
   applyFilter(e) {
-    this.setState({value: e.target.value});
+    // console.log(e.target.value)
+    if (e.target.value !== "") {
+      this.setState({value: parseFloat(e.target.value)});
+    } else {
+      this.setState({value: parseFloat(this.props.default)});
+    }
     this.props.onChange(e)
   }
+
   componentDidUpdate(prevProps) {
     if (this.props.value !== prevProps.value) {
       this.setState({value: this.props.value});
     }
   }
+
+
   render() {
     return (
-      <div>
+      <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
         <label>{this.props.datafilter}</label>
+        <br />
         <input
           type="range"
           name={this.props.name}
@@ -32,6 +43,19 @@ class BasicInput extends Component {
           datafilter={this.props.datafilter}
           datascale={this.props.datascale}
         />
+        <br />
+        <InputGroup style={{height: '30px', width: '80px'}}>
+          <Input
+            style={{height: '30px', width: '60px'}}
+            name={this.props.name}
+            value={this.state.value}
+            min={this.props.min}
+            max={this.props.max}
+            type="number"
+            step={this.props.step}
+            onChange={(e) => this.applyFilter(e)}
+          />
+        </InputGroup>
         <br />
       </div>
     )
