@@ -12,6 +12,7 @@ import {
 import "../../css/style.css"
 import { BrowserRouter } from 'react-router-dom'
 import BasicInput from "../BasicInput.js"
+import StyleTransfer from "../StyleTransfer.js"
 function input_param(name, min, max, step, datascale)
 {
     this.name = name;
@@ -42,17 +43,16 @@ var css_filters = {
     "clarendon": "sepia(.15) contrast(1.25) brightness(1.25) hue-rotate(5)",
     "rise": "sepia(.25) contrast(1.25) brightness(1.2) saturate(.9)"
 }
-function style_param(name, link)
-{
-    this.name = name;
-    this.link = link;
-}
-var style_param_list = [
-  new style_param("None", NaN),
-  new style_param("Shriek", "https://cdn.glitch.com/93893683-46da-4058-829c-a05792722f2b%2Fstyle.jpg"),
-  new style_param("Starry Night", "http://vr.theatre.ntu.edu.tw/fineart/painter-wt/vangogh/vangogh-1889-2x.jpg"),
-]
 var model = new mi.ArbitraryStyleTransferNetwork();
+
+function dataURLtoFile(dataurl, filename) {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, {type:mime});
+}
 
 export default class Project extends Component {
     constructor(props) {
@@ -69,8 +69,6 @@ export default class Project extends Component {
           sepia: ["sepia", 0, ""],
           styleIndex: 0,
           styleStrength: 1.,
-          styleImageLink: style_param_list[0].link,
-          //image_id: ""
         }
 
         this.applyFilter = this.applyFilter.bind(this);
@@ -80,6 +78,8 @@ export default class Project extends Component {
         this.uploadImage = this.uploadImage.bind(this);
         this.changeStyleStrength = this.changeStyleStrength.bind(this);
         this.doStylized = this.doStylized.bind(this);
+        this.selectStyle = this.selectStyle.bind(this);
+        this.handleSave = this.handleSave.bind(this);
       }
 
       getOrginFilter() {
@@ -97,11 +97,10 @@ export default class Project extends Component {
       }
 
       setStateWithEvent(e) {
-        // console.log(e.target.name, this.state[e.target.name])
-        var tmp = this.state[e.target.name]
-        tmp[1] = e.target.value
+        var oldValue = this.state[e.target.name]
+        oldValue[1] = e.target.value
         var obj = {}
-        obj[e.target.name] = tmp
+        obj[e.target.name] = oldValue
         this.setState(obj)
       }
 
@@ -126,24 +125,32 @@ export default class Project extends Component {
         this.useStateOnimage()
       };
 
-      download_img(e) {
-        var canvas = document.getElementById('canvas1');
-        var ctx = canvas.getContext('2d');
-        ctx.filter = this.getAciveState();
+      getRevisedImageFromCanvas() {
+        return new Promise(resolve => {
+          var canvas = document.getElementById('canvas1');
+          var ctx = canvas.getContext('2d');
+          ctx.filter = this.getAciveState();
 
-        var img = new Image();
-        img.setAttribute('crossOrigin', 'anonymous');
-        img.src = this.state.image_id;
-        // console.log(image.style)
-        img.onload = function() {
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          var out = canvas.toDataURL("image/png");
+          var img = new Image();
+          img.setAttribute('crossOrigin', 'anonymous');
+          img.src = this.state.image_id;
+          // console.log(image.style)
 
-          var link = document.createElement('a');
-          link.download = "processed-image.png";
-          link.href = out;
-          link.click();
-        };
+          img.onload = function() {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const imageDataURL = canvas.toDataURL("image/png");
+            resolve(imageDataURL)
+          };
+        })
+      }
+
+      async download_img(e) {
+        const imageDataURL = await this.getRevisedImageFromCanvas()
+        console.log(imageDataURL)
+        var link = document.createElement('a');
+        link.download = "processed-image.png";
+        link.href = imageDataURL;
+        link.click();
       };
 
       parseFIlterCss(e, css) {
@@ -168,14 +175,14 @@ export default class Project extends Component {
         this.setState(obj, this.useStateOnimage)
       }
 
-      uploadImage(image) {
+      uploadImage(imageFile) {
         const r = new XMLHttpRequest()
         const d = new FormData()
         var uploadImageID
 
         const client = 'b411ccbe2c93f6e'
-        console.log(image)
-        d.append('image', image)
+        console.log(imageFile)
+        d.append('image', imageFile)
 
         r.open('POST', 'https://api.imgur.com/3/image/')
         r.setRequestHeader('Authorization', `Client-ID ${client}`)
@@ -192,20 +199,21 @@ export default class Project extends Component {
         // this.setState({image_id: res.data.id})
       }
 
-      selectStyle(e) {
-        // console.log(e.target.value)
-        this.setState({styleImageLink: style_param_list[e.target.value].link})
+      selectStyle(index, link) {
+        this.setState({
+          styleIndex: index,
+          styleImageLink: link,
+        })
       }
 
-      changeStyleStrength(e) {
-        // console.log(e.target.value)
-        this.setState({styleStrength: e.target.value})
+      changeStyleStrength(strength) {
+        this.setState({styleStrength: strength})
       }
 
-      doStylized(e) {
+      doStylized() {
         const contentImg = new Image();
         contentImg.crossOrigin = "anonymous";
-        contentImg.src = "https://i.imgur.com/LZUEDmb.jpg";
+        contentImg.src = this.state.image_id;
         const styleImg = new Image();
         styleImg.crossOrigin = "anonymous";
         styleImg.src = this.state.styleImageLink; // "https://i.imgur.com/7kLiJb7.png";
@@ -221,29 +229,30 @@ export default class Project extends Component {
         model.initialize().then(stylize);
       }
 
-  handleSave = e => {
-    var img = new Image();
-    console.log(img)
-    img.src = this.state.image_id;
-    this.uploadImage(img)
-    this.updateProject({
-      variables: {
-        id: this.props.match.params.id,
-        title: this.state.title,
-        description: this.state.description,
-        image_id: this.state.image_id,
-        blur: this.state.blur[1],
-        brightness: this.state.brightness[1],
-        contrast: this.state.contrast[1],
-        grayscale: this.state.grayscale[1],
-        hue_rotate: this.state.hue_rotate[1],
-        invert: this.state.invert[1],
-        opacity: this.state.opacity[1],
-        saturate: this.state.saturate[1],
-        sepia: this.state.sepia[1]
+      async handleSave(e) {
+        const imageDataURL = await this.getRevisedImageFromCanvas()
+        var imageFile = dataURLtoFile(imageDataURL, 'out.png');
+        console.log(imageFile);
+
+        this.uploadImage(imageFile)
+        this.updateProject({
+          variables: {
+            id: this.props.match.params.id,
+            title: this.state.title,
+            description: this.state.description,
+            image_id: this.state.image_id,
+            blur: this.state.blur[1],
+            brightness: this.state.brightness[1],
+            contrast: this.state.contrast[1],
+            grayscale: this.state.grayscale[1],
+            hue_rotate: this.state.hue_rotate[1],
+            invert: this.state.invert[1],
+            opacity: this.state.opacity[1],
+            saturate: this.state.saturate[1],
+            sepia: this.state.sepia[1]
+          }
+        })
       }
-    })
-  }
 
   render(){
     const { id } = this.props.match.params
@@ -331,24 +340,15 @@ export default class Project extends Component {
           />
           )}
 
-          <FormGroup>
-            <Label for="styleRangeLabel">Style Transfer</Label>
-            <Input type="select" name="styleSelect" id="exampleSelect" onChange={(e) => this.selectStyle(e)}>
-                {style_param_list.map((e, index) =>
-                   <option value={index} >{e.name}</option>
-                )}
-            </Input><br />
-            <img src={this.state.styleImageLink} height="300" style = {{display: this.state.styleImageLink ? "": "none"}}/> <br />
-            <Label for="styleStrengthLabel">Strength</Label>
-            <Input type="range" min="0" max="1" step="0.01" value={this.state.styleStrength} onChange={this.changeStyleStrength}/>
-            <Button onClick={this.doStylized}> Stylized! </Button>
-            <canvas id="stylized" height="700px" width="700px"/> <br />
-          </FormGroup>
+          <StyleTransfer
+            selectStyle={this.selectStyle}
+            changeStyleStrength={this.changeStyleStrength}
+            doStylized={this.doStylized}
+          />
 
           <br />
-          <Button onClick={this.download_img}>Download</Button>
-          <Button onClick={this.handleSave}>Save</Button>
-
+          <button onClick={this.download_img}>Download</button>
+          <button onClick={this.handleSave}>Save</button>
 
           <div id="fh5co-started">
 
