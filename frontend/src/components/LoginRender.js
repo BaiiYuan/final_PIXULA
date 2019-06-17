@@ -3,10 +3,10 @@ import { Query, Mutation, renderToStringWithData } from 'react-apollo'
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 
 import {
-  LOGIN_QUERY 
+  LOGIN_QUERY
 } from '../graphql'
 
-import "../css/style.css" 
+import "../css/style.css"
 import { BrowserRouter } from 'react-router-dom'
 export default class LoginRender extends Component {
   state = {
@@ -37,7 +37,7 @@ export default class LoginRender extends Component {
                   }
                   else{
                     alert("Wrong password or username!")
-                    window.location.reload(); 
+                    window.location.reload();
                   }
                 }
 
@@ -50,7 +50,7 @@ export default class LoginRender extends Component {
         <div class="container">
             <div class="row">
               <div class="col-md-3 col-md-push-1 animate-box">
-                
+
               </div>
               <div class="col-md-7 col-md-push-1 animate-box">
                 <div class="row">
@@ -67,7 +67,7 @@ export default class LoginRender extends Component {
 
                   <div class="col-md-6">
                     <div class="form-group">
-                      <input type="submit" value="login" class="btn btn-primary btn-lg btn-demo" 
+                      <input type="submit" value="login" class="btn btn-primary btn-lg btn-demo"
                         onClick={this.handleLoginButton}/>
                     </div>
                   </div>
@@ -90,7 +90,7 @@ export default class LoginRender extends Component {
     }
   }
   handleEnterKey = e => {
-    if (e.key == "Enter" && this.state.account !== '' && this.state.password !== '') {
+    if (e.key === "Enter" && this.state.account !== '' && this.state.password !== '') {
       this.setState({login_button_on: true})
     }
   }

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Query, Mutation, renderToStringWithData } from 'react-apollo'
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
-import * as mi from '@magenta/image';
 
 import {
   PROJECT_INFO_QUERY,
@@ -43,7 +42,6 @@ var css_filters = {
     "clarendon": "sepia(.15) contrast(1.25) brightness(1.25) hue-rotate(5)",
     "rise": "sepia(.25) contrast(1.25) brightness(1.2) saturate(.9)"
 }
-var model = new mi.ArbitraryStyleTransferNetwork();
 
 function dataURLtoFile(dataurl, filename) {
     var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
@@ -69,6 +67,7 @@ export default class Project extends Component {
           sepia: ["sepia", 0, ""],
           styleIndex: 0,
           styleStrength: 1.,
+          transferStyle: false,
         }
 
         this.applyFilter = this.applyFilter.bind(this);
@@ -76,9 +75,6 @@ export default class Project extends Component {
         this.getOrginFilter = this.getOrginFilter.bind(this);
         this.parseFIlterCss = this.parseFIlterCss.bind(this);
         this.uploadImage = this.uploadImage.bind(this);
-        this.changeStyleStrength = this.changeStyleStrength.bind(this);
-        this.doStylized = this.doStylized.bind(this);
-        this.selectStyle = this.selectStyle.bind(this);
         this.handleSave = this.handleSave.bind(this);
       }
 
@@ -127,9 +123,7 @@ export default class Project extends Component {
 
       getRevisedImageFromCanvas() {
         return new Promise(resolve => {
-          var canvas = document.getElementById('canvas1');
-          var ctx = canvas.getContext('2d');
-          ctx.filter = this.getAciveState();
+          const filter = this.getAciveState();
 
           var img = new Image();
           img.setAttribute('crossOrigin', 'anonymous');
@@ -137,6 +131,14 @@ export default class Project extends Component {
           // console.log(image.style)
 
           img.onload = function() {
+            console.log(img.width, img.height)
+            var canvas = document.createElement('canvas')
+            var ctx = canvas.getContext('2d');
+
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.filter = filter
+
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
             const imageDataURL = canvas.toDataURL("image/png");
             resolve(imageDataURL)
@@ -146,7 +148,7 @@ export default class Project extends Component {
 
       async download_img(e) {
         const imageDataURL = await this.getRevisedImageFromCanvas()
-        console.log(imageDataURL)
+        // console.log(imageDataURL)
         var link = document.createElement('a');
         link.download = "processed-image.png";
         link.href = imageDataURL;
@@ -196,37 +198,6 @@ export default class Project extends Component {
           }
         }.bind(this)
         r.send(d)
-        // this.setState({image_id: res.data.id})
-      }
-
-      selectStyle(index, link) {
-        this.setState({
-          styleIndex: index,
-          styleImageLink: link,
-        })
-      }
-
-      changeStyleStrength(strength) {
-        this.setState({styleStrength: strength})
-      }
-
-      doStylized() {
-        const contentImg = new Image();
-        contentImg.crossOrigin = "anonymous";
-        contentImg.src = this.state.image_id;
-        const styleImg = new Image();
-        styleImg.crossOrigin = "anonymous";
-        styleImg.src = this.state.styleImageLink; // "https://i.imgur.com/7kLiJb7.png";
-        let styleStrength = this.state.styleStrength
-
-        var stylizedCanvas = document.getElementById('stylized');
-        function stylize() {
-          console.log(model)
-          model.stylize(contentImg, styleImg, styleStrength).then((imageData) => {
-            stylizedCanvas.getContext('2d').putImageData(imageData, 0, 0);
-          });
-        }
-        model.initialize().then(stylize);
       }
 
       async handleSave(e) {
@@ -315,17 +286,10 @@ export default class Project extends Component {
 
                   <div class="col-md-12 text-center animate-box">
                       <p>
-                          <label id="largeFile" className="btn btn-secondary btn-lg btn-learn" style = {{display: this.state.image_id ? "none": ""}}>
-                              <input type="file" id="file" className="btn btn-primary btn-lg btn-learn" className="input-image"
-                              onChange={(e) => this.uploadImage(e.target.files[0])}
-                              />
-                          </label>
-
                           <img id="image" src={this.state.image_id ? this.state.image_id: ""}
                           style = {{maxWidth: "500px", maxHeight: "500px", display: this.state.image_id ? "": "none"}}
                           alt="Please upload an image to start this project."
                           class="img-responsive img-rounded"/>
-                          <canvas id="canvas1" height="300px" style={{display: 'none'}}></canvas>
                       </p>
                   </div>
               </div>
@@ -339,12 +303,6 @@ export default class Project extends Component {
               datafilter={e.name} datascale="" onChange={(i) => this.applyFilter(i)}
           />
           )}
-
-          <StyleTransfer
-            selectStyle={this.selectStyle}
-            changeStyleStrength={this.changeStyleStrength}
-            doStylized={this.doStylized}
-          />
 
           <br />
           <button onClick={this.download_img}>Download</button>
