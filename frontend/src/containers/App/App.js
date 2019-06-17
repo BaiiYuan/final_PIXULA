@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Query, Mutation } from 'react-apollo'
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
-
+import ScrollToTop from "../../components/util/ScrollToTop"
 import {
   IMAGES_QUERY, LOGIN_QUERY 
 } from '../../graphql'
@@ -14,36 +14,20 @@ import ProjectsRender from "../../components/ProjectsRender"
 import AddRender from "../../components/AddRender"
 import Project from "../../components/ProjectPost/Project"
 
-var template_text = "some description";
-
-function projectObj(title, description, image) {
-	this.title = title;
-	this.description = template_text;
-  this.image = image;
-}
-
-var project_list = [
-  new projectObj("Project 1", template_text, "../images/portfolio-1.jpg"),
-  new projectObj("Project 2", template_text, "../images/portfolio-2.jpg"), 
-  new projectObj("Project 3", template_text, "../images/portfolio-3.jpg"),
-  new projectObj("Project 4", template_text, "../images/portfolio-4.jpg"),
-  new projectObj("Project 5", template_text, "../images/portfolio-5.jpg"),
-  new projectObj("Project 6", template_text, "../images/portfolio-6.jpg"),
-];
-
 class App extends Component {
   state = {
     formTitle: '',
     formBody: '',
     authorId: 1,
-    user_id: ''
+    user_id: '',
+    account: ''
   }
 
  
   render() {
     return (
       <BrowserRouter>
-
+      <ScrollToTop/>
       <body>
 		
       {/*<div class="fh5co-loader"></div>*/}
@@ -59,7 +43,14 @@ class App extends Component {
                 <ul>
                   <li class="active"><NavLink to="/home">Home</NavLink></li>
                   <li><NavLink to="/projects">Projects</NavLink></li>
-                  <li class="btn-cta"><NavLink to="/login"><span>Login</span></NavLink></li>
+                  <li class="btn-cta">
+                    <NavLink to="/login">
+                     <span>{
+                       this.state.user_id == "" ? "login": this.state.account
+
+                     }</span>
+                    </NavLink>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -69,11 +60,11 @@ class App extends Component {
       </nav>
       
       <Switch>
-        <Route exact path="/projects" component={() => <ProjectsRender  project_list = {project_list}  user_id={this.state.user_id} />} />
-        <Route path="/projects/:id?" component={(props) => <Project {...props} project_list = {project_list}/>} />
+        <Route exact path="/projects" component={() => <ProjectsRender user_id={this.state.user_id} account={this.state.account}/>} />
+        <Route path="/projects/:id?" component={(props) => <Project {...props}/>} />
         <Route path="/home" component={HomeRender} />
         <Route path="/new" component={(props) => <AddRender {...props} user_id={this.state.user_id} />} />
-        <Route path="/login" component={(props) => <LoginRender {...props} login_action_handler={user_id => {this.setState({user_id: user_id})}} />} />
+        <Route path="/login" component={(props) => <LoginRender {...props} login_action_handler={(user_id, account) => {this.setState({user_id: user_id, account: account})}} />} />
         <Redirect from="/" to="/home" />
       </Switch>
 

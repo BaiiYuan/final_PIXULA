@@ -18,7 +18,7 @@ export default class LoginRender extends Component {
   render(){
       console.log(this.state.login_button_on)
       return(
-        <div id="fh5co-contact">
+        <div id="fh5co-contact" onKeyPress={this.handleEnterKey}>
         <div class="container">
           <div class="row animate-box">
             <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
@@ -31,8 +31,14 @@ export default class LoginRender extends Component {
             <Query query={LOGIN_QUERY} variables={{ account: this.state.account, password: this.state.password }}>
               {({ loading, error, data, subscribeToMore }) => {
                 if (!loading && !error) {
-                  this.props.login_action_handler(data.users[0].id)
-                  return <Redirect push to="/projects" />
+                  if(data.users[0] !== undefined){
+                    this.props.login_action_handler(data.users[0].id, this.state.account)
+                    return <Redirect push to={{pathname: "/projects", state: { some_state: "asdf"}}}/>
+                  }
+                  else{
+                    alert("Wrong password or username!")
+                    window.location.reload(); 
+                  }
                 }
 
                 return <div></div>
@@ -61,7 +67,8 @@ export default class LoginRender extends Component {
 
                   <div class="col-md-6">
                     <div class="form-group">
-                      <input type="submit" value="login" class="btn btn-primary btn-lg btn-demo" onClick={this.handleLoginButton}/>
+                      <input type="submit" value="login" class="btn btn-primary btn-lg btn-demo" 
+                        onClick={this.handleLoginButton}/>
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -79,6 +86,11 @@ export default class LoginRender extends Component {
 
   handleLoginButton = e => {
     if (this.state.account !== '' && this.state.password !== '') {
+      this.setState({login_button_on: true})
+    }
+  }
+  handleEnterKey = e => {
+    if (e.key == "Enter" && this.state.account !== '' && this.state.password !== '') {
       this.setState({login_button_on: true})
     }
   }

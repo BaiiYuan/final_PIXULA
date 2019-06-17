@@ -322,7 +322,7 @@ export default class Project extends Component {
                           </label>
 
                           <img id="image" src={this.state.image_id ? this.state.image_id: ""}
-                          style = {{display: this.state.image_id ? "": "none"}}
+                          style = {{maxWidth: "500px", maxHeight: "500px", display: this.state.image_id ? "": "none"}}
                           alt="Please upload an image to start this project."
                           class="img-responsive img-rounded"/>
                           <canvas id="canvas1" height="300px" style={{display: 'none'}}></canvas>
