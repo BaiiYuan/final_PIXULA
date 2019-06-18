@@ -14,6 +14,29 @@ import ProjectsRender from "../../components/ProjectsRender"
 import AddRender from "../../components/AddRender"
 import Project from "../../components/ProjectPost/Project"
 
+const activeLink = {
+  position: "absolute",
+  bottom: "25px", 
+  left: "0", 
+  right: "0", 
+  width: "30px", 
+  height: "2px", 
+  background: "#DD356E", 
+  margin: "0 auto", 
+  color: "#000 !important", 
+  position: "relative", 
+  fontSize: "18px", 
+  padding: "30px 15px", 
+  transition: "0.5s", 
+  textDecoration: "none", 
+  backgroundColor: "transparent", 
+  boxSizing: "border-box", 
+  cursor: "pointer", 
+  listStyle: "none", 
+  fontFamily: "'Inconsolata', Arial, sans-serif", 
+  fontWeight: "400"
+
+};
 class App extends Component {
   state = {
     formTitle: '',
@@ -41,8 +64,8 @@ class App extends Component {
               </div>
               <div class="col-xs-10 text-right menu-1">
                 <ul>
-                  <li class="active"><NavLink to="/home">Home</NavLink></li>
-                  <li><NavLink to="/projects">Projects</NavLink></li>
+                  <li><NavLink activeStyle={activeLink} to="/home">Home</NavLink></li>
+                  <li><NavLink activeClassName="active" to="/projects">Projects</NavLink></li>
                   <li class="btn-cta">
                     <NavLink to="/login">
                      <span>{
