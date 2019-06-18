@@ -7,8 +7,8 @@ var model = new mi.ArbitraryStyleTransferNetwork();
 
 function style_param(name, link)
 {
-    this.name = name;
-    this.link = link;
+  this.name = name;
+  this.link = link;
 }
 var style_param_list = [
   new style_param("None", "https://i.imgur.com/HN7dRfE.jpg"),
@@ -106,7 +106,6 @@ export default class StyleTransfer extends Component {
     }
     model.initialize().then(stylize);
     console.log(stylizedCanvas.toDataURL())
-
     this.props.doStylized()
   }
 
@@ -123,10 +122,8 @@ export default class StyleTransfer extends Component {
           <img src={this.state.styleImageLink} height="300" style={{display: this.state.styleImageLink ? "": "none"}}/>
           <img src="https://i.imgur.com/fnn9J6T.png" height="100" style={{display: this.state.transferStyle ? "": "none"}}/>
           <img id="previewImage" src="" height="300" style={{display: this.state.transferStyle ? "": "none"}}/>
-        </div>
-        <br />
-        <Label for="styleStrengthLabel">Strength</Label>
-        <br />
+        </div> <br />
+        <Label for="styleStrengthLabel">Strength</Label> <br />
         <input
           type="range"
           min="0"
@@ -135,17 +132,14 @@ export default class StyleTransfer extends Component {
           value={this.state.styleStrength}
           onChange={this.changeStyleStrength}
           disabled={this.state.styleIndex === 0  || !this.props.image_id }
-        />
-        <br />
+        /> <br />
         <canvas
           id="stylized"
           width="500"
           height="500"
           style = {{maxWidth: "500px", maxHeight: "500px", display: "none"}}
-        />
-        <br />
-        <Button onClick={this.doStylized} disabled={this.state.styleIndex === 0 || !this.props.image_id}> Stylized! </Button>
-        <br />
+        /> <br />
+        <Button onClick={this.doStylized} disabled={this.state.styleIndex === 0 || !this.props.image_id}> Stylized! </Button> <br />
       </FormGroup>
     )
   }

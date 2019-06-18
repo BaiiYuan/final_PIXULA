@@ -63,4 +63,3 @@ class BasicInput extends Component {
 }
 
 export default BasicInput;
-

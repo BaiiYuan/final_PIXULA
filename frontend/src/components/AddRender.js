@@ -12,126 +12,126 @@ import {
 import "../css/style.css"
 
 function dataURLtoFile(dataurl, filename) {
-    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, {type:mime});
+  var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+  while(n--){
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, {type:mime});
 }
 
 export default class AddRender extends Component {
   constructor(props) {
-      super(props);
-      this.state = {
-        image_id: "",//"LZUEDmb",
-        title: "",
-        description: "",
-        submit: false,
-        styleIndex: 0,
-        transferStyle: false
-      }
-      this.doStylized = this.doStylized.bind(this);
-      this.selectStyle = this.selectStyle.bind(this);
-      this.uploadImage = this.uploadImage.bind(this);
-      this.handleCreateProject = this.handleCreateProject.bind(this);
-      this.changeStyleStrength = this.changeStyleStrength.bind(this);
+    super(props);
+    this.state = {
+      image_id: "",//"LZUEDmb",
+      title: "",
+      description: "",
+      submit: false,
+      styleIndex: 0,
+      transferStyle: false
     }
+    this.doStylized = this.doStylized.bind(this);
+    this.selectStyle = this.selectStyle.bind(this);
+    this.uploadImage = this.uploadImage.bind(this);
+    this.handleCreateProject = this.handleCreateProject.bind(this);
+    this.changeStyleStrength = this.changeStyleStrength.bind(this);
+  }
 
-    setStateWithEvent(e) {
-      // console.log(e.target.name, this.state[e.target.name])
-      var tmp = this.state[e.target.name]
-      tmp[1] = e.target.value
-      var obj = {}
-      obj[e.target.name] = tmp
-      this.setState(obj)
-    }
+  setStateWithEvent(e) {
+    // console.log(e.target.name, this.state[e.target.name])
+    var tmp = this.state[e.target.name]
+    tmp[1] = e.target.value
+    var obj = {}
+    obj[e.target.name] = tmp
+    this.setState(obj)
+  }
 
-    getAciveState() {
-      var activeState = this.state
-      activeState = Object.keys(activeState).map(function(keyName, keyIndex) {
-        return activeState[keyName]
-      })
-      activeState = activeState.filter(s => s[1] && Array.isArray(s));
-      activeState = activeState.map(s => s[0]+"("+s[1]+s[2]+") ")
-      // console.log(activeState.join(""))
-      return activeState.join("")
-    }
+  getAciveState() {
+    var activeState = this.state
+    activeState = Object.keys(activeState).map(function(keyName, keyIndex) {
+      return activeState[keyName]
+    })
+    activeState = activeState.filter(s => s[1] && Array.isArray(s));
+    activeState = activeState.map(s => s[0]+"("+s[1]+s[2]+") ")
+    // console.log(activeState.join(""))
+    return activeState.join("")
+  }
 
-    useStateOnimage() {
-      var image = document.getElementById("image")
-      image.style.filter =  this.getAciveState();
-    }
+  useStateOnimage() {
+    var image = document.getElementById("image")
+    image.style.filter =  this.getAciveState();
+  }
 
-    async uploadImage(imageFile) {
+  async uploadImage(imageFile) {
+    const link = await this.uploadImageAndGetLink(imageFile)
+    this.setState({image_id: link})
+  }
+
+  uploadImageAndGetLink(imageFile) {
+    return new Promise(resolve => {
+      const r = new XMLHttpRequest()
+      const d = new FormData()
+
+      const client = 'b411ccbe2c93f6e'
+      console.log(imageFile)
+      d.append('image', imageFile)
+
+      r.open('POST', 'https://api.imgur.com/3/image/')
+      r.setRequestHeader('Authorization', `Client-ID ${client}`)
+      r.onreadystatechange = function () {
+        if(r.status === 200 && r.readyState === 4) {
+          let res = JSON.parse(r.responseText)
+          console.log(this.state.image_id)
+          console.log(res.data)
+          resolve(res.data.link)
+        }
+      }.bind(this)
+      r.send(d)
+    })
+  }
+
+  async handleCreateProject(e) {
+    if (this.state.title === "" || this.state.description === "" || this.state.image_id === "")
+      return
+    var image_id = this.state.image_id
+    console.log(this.state)
+    if (this.state.styleIndex !== 0 && this.state.transferStyle) {
+      const imageDataURL = document.getElementById('previewImage').src
+      var imageFile = dataURLtoFile(imageDataURL, 'out.png');
       const link = await this.uploadImageAndGetLink(imageFile)
-      this.setState({image_id: link})
+      console.log(link)
+      image_id = link
     }
+    this.createProject(
+      {variables: {
+        author: this.props.user_id,
+        title: this.state.title,
+        description: this.state.description,
+        image_id: image_id,
+      }}
+    )
+    console.log(this.state)
+    this.setState({submit: true})
+  }
 
-    uploadImageAndGetLink(imageFile) {
-      return new Promise(resolve => {
-        const r = new XMLHttpRequest()
-        const d = new FormData()
-
-        const client = 'b411ccbe2c93f6e'
-        console.log(imageFile)
-        d.append('image', imageFile)
-
-        r.open('POST', 'https://api.imgur.com/3/image/')
-        r.setRequestHeader('Authorization', `Client-ID ${client}`)
-        r.onreadystatechange = function () {
-          if(r.status === 200 && r.readyState === 4) {
-            let res = JSON.parse(r.responseText)
-            console.log(this.state.image_id)
-            console.log(res.data)
-            resolve(res.data.link)
-          }
-        }.bind(this)
-        r.send(d)
-      })
+  selectStyle(index, link) {
+    this.setState({
+      styleIndex: index,
+      styleImageLink: link,
+    })
+    if (index === 0) {
+      this.setState({transferStyle: false})
     }
+  }
 
-    async handleCreateProject(e) {
-      if (this.state.title === "" || this.state.description === "" || this.state.image_id === "")
-        return
-      var image_id = this.state.image_id
-      console.log(this.state)
-      if (this.state.styleIndex !== 0 && this.state.transferStyle) {
-        const imageDataURL = document.getElementById('previewImage').src
-        var imageFile = dataURLtoFile(imageDataURL, 'out.png');
-        const link = await this.uploadImageAndGetLink(imageFile)
-        console.log(link)
-        image_id = link
-      }
-      this.createProject(
-        {variables: {
-          author: this.props.user_id,
-          title: this.state.title,
-          description: this.state.description,
-          image_id: image_id,
-        }}
-      )
-      console.log(this.state)
-      this.setState({submit: true})
-    }
+  changeStyleStrength(strength) {
+    this.setState({styleStrength: strength})
+  }
 
-    selectStyle(index, link) {
-      this.setState({
-        styleIndex: index,
-        styleImageLink: link,
-      })
-      if (index === 0) {
-        this.setState({transferStyle: false})
-      }
-    }
-
-    changeStyleStrength(strength) {
-      this.setState({styleStrength: strength})
-    }
-
-    doStylized() {
-      this.setState({transferStyle: true});
-    }
+  doStylized() {
+    this.setState({transferStyle: true});
+  }
 
   render(){
     return (

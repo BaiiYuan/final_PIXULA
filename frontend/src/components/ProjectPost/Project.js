@@ -14,216 +14,216 @@ import BasicInput from "../BasicInput.js"
 import StyleTransfer from "../StyleTransfer.js"
 function input_param(name, min, max, step, datascale)
 {
-    this.name = name;
-    this.min = min;
-    this.max = max;
-    this.step = step;
-    this.datascale = datascale;
+  this.name = name;
+  this.min = min;
+  this.max = max;
+  this.step = step;
+  this.datascale = datascale;
 }
 var input_param_list = [
-    new input_param("blur", "0", "10", "0.1", "px"),
-    new input_param("brightness", "0", "2", "0.01", ""),
-    new input_param("contrast", "0", "2", "0.01", ""),
-    new input_param("grayscale", "0", "1", "0.01", ""),
-    new input_param("hue_rotate", "-180", "180", "1", "deg"),
-    new input_param("invert", "0", "1", "0.01", ""),
-    new input_param("opacity", "0", "1", "0.01", ""),
-    new input_param("saturate", "0", "1", "0.01", ""),
-    new input_param("sepia", "0", "1", "0.01", ""),
+  new input_param("blur", "0", "10", "0.1", "px"),
+  new input_param("brightness", "0", "2", "0.01", ""),
+  new input_param("contrast", "0", "2", "0.01", ""),
+  new input_param("grayscale", "0", "1", "0.01", ""),
+  new input_param("hue_rotate", "-180", "180", "1", "deg"),
+  new input_param("invert", "0", "1", "0.01", ""),
+  new input_param("opacity", "0", "1", "0.01", ""),
+  new input_param("saturate", "0", "1", "0.01", ""),
+  new input_param("sepia", "0", "1", "0.01", ""),
 ]
 var css_filters = {
-    "1997": "sepia(.5) hue-rotate(-30) saturate(1.40)",
-    "aden": "sepia(.2) brightness(1.15) saturate(1.4)",
-    "amaro": "sepia(.35) contrast(1.1) brightness(1.2) saturate(1.3)",
-    "earlybird": "sepia(.25) contrast(1.25) brightness(1.15) saturate(.9) hue-rotate(-5)",
-    "moon": "brightness(1.4) contrast(.95) saturate(0) sepia(.35)",
-    "toaster": "sepia(.25) contrast(1.5) brightness(.95) hue-rotate(-15)",
-    "xpro-ii": "sepia(.45) contrast(1.25) brightness(1.75) saturate(1.3) hue-rotate(-5)",
-    "clarendon": "sepia(.15) contrast(1.25) brightness(1.25) hue-rotate(5)",
-    "rise": "sepia(.25) contrast(1.25) brightness(1.2) saturate(.9)"
+  "1997": "sepia(.5) hue-rotate(-30) saturate(1.40)",
+  "aden": "sepia(.2) brightness(1.15) saturate(1.4)",
+  "amaro": "sepia(.35) contrast(1.1) brightness(1.2) saturate(1.3)",
+  "earlybird": "sepia(.25) contrast(1.25) brightness(1.15) saturate(.9) hue-rotate(-5)",
+  "moon": "brightness(1.4) contrast(.95) saturate(0) sepia(.35)",
+  "toaster": "sepia(.25) contrast(1.5) brightness(.95) hue-rotate(-15)",
+  "xpro-ii": "sepia(.45) contrast(1.25) brightness(1.75) saturate(1.3) hue-rotate(-5)",
+  "clarendon": "sepia(.15) contrast(1.25) brightness(1.25) hue-rotate(5)",
+  "rise": "sepia(.25) contrast(1.25) brightness(1.2) saturate(.9)"
 }
 
 function dataURLtoFile(dataurl, filename) {
-    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, {type:mime});
+  var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+  while(n--){
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, {type:mime});
 }
 
 export default class Project extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-          blur: ["blur", 0, "px"],
-          brightness: ["brightness", 1, ""],
-          contrast: ["contrast", 1, ""],
-          grayscale: ["grayscale", 0, ""],
-          hue_rotate: ["hue-rotate", 0, "deg"],
-          invert: ["invert", 0, ""],
-          opacity: ["opacity", 1, ""],
-          saturate: ["saturate", 1, ""],
-          sepia: ["sepia", 0, ""],
-          styleIndex: 0,
-          styleStrength: 1.,
-          transferStyle: false,
-        }
+  constructor(props) {
+    super(props);
+    this.state = {
+      blur: ["blur", 0, "px"],
+      brightness: ["brightness", 1, ""],
+      contrast: ["contrast", 1, ""],
+      grayscale: ["grayscale", 0, ""],
+      hue_rotate: ["hue-rotate", 0, "deg"],
+      invert: ["invert", 0, ""],
+      opacity: ["opacity", 1, ""],
+      saturate: ["saturate", 1, ""],
+      sepia: ["sepia", 0, ""],
+      styleIndex: 0,
+      styleStrength: 1.,
+      transferStyle: false,
+    }
 
-        this.applyFilter = this.applyFilter.bind(this);
-        this.download_img = this.download_img.bind(this);
-        this.getOrginFilter = this.getOrginFilter.bind(this);
-        this.parseFIlterCss = this.parseFIlterCss.bind(this);
-        this.uploadImage = this.uploadImage.bind(this);
-        this.handleSave = this.handleSave.bind(this);
-      }
+    this.applyFilter = this.applyFilter.bind(this);
+    this.download_img = this.download_img.bind(this);
+    this.getOrginFilter = this.getOrginFilter.bind(this);
+    this.parseFIlterCss = this.parseFIlterCss.bind(this);
+    this.uploadImage = this.uploadImage.bind(this);
+    this.handleSave = this.handleSave.bind(this);
+  }
 
-      getOrginFilter() {
-        return {
-          blur: ["blur", 0, "px"],
-          brightness: ["brightness", 1, ""],
-          contrast: ["contrast", 1, ""],
-          grayscale: ["grayscale", 0, ""],
-          hue_rotate: ["hue-rotate", 0, "deg"],
-          invert: ["invert", 0, ""],
-          opacity: ["opacity", 1, ""],
-          saturate: ["saturate", 1, ""],
-          sepia: ["sepia", 0, ""],
-        }
-      }
+  getOrginFilter() {
+    return {
+      blur: ["blur", 0, "px"],
+      brightness: ["brightness", 1, ""],
+      contrast: ["contrast", 1, ""],
+      grayscale: ["grayscale", 0, ""],
+      hue_rotate: ["hue-rotate", 0, "deg"],
+      invert: ["invert", 0, ""],
+      opacity: ["opacity", 1, ""],
+      saturate: ["saturate", 1, ""],
+      sepia: ["sepia", 0, ""],
+    }
+  }
 
-      setStateWithEvent(e) {
-        var oldValue = this.state[e.target.name]
-        oldValue[1] = e.target.value
-        var obj = {}
-        obj[e.target.name] = oldValue
-        this.setState(obj)
-      }
+  setStateWithEvent(e) {
+    var oldValue = this.state[e.target.name]
+    oldValue[1] = e.target.value
+    var obj = {}
+    obj[e.target.name] = oldValue
+    this.setState(obj)
+  }
 
-      getAciveState() {
-        var activeState = this.state
-        activeState = Object.keys(activeState).map(function(keyName, keyIndex) {
-          return activeState[keyName]
-        })
-        activeState = activeState.filter(s => s[1] && Array.isArray(s));
-        activeState = activeState.map(s => s[0]+"("+s[1]+s[2]+") ")
-        // console.log(activeState.join(""))
-        return activeState.join("")
-      }
+  getAciveState() {
+    var activeState = this.state
+    activeState = Object.keys(activeState).map(function(keyName, keyIndex) {
+      return activeState[keyName]
+    })
+    activeState = activeState.filter(s => s[1] && Array.isArray(s));
+    activeState = activeState.map(s => s[0]+"("+s[1]+s[2]+") ")
+    // console.log(activeState.join(""))
+    return activeState.join("")
+  }
 
-      useStateOnimage() {
-        var image = document.getElementById("image")
-        image.style.filter =  this.getAciveState();
-      }
+  useStateOnimage() {
+    var image = document.getElementById("image")
+    image.style.filter =  this.getAciveState();
+  }
 
-      applyFilter(e) {
-        this.setStateWithEvent(e)
-        this.useStateOnimage()
+  applyFilter(e) {
+    this.setStateWithEvent(e)
+    this.useStateOnimage()
+  };
+
+  getRevisedImageFromCanvas() {
+    return new Promise(resolve => {
+      const filter = this.getAciveState();
+
+      var img = new Image();
+      img.setAttribute('crossOrigin', 'anonymous');
+      img.src = this.state.image_id;
+      // console.log(image.style)
+
+      img.onload = function() {
+        console.log(img.width, img.height)
+        var canvas = document.createElement('canvas')
+        var ctx = canvas.getContext('2d');
+
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.filter = filter
+
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const imageDataURL = canvas.toDataURL("image/png");
+        resolve(imageDataURL)
       };
+    })
+  }
 
-      getRevisedImageFromCanvas() {
-        return new Promise(resolve => {
-          const filter = this.getAciveState();
+  async download_img(e) {
+    const imageDataURL = await this.getRevisedImageFromCanvas()
+    // console.log(imageDataURL)
+    var link = document.createElement('a');
+    link.download = "processed-image.png";
+    link.href = imageDataURL;
+    link.click();
+  };
 
-          var img = new Image();
-          img.setAttribute('crossOrigin', 'anonymous');
-          img.src = this.state.image_id;
-          // console.log(image.style)
-
-          img.onload = function() {
-            console.log(img.width, img.height)
-            var canvas = document.createElement('canvas')
-            var ctx = canvas.getContext('2d');
-
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.filter = filter
-
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            const imageDataURL = canvas.toDataURL("image/png");
-            resolve(imageDataURL)
-          };
-        })
+  parseFIlterCss(e, css) {
+    let cssArr = css.split(" ")
+    var obj = this.getOrginFilter()
+    cssArr.forEach(function(element) {
+      var name = element.split("(")[0]
+      if (name === "hue-rotate") {
+        name = "hue_rotate"
       }
+      var value = element.split("(")[1].slice(0, -1);
+      var tmp = obj[name]
+      tmp[1] = value
+      obj[name] = tmp
+    });
+    console.log(obj)
+    this.setState(obj, this.useStateOnimage)
+  }
 
-      async download_img(e) {
-        const imageDataURL = await this.getRevisedImageFromCanvas()
-        // console.log(imageDataURL)
-        var link = document.createElement('a');
-        link.download = "processed-image.png";
-        link.href = imageDataURL;
-        link.click();
-      };
+  resetFilter() {
+    var obj = this.getOrginFilter()
+    this.setState(obj, this.useStateOnimage)
+  }
 
-      parseFIlterCss(e, css) {
-        let cssArr = css.split(" ")
-        var obj = this.getOrginFilter()
-        cssArr.forEach(function(element) {
-          var name = element.split("(")[0]
-          if (name === "hue-rotate") {
-            name = "hue_rotate"
-          }
-          var value = element.split("(")[1].slice(0, -1);
-          var tmp = obj[name]
-          tmp[1] = value
-          obj[name] = tmp
-        });
-        console.log(obj)
-        this.setState(obj, this.useStateOnimage)
+  uploadImage(imageFile) {
+    const r = new XMLHttpRequest()
+    const d = new FormData()
+    var uploadImageID
+
+    const client = 'b411ccbe2c93f6e'
+    console.log(imageFile)
+    d.append('image', imageFile)
+
+    r.open('POST', 'https://api.imgur.com/3/image/')
+    r.setRequestHeader('Authorization', `Client-ID ${client}`)
+    r.onreadystatechange = function () {
+      if(r.status === 200 && r.readyState === 4) {
+        let res = JSON.parse(r.responseText)
+
+        console.log(this.state.image_id)
+        console.log(res.data)
+        this.setState({image_id: res.data.link})
       }
+    }.bind(this)
+    r.send(d)
+  }
 
-      resetFilter() {
-        var obj = this.getOrginFilter()
-        this.setState(obj, this.useStateOnimage)
+  async handleSave(e) {
+    const imageDataURL = await this.getRevisedImageFromCanvas()
+    var imageFile = dataURLtoFile(imageDataURL, 'out.png');
+    console.log(imageFile);
+
+    this.uploadImage(imageFile)
+    this.updateProject({
+      variables: {
+        id: this.props.match.params.id,
+        title: this.state.title,
+        description: this.state.description,
+        image_id: this.state.image_id,
+        blur: this.state.blur[1],
+        brightness: this.state.brightness[1],
+        contrast: this.state.contrast[1],
+        grayscale: this.state.grayscale[1],
+        hue_rotate: this.state.hue_rotate[1],
+        invert: this.state.invert[1],
+        opacity: this.state.opacity[1],
+        saturate: this.state.saturate[1],
+        sepia: this.state.sepia[1]
       }
-
-      uploadImage(imageFile) {
-        const r = new XMLHttpRequest()
-        const d = new FormData()
-        var uploadImageID
-
-        const client = 'b411ccbe2c93f6e'
-        console.log(imageFile)
-        d.append('image', imageFile)
-
-        r.open('POST', 'https://api.imgur.com/3/image/')
-        r.setRequestHeader('Authorization', `Client-ID ${client}`)
-        r.onreadystatechange = function () {
-          if(r.status === 200 && r.readyState === 4) {
-            let res = JSON.parse(r.responseText)
-
-            console.log(this.state.image_id)
-            console.log(res.data)
-            this.setState({image_id: res.data.link})
-          }
-        }.bind(this)
-        r.send(d)
-      }
-
-      async handleSave(e) {
-        const imageDataURL = await this.getRevisedImageFromCanvas()
-        var imageFile = dataURLtoFile(imageDataURL, 'out.png');
-        console.log(imageFile);
-
-        this.uploadImage(imageFile)
-        this.updateProject({
-          variables: {
-            id: this.props.match.params.id,
-            title: this.state.title,
-            description: this.state.description,
-            image_id: this.state.image_id,
-            blur: this.state.blur[1],
-            brightness: this.state.brightness[1],
-            contrast: this.state.contrast[1],
-            grayscale: this.state.grayscale[1],
-            hue_rotate: this.state.hue_rotate[1],
-            invert: this.state.invert[1],
-            opacity: this.state.opacity[1],
-            saturate: this.state.saturate[1],
-            sepia: this.state.sepia[1]
-          }
-        })
-      }
+    })
+  }
 
   render(){
     const { id } = this.props.match.params
@@ -293,9 +293,7 @@ export default class Project extends Component {
                       </p>
                   </div>
               </div>
-        </div>
-
-
+          </div>
 
           {input_param_list.map(e =>
           <BasicInput
@@ -310,18 +308,17 @@ export default class Project extends Component {
 
           <div id="fh5co-started">
 
-      <div class="overlay"></div>
-              <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-                  <h2>Style Button</h2>
-                  <button class="btn btn-default btn-sm" onClick={() => this.resetFilter()}>Origin</button>
-                  {Object.keys(css_filters).map(e =>
-                      <button class="btn btn-default btn-sm" onClick={(i) => this.parseFIlterCss(i, css_filters[e])}>{e}</button>
-                  )}
-              </div>
+            <div class="overlay"></div>
+            <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+              <h2>Style Button</h2>
+              <button class="btn btn-default btn-sm" onClick={() => this.resetFilter()}>Origin</button>
+              {Object.keys(css_filters).map(e =>
+                <button class="btn btn-default btn-sm" onClick={(i) => this.parseFIlterCss(i, css_filters[e])}>{e}</button>
+              )}
+            </div>
+          </div>
         </div>
-    </div>
-    )}
-
+      )
+    }
   }
-
 }
