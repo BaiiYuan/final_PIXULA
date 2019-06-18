@@ -3,10 +3,10 @@ import { Query, Mutation } from 'react-apollo'
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 import ScrollToTop from "../../components/util/ScrollToTop"
 import {
-  IMAGES_QUERY, LOGIN_QUERY 
+  IMAGES_QUERY, LOGIN_QUERY
 } from '../../graphql'
 
-import "../../css/style.css" 
+import "../../css/style.css"
 import { BrowserRouter } from 'react-router-dom'
 import HomeRender from "../../components/HomeRender"
 import LoginRender from "../../components/LoginRender"
@@ -46,15 +46,15 @@ class App extends Component {
     account: ''
   }
 
- 
+
   render() {
     return (
       <BrowserRouter>
       <ScrollToTop/>
       <body>
-		
+
       {/*<div class="fh5co-loader"></div>*/}
-      
+
       <nav class="fh5co-nav" role="navigation">
         <div class="top-menu">
           <div class="container">
@@ -69,7 +69,7 @@ class App extends Component {
                   <li class="btn-cta">
                     <NavLink to="/login">
                      <span>{
-                       this.state.user_id == "" ? "login": this.state.account
+                       this.state.user_id == "" ? "login": "Hi, "+ this.state.account
 
                      }</span>
                     </NavLink>
@@ -77,11 +77,11 @@ class App extends Component {
                 </ul>
               </div>
             </div>
-            
+
           </div>
         </div>
       </nav>
-      
+
       <Switch>
         <Route exact path="/projects" component={() => <ProjectsRender user_id={this.state.user_id} account={this.state.account}/>} />
         <Route path="/projects/:id?" component={(props) => <Project {...props}/>} />
@@ -91,14 +91,14 @@ class App extends Component {
         <Redirect from="/" to="/home" />
       </Switch>
 
-    
-      
-    
+
+
+
       <footer id="fh5co-footer" role="contentinfo">
         <div class="row copyright">
           <div class="col-md-12 text-center">
             <p>
-              <small class="block">If you're seeing this, you are probably viewing a half-completed website.</small> 
+              <small class="block">If you're seeing this, you are probably viewing a half-completed website.</small>
               <small class="block">Designed by <a href="http://freehtml5.co/" target="_blank">FreeHTML5.co</a> Demo Images: <a href="http://unsplash.co/" target="_blank">Unsplash</a></small>
             </p>
             <p>
@@ -112,7 +112,7 @@ class App extends Component {
           </div>
         </div>
       </footer>
-    
+
       <div class="gototop js-top">
         <a href="#" class="js-gotop"><i class="icon-arrow-up22"></i></a>
       </div>
