@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Query, Mutation } from 'react-apollo'
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 import ScrollToTop from "../../components/util/ScrollToTop"
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import {
   IMAGES_QUERY, LOGIN_QUERY
 } from '../../graphql'
@@ -13,39 +14,34 @@ import LoginRender from "../../components/LoginRender"
 import ProjectsRender from "../../components/ProjectsRender"
 import AddRender from "../../components/AddRender"
 import Project from "../../components/ProjectPost/Project"
+import Download from "../../components/DownloadRender"
 
 const activeLink = {
-  position: "absolute",
-  bottom: "25px", 
-  left: "0", 
-  right: "0", 
-  width: "30px", 
-  height: "2px", 
-  background: "#DD356E", 
+  borderBottom: "3px solid #DD356E", 
   margin: "0 auto", 
-  color: "#000 !important", 
-  position: "relative", 
-  fontSize: "18px", 
-  padding: "30px 15px", 
-  transition: "0.5s", 
-  textDecoration: "none", 
-  backgroundColor: "transparent", 
-  boxSizing: "border-box", 
-  cursor: "pointer", 
-  listStyle: "none", 
-  fontFamily: "'Inconsolata', Arial, sans-serif", 
-  fontWeight: "400"
-
+  color: "#000", 
+  paddingBottom: "15px" 
 };
 class App extends Component {
-  state = {
-    formTitle: '',
-    formBody: '',
-    authorId: 1,
-    user_id: '',
-    account: ''
+  constructor(props) {
+    super(props);
+
+    this.toggle = this.toggle.bind(this);
+    this.state = {
+      formTitle: '',
+      formBody: '',
+      authorId: 1,
+      user_id: '',
+      account: '',
+      dropdownOpen: false
+    };
   }
 
+  toggle() {
+    this.setState((prevState) => ({
+      dropdownOpen: !prevState.dropdownOpen
+    }));
+  }
 
   render() {
     return (
@@ -65,7 +61,7 @@ class App extends Component {
               <div class="col-xs-10 text-right menu-1">
                 <ul>
                   <li><NavLink activeStyle={activeLink} to="/home">Home</NavLink></li>
-                  <li><NavLink activeClassName="active" to="/projects">Projects</NavLink></li>
+                  <li><NavLink activeStyle={activeLink} to="/projects">Projects</NavLink></li>
                   <li class="btn-cta">
                     <NavLink to="/login">
                      <span>{
@@ -73,6 +69,17 @@ class App extends Component {
 
                      }</span>
                     </NavLink>
+                  </li>
+                  <li>
+                    <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                      <DropdownToggle>
+                        Dropdown
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        <DropdownItem header>Account</DropdownItem>
+                        <DropdownItem>Some Action</DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown> 
                   </li>
                 </ul>
               </div>
@@ -87,6 +94,7 @@ class App extends Component {
         <Route path="/projects/:id?" component={(props) => <Project {...props}/>} />
         <Route path="/home" component={HomeRender} />
         <Route path="/new" component={(props) => <AddRender {...props} user_id={this.state.user_id} />} />
+        <Route path="/download/:id"  component={(props) => <Download {...props}/>} />
         <Route path="/login" component={(props) => <LoginRender {...props} login_action_handler={(user_id, account) => {this.setState({user_id: user_id, account: account})}} />} />
         <Redirect from="/" to="/home" />
       </Switch>

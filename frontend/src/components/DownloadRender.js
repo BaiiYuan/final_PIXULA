@@ -6,12 +6,10 @@ import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import {
   PROJECT_INFO_QUERY,
   UPDATE_PROJECT_MUTATION
-} from '../../graphql'
+} from '../graphql'
 
-import "../../css/style.css"
+import "../css/style.css"
 import { BrowserRouter } from 'react-router-dom'
-import BasicInput from "../BasicInput.js"
-import StyleTransfer from "../StyleTransfer.js"
 function input_param(name, min, max, step, datascale)
 {
   this.name = name;
@@ -52,7 +50,7 @@ function dataURLtoFile(dataurl, filename) {
   return new File([u8arr], filename, {type:mime});
 }
 
-export default class Project extends Component {
+export default class Download extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -295,33 +293,13 @@ export default class Project extends Component {
               </div>
           </div>
 
-          {input_param_list.map(e =>
-          <BasicInput
-              name={e.name} min={e.min} max={e.max} value={this.state[e.name][1]} step={e.step}
-              datafilter={e.name} datascale="" onChange={(i) => this.applyFilter(i)}
-          />
-          )}
+          <h1>some feature for croping</h1>
 
           <br />
           <button onClick={this.download_img}>Download</button>
 
-          <NavLink key={id} to={"/download/" + id} class="icon-arrow-right22">
-            <button>The true Download</button>	
-					</NavLink>
 
-          <button onClick={this.handleSave}>Save</button>
 
-          <div id="fh5co-started">
-
-            <div class="overlay"></div>
-            <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-              <h2>Style Button</h2>
-              <button class="btn btn-default btn-sm" onClick={() => this.resetFilter()}>Origin</button>
-              {Object.keys(css_filters).map(e =>
-                <button class="btn btn-default btn-sm" onClick={(i) => this.parseFIlterCss(i, css_filters[e])}>{e}</button>
-              )}
-            </div>
-          </div>
         </div>
       )
     }
