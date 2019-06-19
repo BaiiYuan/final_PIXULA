@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Query, Mutation, renderToStringWithData } from 'react-apollo'
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
 import {
   PROJECT_INFO_QUERY,
@@ -66,14 +68,90 @@ export default class Download extends Component {
       styleIndex: 0,
       styleStrength: 1.,
       transferStyle: false,
+      crop: {
+        x: 0,
+        y: 0,
+        width: 200,
+        height: 200
+      },
     }
 
     this.applyFilter = this.applyFilter.bind(this);
     this.download_img = this.download_img.bind(this);
     this.getOrginFilter = this.getOrginFilter.bind(this);
     this.parseFIlterCss = this.parseFIlterCss.bind(this);
-    this.uploadImage = this.uploadImage.bind(this);
-    this.handleSave = this.handleSave.bind(this);
+    this.onCropChange = this.onCropChange.bind(this);
+    this.onCropComplete = this.onCropComplete.bind(this);
+  }
+
+  onCropComplete(crop) {
+    this.makeClientCrop(crop);
+  };
+
+  onCropChange(crop, percentCrop) {
+    // You could also use percentCrop:
+    // this.setState({ crop: percentCrop });
+    this.setState({ crop: crop });
+  };
+
+  async makeClientCrop(crop) {
+    console.log(crop)
+    if (crop.width && crop.height) {
+      const croppedImageUrl = await this.getCroppedImgBridge(crop)
+      this.setState({ croppedImageUrl: croppedImageUrl });
+    }
+  }
+
+  getCroppedImgBridge(crop) {
+    return new Promise(resolve => {
+      var img = new Image();
+      img.setAttribute('crossOrigin', 'anonymous');
+      img.src = this.state.image_id;
+
+      img.onload = async function() {
+        console.log(img.width, img.height)
+        const croppedImageUrl = await this.getCroppedImg(
+          img,
+          crop,
+          "newFile.png"
+        );
+        resolve(croppedImageUrl)
+      }.bind(this);
+    })
+  }
+
+  getCroppedImg(image, crop, fileName) {
+    const canvas = document.createElement("canvas");
+    const rate = Math.max(image.naturalWidth, image.naturalHeight) / 500
+    canvas.width = crop.width;
+    canvas.height = crop.height;
+    const ctx = canvas.getContext("2d");
+
+    ctx.drawImage(
+      image,
+      crop.x * rate,
+      crop.y * rate,
+      crop.width * rate,
+      crop.height * rate,
+      0,
+      0,
+      crop.width,
+      crop.height
+    );
+
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(blob => {
+        if (!blob) {
+          //reject(new Error('Canvas is empty'));
+          console.error("Canvas is empty");
+          return;
+        }
+        blob.name = fileName;
+        window.URL.revokeObjectURL(this.fileUrl);
+        this.fileUrl = window.URL.createObjectURL(blob);
+        resolve(this.fileUrl);
+      }, "image/jpeg");
+    });
   }
 
   getOrginFilter() {
@@ -125,7 +203,7 @@ export default class Download extends Component {
 
       var img = new Image();
       img.setAttribute('crossOrigin', 'anonymous');
-      img.src = this.state.image_id;
+      img.src = this.state.croppedImageUrl
       // console.log(image.style)
 
       img.onload = function() {
@@ -175,53 +253,6 @@ export default class Download extends Component {
     this.setState(obj, this.useStateOnimage)
   }
 
-  uploadImage(imageFile) {
-    const r = new XMLHttpRequest()
-    const d = new FormData()
-    var uploadImageID
-
-    const client = 'b411ccbe2c93f6e'
-    console.log(imageFile)
-    d.append('image', imageFile)
-
-    r.open('POST', 'https://api.imgur.com/3/image/')
-    r.setRequestHeader('Authorization', `Client-ID ${client}`)
-    r.onreadystatechange = function () {
-      if(r.status === 200 && r.readyState === 4) {
-        let res = JSON.parse(r.responseText)
-
-        console.log(this.state.image_id)
-        console.log(res.data)
-        this.setState({image_id: res.data.link})
-      }
-    }.bind(this)
-    r.send(d)
-  }
-
-  async handleSave(e) {
-    const imageDataURL = await this.getRevisedImageFromCanvas()
-    var imageFile = dataURLtoFile(imageDataURL, 'out.png');
-    console.log(imageFile);
-
-    this.uploadImage(imageFile)
-    this.updateProject({
-      variables: {
-        id: this.props.match.params.id,
-        title: this.state.title,
-        description: this.state.description,
-        image_id: this.state.image_id,
-        blur: this.state.blur[1],
-        brightness: this.state.brightness[1],
-        contrast: this.state.contrast[1],
-        grayscale: this.state.grayscale[1],
-        hue_rotate: this.state.hue_rotate[1],
-        invert: this.state.invert[1],
-        opacity: this.state.opacity[1],
-        saturate: this.state.saturate[1],
-        sepia: this.state.sepia[1]
-      }
-    })
-  }
 
   render(){
     const { id } = this.props.match.params
@@ -249,10 +280,8 @@ export default class Download extends Component {
                 sepia: ["sepia", project.sepia, ""],
                 image_id: project.image_id
               }
-
               this.setState(new_state, this.useStateOnimage)
             }
-
             return <div></div>
           }}
       </Query>
@@ -267,38 +296,61 @@ export default class Download extends Component {
             }}
           </Mutation>
           <div id="fh5co-header">
-              <div class="container">
-                  <div class="row animate-box">
-                      <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-                          <input type="text" className="our_input_text_h2"
-                            placeholder={this.state.title}
-                            value={this.state.title}
-                            onChange={e => this.setState({title: e.target.value})} />
-                            <input type="text" class="our_input_text_p"
-                              placeholder={this.state.description}
-                              value={this.state.description}
-                              onChange={e => this.setState({description: e.target.value})}/>
-
-                      </div>
-                  </div>
-
-                  <div class="col-md-12 text-center animate-box">
-                      <p>
-                          <img id="image" src={this.state.image_id ? this.state.image_id: ""}
-                          style = {{maxWidth: "500px", maxHeight: "500px", display: this.state.image_id ? "": "none"}}
-                          alt="Please upload an image to start this project."
-                          class="img-responsive img-rounded"/>
-                      </p>
-                  </div>
+            <div class="container">
+              <div class="row animate-box">
+                <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+                  <input type="text" className="our_input_text_h2"
+                    placeholder={this.state.title}
+                    value={this.state.title}
+                    onChange={e => this.setState({title: e.target.value})} />
+                    <input type="text" class="our_input_text_p"
+                      placeholder={this.state.description}
+                      value={this.state.description}
+                      onChange={e => this.setState({description: e.target.value})}/>
+                </div>
               </div>
+
+              <div class="col-md-12 text-center animate-box">
+                <p>
+                  <img id="image" src={this.state.image_id ? this.state.image_id: ""}
+                    style = {{maxWidth: "500px", maxHeight: "500px", display: "none"}}
+                    alt="Please upload an image to start this project."
+                    class="img-responsive img-rounded"/>
+                  <ReactCrop
+                    src={this.state.image_id ? this.state.image_id: ""}
+                    style = {{
+                      maxWidth: "500px",
+                      maxHeight: "500px",
+                      display: this.state.image_id ? "": "none",
+                      filter: this.getAciveState(),
+                    }}
+                    crop={this.state.crop}
+                    onComplete={this.onCropComplete}
+                    onChange={this.onCropChange}
+                  />
+                </p>
+              </div>
+            </div>
           </div>
 
           <h1>some feature for croping</h1>
+          <div>
+
+            {this.state.croppedImageUrl && (
+              <img id="cropImage" alt="Crop"
+                src={this.state.croppedImageUrl}
+                style = {{
+                  maxWidth: "500px",
+                  maxHeight: "500px",
+                  display: this.state.image_id ? "": "none",
+                  filter: this.getAciveState(),
+                }}
+              />
+            )}
+          </div>
 
           <br />
           <button onClick={this.download_img}>Download</button>
-
-
 
         </div>
       )
