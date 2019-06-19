@@ -303,10 +303,9 @@ export default class Project extends Component {
           )}
 
           <br />
-          <button onClick={this.download_img}>Download</button>
 
           <NavLink key={id} to={"/download/" + id} class="icon-arrow-right22">
-            <button>The true Download</button>	
+            <button>Download</button>	
 					</NavLink>
 
           <button onClick={this.handleSave}>Save</button>
