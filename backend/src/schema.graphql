@@ -67,8 +67,6 @@ type Project {
   opacity: String!
   saturate: String!
   sepia: String!
-
-
 }
 
 enum MutationType {
