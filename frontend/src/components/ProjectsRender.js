@@ -70,9 +70,9 @@ export default class ProjectsRender extends Component {
 
 						<div class="col-md-4">
 							<NavLink to={"/New/"}>
-								<div class="fh5co-portfolio animate-box">
+								<div class="fh5co-portfolio animate-box card-2">
 									<div className="portfolio-entry" style={{backgroundImage: 'url(../images/add.png)'}}></div>
-									<div className="portfolio-text card-2">
+									<div className="portfolio-text">
 										<h3>Add new</h3>
 										<h6>Click to add new project.</h6>
 										<ul class="stuff">

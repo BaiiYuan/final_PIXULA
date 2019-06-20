@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Query, Mutation, renderToStringWithData } from 'react-apollo'
-import { NavLink, Switch, Route, Redirect } from "react-router-dom";
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { NavLink, Switch, Route, Redirect } from "react-router-dom"
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
 
 import {
   PROJECT_INFO_QUERY,
@@ -14,11 +14,11 @@ import BasicInput from "../BasicInput.js"
 import StyleTransfer from "../StyleTransfer.js"
 function input_param(name, min, max, step, datascale)
 {
-  this.name = name;
-  this.min = min;
-  this.max = max;
-  this.step = step;
-  this.datascale = datascale;
+  this.name = name
+  this.min = min
+  this.max = max
+  this.step = step
+  this.datascale = datascale
 }
 var input_param_list = [
   new input_param("blur", "0", "10", "0.1", "px"),
@@ -44,18 +44,19 @@ var css_filters = {
 }
 
 function dataURLtoFile(dataurl, filename) {
-  var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+  var arr = dataurl.split(','), mime = arr[0].match(/:(.*?)/)[1],
+    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n)
   while(n--){
-    u8arr[n] = bstr.charCodeAt(n);
+    u8arr[n] = bstr.charCodeAt(n)
   }
-  return new File([u8arr], filename, {type:mime});
+  return new File([u8arr], filename, {type:mime})
 }
 
+const LOADING_GIF = require("../../containers/images/loader.gif")
 
 export default class Project extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       blur: ["blur", 0, "px"],
       brightness: ["brightness", 1, ""],
@@ -69,14 +70,15 @@ export default class Project extends Component {
       styleIndex: 0,
       styleStrength: 1.,
       transferStyle: false,
+      loading: true
     }
 
-    this.applyFilter = this.applyFilter.bind(this);
-    this.download_img = this.download_img.bind(this);
-    this.getOrginFilter = this.getOrginFilter.bind(this);
-    this.parseFIlterCss = this.parseFIlterCss.bind(this);
-    this.uploadImage = this.uploadImage.bind(this);
-    this.handleSave = this.handleSave.bind(this);
+    this.applyFilter = this.applyFilter.bind(this)
+    this.download_img = this.download_img.bind(this)
+    this.getOrginFilter = this.getOrginFilter.bind(this)
+    this.parseFIlterCss = this.parseFIlterCss.bind(this)
+    this.uploadImage = this.uploadImage.bind(this)
+    this.handleSave = this.handleSave.bind(this)
   }
 
   getOrginFilter() {
@@ -106,7 +108,7 @@ export default class Project extends Component {
     activeState = Object.keys(activeState).map(function(keyName, keyIndex) {
       return activeState[keyName]
     })
-    activeState = activeState.filter(s => s[1] && Array.isArray(s));
+    activeState = activeState.filter(s => s[1] && Array.isArray(s))
     activeState = activeState.map(s => s[0]+"("+s[1]+s[2]+") ")
     // console.log(activeState.join(""))
     return activeState.join("")
@@ -114,47 +116,47 @@ export default class Project extends Component {
 
   useStateOnimage() {
     var image = document.getElementById("image")
-    image.style.filter =  this.getAciveState();
+    image.style.filter =  this.getAciveState()
   }
 
   applyFilter(e) {
     this.setStateWithEvent(e)
     this.useStateOnimage()
-  };
+  }
 
   getRevisedImageFromCanvas() {
     return new Promise(resolve => {
-      const filter = this.getAciveState();
+      const filter = this.getAciveState()
 
-      var img = new Image();
-      img.setAttribute('crossOrigin', 'anonymous');
-      img.src = this.state.image_id;
+      var img = new Image()
+      img.setAttribute('crossOrigin', 'anonymous')
+      img.src = this.state.image_id
       // console.log(image.style)
 
       img.onload = function() {
         console.log(img.width, img.height)
         var canvas = document.createElement('canvas')
-        var ctx = canvas.getContext('2d');
+        var ctx = canvas.getContext('2d')
 
-        canvas.width = img.width;
-        canvas.height = img.height;
+        canvas.width = img.width
+        canvas.height = img.height
         ctx.filter = filter
 
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        const imageDataURL = canvas.toDataURL("image/png");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+        const imageDataURL = canvas.toDataURL("image/png")
         resolve(imageDataURL)
-      };
+      }
     })
   }
 
   async download_img(e) {
     const imageDataURL = await this.getRevisedImageFromCanvas()
     // console.log(imageDataURL)
-    var link = document.createElement('a');
-    link.download = "processed-image.png";
-    link.href = imageDataURL;
-    link.click();
-  };
+    var link = document.createElement('a')
+    link.download = "processed-image.png"
+    link.href = imageDataURL
+    link.click()
+  }
 
   parseFIlterCss(e, css) {
     let cssArr = css.split(" ")
@@ -164,11 +166,11 @@ export default class Project extends Component {
       if (name === "hue-rotate") {
         name = "hue_rotate"
       }
-      var value = element.split("(")[1].slice(0, -1);
+      var value = element.split("(")[1].slice(0, -1)
       var tmp = obj[name]
       tmp[1] = value
       obj[name] = tmp
-    });
+    })
     console.log(obj)
     this.setState(obj, this.useStateOnimage)
   }
@@ -203,8 +205,8 @@ export default class Project extends Component {
 
   async handleSave(e) {
     const imageDataURL = await this.getRevisedImageFromCanvas()
-    var imageFile = dataURLtoFile(imageDataURL, 'out.png');
-    console.log(imageFile);
+    var imageFile = dataURLtoFile(imageDataURL, 'out.png')
+    console.log(imageFile)
 
     // this.uploadImage(imageFile)
     this.updateProject({
@@ -296,9 +298,13 @@ export default class Project extends Component {
                   <div class="col-md-12 text-center animate-box">
                       <p>
                           <img id="image" src={this.state.image_id ? this.state.image_id: ""}
-                          style = {{maxWidth: "500px", maxHeight: "500px", display: this.state.image_id ? "": "none"}}
-                          alt="Please upload an image to start this project."
-                          class="img-responsive img-rounded "/>
+
+                            style = {{maxWidth: "500px", maxHeight: "500px", display: this.state.image_id ? "": "none"}}
+                            alt="Please upload an image to start this project."
+                            class="img-responsive img-rounded"
+                            onLoad={() => this.setState({loading: false})}
+                          />
+                          <img src={LOADING_GIF} style = {{display: this.state.loading ? "": "none"}}/>
                       </p>
                   </div>
               </div>

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Query, Mutation, renderToStringWithData } from 'react-apollo'
-import { NavLink, Switch, Route, Redirect } from "react-router-dom";
+import { NavLink, Switch, Route, Redirect } from "react-router-dom"
 import StyleTransfer from "./StyleTransfer.js"
-import * as mi from '@magenta/image';
+import * as mi from '@magenta/image'
 
 import {
   CREATE_PROJECT_MUTATION,
@@ -11,31 +11,36 @@ import {
 
 import "../css/style.css"
 
+const LOADING_GIF = require("../containers/images/loader.gif")
+
 function dataURLtoFile(dataurl, filename) {
-  var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+  var arr = dataurl.split(','), mime = arr[0].match(/:(.*?)/)[1],
+    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n)
   while(n--){
-    u8arr[n] = bstr.charCodeAt(n);
+    u8arr[n] = bstr.charCodeAt(n)
   }
-  return new File([u8arr], filename, {type:mime});
+  return new File([u8arr], filename, {type:mime})
 }
 
 export default class AddRender extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       image_id: "",//"LZUEDmb",
+      imageTransfer: "",
+      imageFinal: "",
       title: "",
       description: "",
+      styleStrength: 1.,
       submit: false,
       styleIndex: 0,
       transferStyle: false
     }
-    this.doStylized = this.doStylized.bind(this);
-    this.selectStyle = this.selectStyle.bind(this);
-    this.uploadImage = this.uploadImage.bind(this);
-    this.handleCreateProject = this.handleCreateProject.bind(this);
-    this.changeStyleStrength = this.changeStyleStrength.bind(this);
+    this.doStylized = this.doStylized.bind(this)
+    this.selectStyle = this.selectStyle.bind(this)
+    this.uploadImage = this.uploadImage.bind(this)
+    this.handleCreateProject = this.handleCreateProject.bind(this)
+    this.changeStyleStrength = this.changeStyleStrength.bind(this)
   }
 
   setStateWithEvent(e) {
@@ -52,7 +57,7 @@ export default class AddRender extends Component {
     activeState = Object.keys(activeState).map(function(keyName, keyIndex) {
       return activeState[keyName]
     })
-    activeState = activeState.filter(s => s[1] && Array.isArray(s));
+    activeState = activeState.filter(s => s[1] && Array.isArray(s))
     activeState = activeState.map(s => s[0]+"("+s[1]+s[2]+") ")
     // console.log(activeState.join(""))
     return activeState.join("")
@@ -60,12 +65,15 @@ export default class AddRender extends Component {
 
   useStateOnimage() {
     var image = document.getElementById("image")
-    image.style.filter =  this.getAciveState();
+    image.style.filter =  this.getAciveState()
   }
 
   async uploadImage(imageFile) {
+    this.setState({uploading: true})
     const link = await this.uploadImageAndGetLink(imageFile)
-    this.setState({image_id: link})
+    this.setState({
+      image_id: link,
+    })
   }
 
   uploadImageAndGetLink(imageFile) {
@@ -98,11 +106,18 @@ export default class AddRender extends Component {
     console.log(this.state)
     if (this.state.styleIndex !== 0 && this.state.transferStyle) {
       const imageDataURL = document.getElementById('previewImage').src
-      var imageFile = dataURLtoFile(imageDataURL, 'out.png');
+      var imageFile = dataURLtoFile(imageDataURL, 'out.png')
       const link = await this.uploadImageAndGetLink(imageFile)
       console.log(link)
       image_id = link
+      this.setState({imageFinal: link})
+    } else {
+      this.setState({
+        imageTransfer: "",
+        imageFinal: "",
+      })
     }
+
     this.createProject(
       {variables: {
         author: this.props.user_id,
@@ -118,7 +133,7 @@ export default class AddRender extends Component {
   selectStyle(index, link) {
     this.setState({
       styleIndex: index,
-      styleImageLink: link,
+      imageTransfer: link,
     })
     if (index === 0) {
       this.setState({transferStyle: false})
@@ -130,7 +145,7 @@ export default class AddRender extends Component {
   }
 
   doStylized() {
-    this.setState({transferStyle: true});
+    this.setState({transferStyle: true})
   }
 
   renderLoginRedirect = () => {
@@ -181,16 +196,18 @@ export default class AddRender extends Component {
 
                     <div class="col-md-12 text-center animate-box">
                       <p>
-                        <label id="largeFile" className="btn btn-secondary btn-lg btn-learn" style = {{display: this.state.image_id ? "none": ""}}>
+                        <label id="largeFile" className="btn btn-secondary btn-lg btn-learn" style={{display: (this.state.image_id || this.state.uploading) ? "none": ""}}>
                           <input type="file" id="file" className="btn btn-primary btn-lg btn-learn" className="input-image"
                           onChange={(e) => this.uploadImage(e.target.files[0])}
                           />
                         </label>
-
+                        <img src={LOADING_GIF} style = {{display: this.state.uploading ? "": "none"}}/>
                         <img id="image" src={this.state.image_id ? this.state.image_id: ""}
-                        style = {{maxWidth: "500px", maxHeight: "500px", display: this.state.image_id ? "": "none"}}
-                        alt="Please upload an image to start this project."
-                        class="img-responsive img-rounded card-1"/>
+                          style = {{maxWidth: "500px", maxHeight: "500px", display: (this.state.image_id && !this.state.uploading) ? "": "none"}}
+                          alt="Please upload an image to start this project."
+                          class="img-responsive img-rounded card-1"
+                          onLoad={() => this.setState({uploading: false})}
+                        />
                         <canvas id="canvas1" height="300px" style={{display: 'none'}}></canvas>
                       </p>
                     </div>
