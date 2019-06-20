@@ -106,7 +106,7 @@ const projects = [
     description: 'testing',
     image_id: 'https://i.imgur.com/LZUEDmb.jpg',
     blur: 0,
-    brightness: 1,
+    brightness: 1.5,
     contrast: 1,
     grayscale: 0,
     hue_rotate: 0,

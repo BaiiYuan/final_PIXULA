@@ -206,13 +206,12 @@ export default class Project extends Component {
     var imageFile = dataURLtoFile(imageDataURL, 'out.png');
     console.log(imageFile);
 
-    this.uploadImage(imageFile)
+    // this.uploadImage(imageFile)
     this.updateProject({
       variables: {
         id: this.props.match.params.id,
         title: this.state.title,
         description: this.state.description,
-        image_id: this.state.image_id,
         blur: this.state.blur[1],
         brightness: this.state.brightness[1],
         contrast: this.state.contrast[1],
@@ -313,7 +312,7 @@ export default class Project extends Component {
           <br />
 
           <NavLink key={id} to={"/download/" + id} class="icon-arrow-right22">
-            <button>Download</button>	
+            <button>Download</button>
 					</NavLink>
 
           <button onClick={this.handleSave}>Save</button>
