@@ -15,6 +15,7 @@ import ProjectsRender from "../../components/ProjectsRender"
 import AddRender from "../../components/AddRender"
 import Project from "../../components/ProjectPost/Project"
 import Download from "../../components/DownloadRender"
+import LoginButton from "../../components/button/login_button"
 
 const activeLink = {
   borderBottom: "3px solid #DD356E", 
@@ -22,11 +23,14 @@ const activeLink = {
   color: "#000", 
   paddingBottom: "15px" 
 };
+
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.toggle = this.toggle.bind(this);
+    this.logout = this.toggle.bind(this);
+    this.renderLoginRedirect = this.renderLoginRedirect.bind(this);
     this.state = {
       formTitle: '',
       formBody: '',
@@ -43,6 +47,25 @@ class App extends Component {
     }));
   }
 
+  logout = () => {
+    this.setState({
+      user_id: "", 
+      account: ""
+    })
+    console.log("logout!")
+  }
+
+  switch_account() {
+    console.log("switched!")
+  }
+
+  renderLoginRedirect = () => {
+		if (this.state.user_id == "") {
+			// alert("Please login first!")
+			return <Redirect to='/login' />
+		}
+  }
+
   render() {
     return (
       <BrowserRouter>
@@ -51,8 +74,8 @@ class App extends Component {
 
       {/*<div class="fh5co-loader"></div>*/}
 
-      <nav class="fh5co-nav" role="navigation">
-        <div class="top-menu">
+      <nav class="fh5co-nav" role="navigation" style = {{position: "sticky", top: "0"}}>
+        <div class="top-menu" style={{backgroundColor: "#fff", zIndex: "5000", position: "relateive"}}>
           <div class="container">
             <div class="row">
               <div class="col-xs-2">
@@ -62,22 +85,18 @@ class App extends Component {
                 <ul>
                   <li><NavLink activeStyle={activeLink} to="/home">Home</NavLink></li>
                   <li><NavLink activeStyle={activeLink} to="/projects">Projects</NavLink></li>
-                  <li class="btn-cta">
-                    <NavLink to="/login">
-                     <span>{
-                       this.state.user_id == "" ? "login": "Hi, "+ this.state.account
-
-                     }</span>
-                    </NavLink>
+          
+                  <li class="btn-cta" style={{display: this.state.user_id == "" ? "": "none"}}>
+                    <LoginButton user_id = {this.state.user_id} account = {this.state.account}/> 
                   </li>
-                  <li>
+                  <li class="btn-cta" style={{display: this.state.user_id == "" ? "none": ""}}>
+                    <a onClick={this.toggle}><span>Hi, {this.state.account}</span></a>
                     <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                      <DropdownToggle>
-                        Dropdown
-                      </DropdownToggle>
+                      <DropdownToggle style={{visibility: "hidden"}}> </DropdownToggle>
                       <DropdownMenu>
                         <DropdownItem header>Account</DropdownItem>
-                        <DropdownItem>Some Action</DropdownItem>
+                        <DropdownItem><NavLink to="/login" style={{color: "#212529", fontWeight: "400", fontSize: "1rem"}}>switch account</NavLink></DropdownItem>
+                        <DropdownItem><div onClick={() => {window.location.reload()}}>logout</div></DropdownItem>
                       </DropdownMenu>
                     </Dropdown> 
                   </li>
@@ -91,7 +110,7 @@ class App extends Component {
 
       <Switch>
         <Route exact path="/projects" component={() => <ProjectsRender user_id={this.state.user_id} account={this.state.account}/>} />
-        <Route path="/projects/:id?" component={(props) => <Project {...props}/>} />
+        <Route path="/projects/:id?" component={(props) => <Project {...props} user_id={this.state.user_id}/>} />
         <Route path="/home" component={HomeRender} />
         <Route path="/new" component={(props) => <AddRender {...props} user_id={this.state.user_id} />} />
         <Route path="/download/:id"  component={(props) => <Download {...props}/>} />

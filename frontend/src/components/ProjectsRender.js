@@ -13,17 +13,16 @@ import { BrowserRouter } from 'react-router-dom'
 export default class ProjectsRender extends Component {
 	renderLoginRedirect = () => {
 		if (this.props.user_id == "") {
-			alert("Please login first!")
 			return <Redirect to='/login' />
 		}
     }
 	render(){
-		console.log(this.props.user_id)
+		// console.log(this.props.user_id)
 
 		return(
 			<div id="fh5co-portfolio">
 				{this.renderLoginRedirect()}
-				<renderLoginRedirect user_id = {this.props.user_id}/>
+				{/* <renderLoginRedirect user_id = {this.props.user_id}/> */}
 				<div class="container">
 					<div class="row animate-box">
 						<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
@@ -39,7 +38,7 @@ export default class ProjectsRender extends Component {
 									if (data.projects !== undefined) {
 										return (
 											data.projects.map(e => {
-												console.log(e)
+												// console.log(e)
 												return (
 												<div class="col-md-4">
 													<div class="fh5co-portfolio animate-box">
@@ -48,8 +47,8 @@ export default class ProjectsRender extends Component {
 															<h3>{e.title}</h3>
 															<p>{e.description}</p>
 															<ul class="stuff">
-																<li><i class="icon-heart2"></i>200</li>
-																<li><i class="icon-eye2"></i>248</li>
+																<li><i class="icon-heart2"></i>Made by: </li>
+																<li><i class="icon-eye2"></i>you</li>
 																<li>
 																<NavLink key={e.id} to={"/Projects/" + e.id} class="icon-arrow-right22">
 																	Edit<i class="icon-arrow-right22"></i>

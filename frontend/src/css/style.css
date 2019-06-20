@@ -146,8 +146,7 @@ h1, h2, h3, h4, h5, h6, figure {
   -moz-box-shadow: 0px 14px 33px -9px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 14px 33px -9px rgba(0, 0, 0, 0.75);
   z-index: 1002;
-  visibility: hidden;
-  opacity: 0;
+  /* visibility: block; */
   position: absolute;
   top: 40px;
   left: 0;
@@ -162,7 +161,13 @@ h1, h2, h3, h4, h5, h6, figure {
   -o-transition: 0s;
   transition: 0s;
 }
+/* .fh5co-nav ul li.has-dropdown .dropdown {
+  opacity: 100%;
+  visibility: visible;
+} */
 .fh5co-nav ul li.has-dropdown .dropdown:before {
+  opacity: 100%;
+  visibility: visible;
   bottom: 100%;
   left: 40px;
   border: solid transparent;
@@ -677,7 +682,7 @@ h1, h2, h3, h4, h5, h6, figure {
 }
 
 .fh5co-heading {
-  margin-bottom: 5em;
+  margin-bottom: 2em;
 }
 .fh5co-heading.fh5co-heading-sm {
   margin-bottom: 2em;

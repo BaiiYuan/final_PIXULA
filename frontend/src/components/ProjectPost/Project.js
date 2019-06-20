@@ -52,6 +52,7 @@ function dataURLtoFile(dataurl, filename) {
   return new File([u8arr], filename, {type:mime});
 }
 
+
 export default class Project extends Component {
   constructor(props) {
     super(props);
@@ -225,6 +226,12 @@ export default class Project extends Component {
     })
   }
 
+  renderLoginRedirect = () => {
+		if (this.props.user_id == "") {
+			return <Redirect to='/login' />
+		}
+  }
+
   render(){
     const { id } = this.props.match.params
     console.log(id)
@@ -262,6 +269,7 @@ export default class Project extends Component {
     } else {
       return (
         <div>
+          {this.renderLoginRedirect()}
           <Mutation mutation={UPDATE_PROJECT_MUTATION}>
             {updateProject => {
               this.updateProject = updateProject

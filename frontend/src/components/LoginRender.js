@@ -16,14 +16,13 @@ export default class LoginRender extends Component {
   }
 
   render(){
-    console.log(this.state.login_button_on)
     return(
       <div id="fh5co-contact" onKeyPress={this.handleEnterKey}>
       <div class="container">
         <div class="row animate-box">
           <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
             <h2>Login</h2>
-            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
+            <p>To see your projects, please login here.If you don't have an account, you are welcomed to register one.</p>
           </div>
         </div>
 
