@@ -3,6 +3,7 @@ import { Query, Mutation } from 'react-apollo'
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 import ScrollToTop from "../../components/util/ScrollToTop"
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import ScrollUpButton from "react-scroll-up-button";
 import {
   IMAGES_QUERY, LOGIN_QUERY
 } from '../../graphql'
@@ -74,7 +75,7 @@ class App extends Component {
 
       {/*<div class="fh5co-loader"></div>*/}
 
-      <nav class="fh5co-nav" role="navigation" style = {{position: "sticky", top: "0"}}>
+      <nav class="fh5co-nav" role="navigation">
         <div class="top-menu" style={{backgroundColor: "#fff", zIndex: "5000", position: "relateive"}}>
           <div class="container">
             <div class="row">
@@ -140,9 +141,10 @@ class App extends Component {
         </div>
       </footer>
 
-      <div class="gototop js-top">
+      {/* <div class="gototop js-top">
         <a href="#" class="js-gotop"><i class="icon-arrow-up22"></i></a>
-      </div>
+      </div> */}
+      <ScrollUpButton />
 
       </body>
       </BrowserRouter>

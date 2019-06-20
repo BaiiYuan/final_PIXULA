@@ -13,6 +13,7 @@
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
+    "react-scroll-up-button": "^1.6.4",
     "reactstrap": "^8.0.0",
     "subscriptions-transport-ws": "^0.9.16"
   },
