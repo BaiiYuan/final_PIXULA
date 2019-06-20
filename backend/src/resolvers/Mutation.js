@@ -68,6 +68,7 @@ const Mutation = {
       opacity: 1,
       saturate: 1,
       sepia: 0,
+      public: false,
       ...args.data
     }
 
@@ -120,6 +121,7 @@ const Mutation = {
     project.opacity = data.opacity
     project.saturate = data.saturate
     project.sepia = data.sepia
+    project.public = project.public
 
 
     pubsub.publish(`project ${project.author}`, {

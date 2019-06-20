@@ -3,7 +3,8 @@ import { Query, Mutation, renderToStringWithData } from 'react-apollo'
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 
 import {
-  LOGIN_QUERY
+  LOGIN_QUERY,
+  CREATE_USER_MUTATION
 } from '../graphql'
 
 import "../css/style.css"
@@ -19,6 +20,12 @@ export default class LoginRender extends Component {
     return(
       <div id="fh5co-contact" onKeyPress={this.handleEnterKey}>
       <div class="container">
+        <Mutation mutation={CREATE_USER_MUTATION} onCompleted={() => this.setState({login_button_on: true})}>
+          {createUser => {
+            this.createUser = createUser
+            return <div></div>
+          }}
+        </Mutation>
         <div class="row animate-box">
           <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
             <h2>Login</h2>
@@ -70,7 +77,8 @@ export default class LoginRender extends Component {
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <input type="submit" value="sign up" class="btn btn-secondary btn-lg btn-learn"/>
+                    <input type="submit" value="sign up" class="btn btn-secondary btn-lg btn-learn"
+                      onClick={this.handleSignupButton}/>
                   </div>
                 </div>
               </div>
@@ -89,6 +97,18 @@ export default class LoginRender extends Component {
   handleEnterKey = e => {
     if (e.key === "Enter" && this.state.account !== '' && this.state.password !== '') {
       this.setState({login_button_on: true})
+    }
+  }
+
+  handleSignupButton = e => {
+    if (this.state.account !== '' && this.state.password !== '') {
+      console.log('signup')
+      this.createUser({
+        variables: {
+          account: this.state.account,
+          password: this.state.password
+        }
+      })
     }
   }
 }

@@ -34,6 +34,7 @@ export const PROJECT_INFO_QUERY = gql`
       opacity
       saturate
       sepia
+      public
     }
   }
 `

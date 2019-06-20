@@ -220,7 +220,8 @@ export default class Project extends Component {
         invert: this.state.invert[1],
         opacity: this.state.opacity[1],
         saturate: this.state.saturate[1],
-        sepia: this.state.sepia[1]
+        sepia: this.state.sepia[1],
+        public: this.state.public
       }
     })
   }
@@ -255,7 +256,8 @@ export default class Project extends Component {
                 opacity: ["opacity", project.opacity, ""],
                 saturate: ["saturate", project.saturate, ""],
                 sepia: ["sepia", project.sepia, ""],
-                image_id: project.image_id
+                image_id: project.image_id,
+                public: project.public
               }
 
               this.setState(new_state, this.useStateOnimage)

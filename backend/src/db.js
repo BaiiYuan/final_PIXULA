@@ -6,8 +6,8 @@ const users = [
   },
   {
     id: '02',
-    account: 'abcasdfarbc',
-    password: 'qwasdfewertyuiop'
+    account: 'abcabc',
+    password: 'qwertyuiop'
   },{
     id: '03',
     account: 'abcffabc',
@@ -35,7 +35,8 @@ const projects = [
     invert: 0,
     opacity: 1,
     saturate: 1,
-    sepia: 0
+    sepia: 0,
+    public: false
   },
   {
     id: '2',
@@ -51,7 +52,8 @@ const projects = [
     invert: 0,
     opacity: 1,
     saturate: 1,
-    sepia: 0
+    sepia: 0,
+    public: false
   },
   {
     id: '3',
@@ -67,7 +69,8 @@ const projects = [
     invert: 0,
     opacity: 1,
     saturate: 1,
-    sepia: 0
+    sepia: 0,
+    public: false
   },
   {
     id: '4',
@@ -83,7 +86,8 @@ const projects = [
     invert: 0,
     opacity: 1,
     saturate: 1,
-    sepia: 0
+    sepia: 0,
+    public: false
   },{
     id: '5',
     author: '02',
@@ -98,7 +102,8 @@ const projects = [
     invert: 0,
     opacity: 1,
     saturate: 1,
-    sepia: 0
+    sepia: 0,
+    public: false
   },{
     id: '6',
     author: '01',
@@ -113,7 +118,8 @@ const projects = [
     invert: 0,
     opacity: 1,
     saturate: 1,
-    sepia: 0
+    sepia: 0,
+    public: false
   },{
     id: '7',
     author: '01',
@@ -128,7 +134,8 @@ const projects = [
     invert: 0,
     opacity: 1,
     saturate: 1,
-    sepia: 0
+    sepia: 0,
+    public: false
   },{
     id: '8',
     author: '01',
@@ -143,7 +150,8 @@ const projects = [
     invert: 0,
     opacity: 1,
     saturate: 1,
-    sepia: 0
+    sepia: 0,
+    public: false
   }
 ]
 
