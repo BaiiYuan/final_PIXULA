@@ -133,9 +133,16 @@ export default class AddRender extends Component {
     this.setState({transferStyle: true});
   }
 
+  renderLoginRedirect = () => {
+		if (this.props.user_id == "") {
+			return <Redirect to='/login' />
+		}
+  }
+
   render(){
     return (
       <div>
+        {this.renderLoginRedirect()}
         {this.state.submit &&
           <Query query={PROJECT_ID_QUERY} variables={{author: this.props.user_id, title: this.state.title}}>
             {({loading, error, data}) => {
@@ -165,7 +172,7 @@ export default class AddRender extends Component {
                             <input type="text" className="our_input_text_h2"
                             placeholder="Click to add title"
                             onChange={e => this.setState({title: e.target.value})} />
-                            <input type="text" class="our_input_text_p"
+                            <input width="48" type="text" class="our_input_text_p"
                               placeholder="Click to add description."
                               onChange={e => this.setState({description: e.target.value})}/>
                         </div>
@@ -189,8 +196,7 @@ export default class AddRender extends Component {
                     </div>
                   </div>
                 </div>
-                <div id="fh5co-slider">
-                  <div class="overlay"></div>
+                <div id="fh5co-footer">
                   <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
                     <h2>Step 2</h2>
                     <p>Select the Style Transfer!</p>

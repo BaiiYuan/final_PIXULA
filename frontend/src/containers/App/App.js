@@ -36,8 +36,8 @@ class App extends Component {
       formTitle: '',
       formBody: '',
       authorId: 1,
-      user_id: '',
-      account: '',
+      user_id: '01',
+      account: 'qqq',
       dropdownOpen: false
     };
   }
@@ -114,7 +114,7 @@ class App extends Component {
         <Route path="/projects/:id?" component={(props) => <Project {...props} user_id={this.state.user_id}/>} />
         <Route path="/home" component={HomeRender} />
         <Route path="/new" component={(props) => <AddRender {...props} user_id={this.state.user_id} />} />
-        <Route path="/download/:id"  component={(props) => <Download {...props}/>} />
+        <Route path="/download/:id"  component={(props) => <Download {...props} user_id={this.state.user_id}/>} />
         <Route path="/login" component={(props) => <LoginRender {...props} login_action_handler={(user_id, account) => {this.setState({user_id: user_id, account: account})}} />} />
         <Redirect from="/" to="/home" />
       </Switch>

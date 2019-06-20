@@ -253,6 +253,11 @@ export default class Download extends Component {
     this.setState(obj, this.useStateOnimage)
   }
 
+  renderLoginRedirect = () => {
+		if (this.props.user_id == "") {
+			return <Redirect to='/login' />
+		}
+  }
 
   render(){
     const { id } = this.props.match.params
@@ -289,6 +294,7 @@ export default class Download extends Component {
     } else {
       return (
         <div>
+          {this.renderLoginRedirect()}
           <Mutation mutation={UPDATE_PROJECT_MUTATION}>
             {updateProject => {
               this.updateProject = updateProject
@@ -333,25 +339,32 @@ export default class Download extends Component {
             </div>
           </div>
 
-          <h1>some feature for croping</h1>
-          <div>
-
-            {this.state.croppedImageUrl && (
-              <img id="cropImage" alt="Crop"
-                src={this.state.croppedImageUrl}
-                style = {{
-                  maxWidth: "500px",
-                  maxHeight: "500px",
-                  display: this.state.image_id ? "": "none",
-                  filter: this.getAciveState(),
-                }}
-              />
-            )}
+          <div id="fh5co-header">
+              <div class="container">
+                  <div class="row animate-box">
+                      <div class="col-md-8 col-md-offset-2 text-center fh5co-cover">
+                        <h2>Resize & Crop!</h2>
+                        <p>Choose the size and shape before you download it!</p>
+                      </div>
+                  </div>
+                  <div class="col-md-12 text-center animate-box">
+                    <p>
+                      {this.state.croppedImageUrl && (
+                        <img id="cropImage" alt="Crop"
+                          src={this.state.croppedImageUrl}
+                          style = {{
+                            maxWidth: "500px",
+                            maxHeight: "500px",
+                            display: this.state.image_id ? "": "none",
+                            filter: this.getAciveState(),
+                          }}
+                        />
+                      )} 
+                    </p>
+                    <button class="btn btn-primary btn-lg btn-learn" onClick={this.download_img}>Download</button>
+                  </div>
+              </div>
           </div>
-
-          <br />
-          <button onClick={this.download_img}>Download</button>
-
         </div>
       )
     }
