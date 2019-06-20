@@ -1,0 +1,36 @@
+.wrap{
+	position: relative;
+	width: 100%;
+	max-width: 800px;
+}
+
+.value {
+  text-align: left;
+  margin: 3px;
+  width: 100px;
+}
+
+
+input[type="range"] {
+  display: block;
+  -webkit-appearance: none;
+	-moz-appearance: none;
+	background: #DD356E;
+	border-radius: 5px;
+  width: 200px;
+  height: 1px;
+  outline: 0;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background-color: #DD356E;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: .3s ease-in-out;
+}
+
+input[type="number"] {
+   margin-left: 5px;
+  }

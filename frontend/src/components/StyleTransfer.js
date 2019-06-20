@@ -118,21 +118,23 @@ export default class StyleTransfer extends Component {
                <option value={index} >{e.name}</option>
             )}
         </Input><br />
-        <div id="stylePreview">
-          <img src={this.state.styleImageLink} height="300" style={{display: this.state.styleImageLink ? "": "none"}}/>
+        <div id="stylePreview" >
+          <img className="card-1" src={this.state.styleImageLink} height="300" style={{display: this.state.styleImageLink ? "": "none"}}/>
           <img src="https://i.imgur.com/fnn9J6T.png" height="100" style={{display: this.state.transferStyle ? "": "none"}}/>
-          <img id="previewImage" src="" height="300" style={{display: this.state.transferStyle ? "": "none"}}/>
+          <img className="card-1" id="previewImage" src="" height="300" style={{display: this.state.transferStyle ? "": "none"}}/>
         </div> <br />
-        <Label for="styleStrengthLabel">Strength</Label> <br />
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={this.state.styleStrength}
-          onChange={this.changeStyleStrength}
-          disabled={this.state.styleIndex === 0  || !this.props.image_id }
-        /> <br />
+        <div class="text-center">
+          <Label for="styleStrengthLabel"><h4>Strength</h4></Label> 
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={this.state.styleStrength}
+            onChange={this.changeStyleStrength}
+            disabled={this.state.styleIndex === 0  || !this.props.image_id }
+          /> 
+        </div>
         <canvas
           id="stylized"
           width="500"

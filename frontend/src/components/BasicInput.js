@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { InputGroup, InputGroupAddon, InputGroupText, Input } from 'reactstrap';
+import "./css/BasicInput.css"
 
 class BasicInput extends Component {
   constructor(props) {
@@ -29,8 +30,8 @@ class BasicInput extends Component {
 
   render() {
     return (
-      <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-        <label>{this.props.datafilter}</label>
+      <div class= "wrap" style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+        <p class="value">{this.props.datafilter}</p>
         <br />
         <input
           type="range"

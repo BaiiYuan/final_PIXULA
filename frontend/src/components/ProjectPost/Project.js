@@ -298,36 +298,51 @@ export default class Project extends Component {
                           <img id="image" src={this.state.image_id ? this.state.image_id: ""}
                           style = {{maxWidth: "500px", maxHeight: "500px", display: this.state.image_id ? "": "none"}}
                           alt="Please upload an image to start this project."
-                          class="img-responsive img-rounded"/>
+                          class="img-responsive img-rounded "/>
                       </p>
                   </div>
               </div>
           </div>
+          
+          <div className="container">
+            <div className="row">
+              <div className="card-1 col-md-6" style={{padding: "40px"}}>
+								<div className="portfolio-text ">
+                 <h2> Style Sliders</h2>
+                </div>
+                {input_param_list.map(e =>
+                <BasicInput
+                    name={e.name} min={e.min} max={e.max} value={this.state[e.name][1]} step={e.step}
+                    datafilter={e.name} datascale="" onChange={(i) => this.applyFilter(i)}
+                />
+                )}
+              </div>
 
-          {input_param_list.map(e =>
-          <BasicInput
-              name={e.name} min={e.min} max={e.max} value={this.state[e.name][1]} step={e.step}
-              datafilter={e.name} datascale="" onChange={(i) => this.applyFilter(i)}
-          />
-          )}
+              <div class="card-1 col-md-5 col-md-offset-1  " style={{padding: "40px"}}>
+                <div className="portfolio-text ">
+                  <h2>Style Buttons</h2>
+                </div>
+                <button class="btn btn-primary btn-lg" onClick={() => this.resetFilter()}>Origin</button>
+                {Object.keys(css_filters).map(e =>
+                  <button class="btn btn-primary btn-lg" onClick={(i) => this.parseFIlterCss(i, css_filters[e])}>{e}</button>
+                )}
+              </div>
+            </div>
+          </div>
 
           <br />
 
-          <NavLink key={id} to={"/download/" + id} class="icon-arrow-right22">
-            <button>Download</button>
-					</NavLink>
-
-          <button onClick={this.handleSave}>Save</button>
 
           <div id="fh5co-started">
 
             <div class="overlay"></div>
             <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-              <h2>Style Button</h2>
-              <button class="btn btn-default btn-sm" onClick={() => this.resetFilter()}>Origin</button>
-              {Object.keys(css_filters).map(e =>
-                <button class="btn btn-default btn-sm" onClick={(i) => this.parseFIlterCss(i, css_filters[e])}>{e}</button>
-              )}
+              <h2>Save progress or Download!</h2>
+              <NavLink key={id} to={"/download/" + id} class="icon-arrow-right22">
+                <button class="btn btn-default btn-sm" >Download</button>
+					    </NavLink>
+              <button class="btn btn-default btn-sm" onClick={this.handleSave}>Save</button>
+              
             </div>
           </div>
         </div>

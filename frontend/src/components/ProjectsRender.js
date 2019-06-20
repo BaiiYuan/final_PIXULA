@@ -41,9 +41,9 @@ export default class ProjectsRender extends Component {
 												// console.log(e)
 												return (
 												<div class="col-md-4">
-													<div class="fh5co-portfolio animate-box">
+													<div class="fh5co-portfolio animate-box card-2">
 														<div className="portfolio-entry" style={{backgroundImage: 'url(' + e.image_id + ')'}}></div>
-														<div className="portfolio-text">
+														<div className="portfolio-text ">
 															<h3>{e.title}</h3>
 															<p>{e.description}</p>
 															<ul class="stuff">
@@ -72,7 +72,7 @@ export default class ProjectsRender extends Component {
 							<NavLink to={"/New/"}>
 								<div class="fh5co-portfolio animate-box">
 									<div className="portfolio-entry" style={{backgroundImage: 'url(../images/add.png)'}}></div>
-									<div className="portfolio-text">
+									<div className="portfolio-text card-2">
 										<h3>Add new</h3>
 										<h6>Click to add new project.</h6>
 										<ul class="stuff">

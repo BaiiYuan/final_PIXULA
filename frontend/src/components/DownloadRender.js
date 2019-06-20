@@ -321,7 +321,7 @@ export default class Download extends Component {
                   <img id="image" src={this.state.image_id ? this.state.image_id: ""}
                     style = {{maxWidth: "500px", maxHeight: "500px", display: "none"}}
                     alt="Please upload an image to start this project."
-                    class="img-responsive img-rounded"/>
+                    className="img-responsive img-rounded card-1"/>
                   <ReactCrop
                     src={this.state.image_id ? this.state.image_id: ""}
                     style = {{
@@ -333,6 +333,7 @@ export default class Download extends Component {
                     crop={this.state.crop}
                     onComplete={this.onCropComplete}
                     onChange={this.onCropChange}
+                    className="card-1"
                   />
                 </p>
               </div>
@@ -350,7 +351,7 @@ export default class Download extends Component {
                   <div class="col-md-12 text-center animate-box">
                     <p>
                       {this.state.croppedImageUrl && (
-                        <img id="cropImage" alt="Crop"
+                        <img className="card-1" id="cropImage" alt="Crop"
                           src={this.state.croppedImageUrl}
                           style = {{
                             maxWidth: "500px",
