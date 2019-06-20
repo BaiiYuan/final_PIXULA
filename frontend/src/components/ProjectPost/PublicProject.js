@@ -54,7 +54,7 @@ function dataURLtoFile(dataurl, filename) {
 
 const LOADING_GIF = require("../../containers/images/loader.gif")
 
-export default class Project extends Component {
+export default class PublicProject extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -203,29 +203,8 @@ export default class Project extends Component {
     r.send(d)
   }
 
-  async handleSave(e) {
-    const imageDataURL = await this.getRevisedImageFromCanvas()
-    var imageFile = dataURLtoFile(imageDataURL, 'out.png')
-    console.log(imageFile)
-
-    // this.uploadImage(imageFile)
-    this.updateProject({
-      variables: {
-        id: this.props.match.params.id,
-        title: this.state.title,
-        description: this.state.description,
-        blur: this.state.blur[1],
-        brightness: this.state.brightness[1],
-        contrast: this.state.contrast[1],
-        grayscale: this.state.grayscale[1],
-        hue_rotate: this.state.hue_rotate[1],
-        invert: this.state.invert[1],
-        opacity: this.state.opacity[1],
-        saturate: this.state.saturate[1],
-        sepia: this.state.sepia[1],
-        public: this.state.public
-      }
-    })
+  handleSave = () => {
+    console.log("There should be some mutation here.")
   }
 
   renderLoginRedirect = () => {
@@ -284,10 +263,7 @@ export default class Project extends Component {
               <div class="container">
                   <div class="row animate-box">
                       <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-                          <input type="text" className="our_input_text_h2"
-                            placeholder={this.state.title}
-                            value={this.state.title}
-                            onChange={e => this.setState({title: e.target.value})} />
+                            <h2>{this.state.title} </h2>
                             <input type="text" class="our_input_text_p"
                               placeholder={this.state.description}
                               value={this.state.description}
@@ -302,45 +278,29 @@ export default class Project extends Component {
 
                             style = {{maxWidth: "400px", maxHeight: "400px", display: this.state.image_id ? "": "none"}}
                             alt="Please upload an image to start this project."
-                            class="img-responsive img-rounded card-2"
+                            class="img-responsive img-rounded card-1"
                             onLoad={() => this.setState({loading: false})}
                           />
                           <img src={LOADING_GIF} style = {{display: this.state.loading ? "": "none"}}/>
                       </p>
                   </div>
+
               </div>
           </div>
           
           <div className="container">
             <div className="row">
-              <div className="card-2 col-md-6" style={{padding: "40px"}}>
+              <div className="card-2 col-md-6" style={{margin: "auto", padding: "40px"}}>
 								<div className="portfolio-text ">
-                 <h2> Style Sliders</h2>
+                 <h2> Style Slider Values</h2>
                 </div>
                 {input_param_list.map(e =>
-                <BasicInput
-                    name={e.name} min={e.min} max={e.max} value={this.state[e.name][1]} step={e.step}
-                    datafilter={e.name} datascale="" onChange={(i) => this.applyFilter(i)}
-                />
+                  <div><b>{e.name}</b>: {this.state[e.name][1]}</div>
                 )}
+                <div><b>Made by</b>: query the author</div>
+                <div><b>Used Style</b>: query the style</div>
               </div>
-
-              <div class="card-2 col-md-5 col-md-offset-1  " style={{padding: "40px"}}>
-                <div className="portfolio-text ">
-                  <h2>Style Buttons</h2>
-                </div>
-                <button class="btn btn-primary btn-lg" onClick={() => this.resetFilter()}>Origin</button>
-                {Object.keys(css_filters).map(e =>
-                  <button class="btn btn-primary btn-lg" onClick={(i) => this.parseFIlterCss(i, css_filters[e])}>{e}</button>
-                )}
-                <p></p>
-                <label class="checkbox-container"> 
-                  <h4 style={{marginBottom: "2px"}}>Make Public</h4>
-                  <input type="checkbox"/>
-                  <span class="checkmark"></span> 
-                  <p>If you made something public, people can see them through public gallery.</p>
-                </label>
-              </div>
+            
             </div>
           </div>
 
@@ -351,11 +311,11 @@ export default class Project extends Component {
 
             <div class="overlay"></div>
             <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-              <h2>Save progress or Download!</h2>
+              <h2>Copy to your gallery or Download!</h2>
+              <button class="btn btn-default btn-sm" onClick={this.handleCopy}>Copy</button>
               <NavLink key={id} to={"/download/" + id} class="icon-arrow-right22">
                 <button class="btn btn-default btn-sm" >Download</button>
 					    </NavLink>
-              <button class="btn btn-default btn-sm" onClick={this.handleSave}>Save</button>
               
             </div>
           </div>

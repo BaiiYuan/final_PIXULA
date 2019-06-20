@@ -150,6 +150,7 @@ export default class AddRender extends Component {
 
   renderLoginRedirect = () => {
 		if (this.props.user_id == "") {
+			alert("Please login to see the content on this page!")
 			return <Redirect to='/login' />
 		}
   }
@@ -174,7 +175,7 @@ export default class AddRender extends Component {
 
             return (
               <div>
-                <div id="fh5co-header">
+                <div id="fh5co-footer">
                   <div class="container">
                     <div class="row animate-box">
                       <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
@@ -216,7 +217,7 @@ export default class AddRender extends Component {
                 <div id="fh5co-footer">
                   <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
                     <h2>Step 2</h2>
-                    <p>Select the Style Transfer!</p>
+                    <p>This is for style transfer! You may transfer the style of your image.</p>
                     <StyleTransfer
                       image_id={this.state.image_id}
                       selectStyle={this.selectStyle}

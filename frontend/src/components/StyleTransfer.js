@@ -122,13 +122,14 @@ export default class StyleTransfer extends Component {
 
   render() {
     return (
-      <FormGroup>
-        <Label for="styleRangeLabel">Style Transfer</Label>
-        <Input type="select" name="styleSelect" id="exampleSelect" onChange={(e) => this.selectStyle(e)}>
+      <FormGroup width="400">
+        <Label for="styleRangeLabel"><h4>Choose your style</h4></Label>
+        <Input style={{width: "50%", margin: "auto"}} type="select" name="styleSelect" id="exampleSelect" onChange={(e) => this.selectStyle(e)}>
             {style_param_list.map((e, index) =>
                <option value={index} >{e.name}</option>
             )}
-        </Input><br />
+        </Input>
+        <br/>
 
         <div id="stylePreview">
           <img
@@ -155,7 +156,7 @@ export default class StyleTransfer extends Component {
             onLoad={() => this.setState({transfering: false})}
           />
         </div> <br />
-        <Label for="styleStrengthLabel">Strength</Label> <br />
+        <Label for="styleStrengthLabel"><h4>Choose the strength of the style</h4></Label> <br />
         <input
           type="range"
           min="0"
@@ -164,6 +165,7 @@ export default class StyleTransfer extends Component {
           value={this.state.styleStrength}
           onChange={this.changeStyleStrength}
           disabled={this.state.styleIndex === 0  || !this.props.image_id || this.state.transfering}
+          style={{margin: "auto"}}
         /> <br />
         <canvas
           id="stylized"
@@ -171,7 +173,7 @@ export default class StyleTransfer extends Component {
           height="500"
           style = {{maxWidth: "500px", maxHeight: "500px", display: "none"}}
         /> <br />
-        <Button onClick={this.doStylized} disabled={this.state.styleIndex === 0 || !this.props.image_id || this.state.transfering}>{this.state.buttonText}</Button> <br />
+        <button className="btn btn-primary btn-lg" onClick={this.doStylized} disabled={this.state.styleIndex === 0 || !this.props.image_id || this.state.transfering}>{this.state.buttonText}</button> <br />
       </FormGroup>
     )
   }

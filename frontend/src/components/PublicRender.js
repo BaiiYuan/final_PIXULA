@@ -10,7 +10,7 @@ import "../css/style.css"
 import { BrowserRouter } from 'react-router-dom'
 
 
-export default class ProjectsRender extends Component {
+export default class PublicRender extends Component {
 	renderLoginRedirect = () => {
 		if (this.props.user_id == "") {
 			alert("Please login to see the content on this page!")
@@ -27,7 +27,7 @@ export default class ProjectsRender extends Component {
 				<div class="container">
 					<div class="row animate-box">
 						<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-							<h2>Your Gallery</h2>
+							<h2>Public Gallery</h2>
 							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
 						</div>
 					</div>
@@ -49,10 +49,10 @@ export default class ProjectsRender extends Component {
 															<p>{e.description}</p>
 															<ul class="stuff">
 																<li><i class="icon-heart2"></i>Made by: </li>
-																<li><i class="icon-eye2"></i>you</li>
+																<li><i class="icon-eye2"></i>somebody</li>
 																<li>
-																<NavLink key={e.id} to={"/Projects/" + e.id} class="icon-arrow-right22">
-																	Edit<i class="icon-arrow-right22"></i>
+																<NavLink key={e.id} to={"/Public/" + e.id} class="icon-arrow-right22">
+																	View<i class="icon-arrow-right22"></i>
 																</NavLink>
 																</li>
 															</ul>

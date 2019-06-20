@@ -255,6 +255,7 @@ export default class Download extends Component {
 
   renderLoginRedirect = () => {
 		if (this.props.user_id == "") {
+			alert("Please login to see the content on this page!")
 			return <Redirect to='/login' />
 		}
   }

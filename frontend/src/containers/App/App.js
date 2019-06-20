@@ -13,8 +13,10 @@ import { BrowserRouter } from 'react-router-dom'
 import HomeRender from "../../components/HomeRender"
 import LoginRender from "../../components/LoginRender"
 import ProjectsRender from "../../components/ProjectsRender"
+import PublicRender from "../../components/PublicRender"
 import AddRender from "../../components/AddRender"
 import Project from "../../components/ProjectPost/Project"
+import PublicProject from "../../components/ProjectPost/PublicProject"
 import Download from "../../components/DownloadRender"
 import LoginButton from "../../components/button/login_button"
 
@@ -36,8 +38,8 @@ class App extends Component {
       formTitle: '',
       formBody: '',
       authorId: 1,
-      user_id: '01',
-      account: 'qqq',
+      user_id: '',
+      account: '',
       dropdownOpen: false
     };
   }
@@ -85,7 +87,9 @@ class App extends Component {
               <div class="col-xs-10 text-right menu-1">
                 <ul>
                   <li><NavLink activeStyle={activeLink} to="/home">Home</NavLink></li>
-                  <li><NavLink activeStyle={activeLink} to="/projects">Projects</NavLink></li>
+                  <li><NavLink activeStyle={activeLink} to="/public">Public Gallery</NavLink></li>
+                  <li><NavLink activeStyle={activeLink} to="/projects">Your Gallery</NavLink></li>
+                  <li><NavLink activeStyle={activeLink} to="/new">Add New</NavLink></li>
           
                   <li class="btn-cta" style={{display: this.state.user_id == "" ? "": "none"}}>
                     <LoginButton user_id = {this.state.user_id} account = {this.state.account}/> 
@@ -112,6 +116,8 @@ class App extends Component {
       <Switch>
         <Route exact path="/projects" component={() => <ProjectsRender user_id={this.state.user_id} account={this.state.account}/>} />
         <Route path="/projects/:id?" component={(props) => <Project {...props} user_id={this.state.user_id}/>} />
+        <Route exact path="/public" component={() => <PublicRender user_id={this.state.user_id} account={this.state.account}/>} />
+        <Route path="/public/:id?" component={(props) => <PublicProject {...props} user_id={this.state.user_id}/>} />
         <Route path="/home" component={HomeRender} />
         <Route path="/new" component={(props) => <AddRender {...props} user_id={this.state.user_id} />} />
         <Route path="/download/:id"  component={(props) => <Download {...props} user_id={this.state.user_id}/>} />
