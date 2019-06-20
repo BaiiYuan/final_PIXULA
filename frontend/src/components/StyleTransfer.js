@@ -1,15 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { BrowserRouter } from 'react-router-dom'
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
-
-import * as mi from '@magenta/image';
-var model = new mi.ArbitraryStyleTransferNetwork();
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
+import * as mi from '@magenta/image'
 
 function style_param(name, link)
 {
-  this.name = name;
-  this.link = link;
+  this.name = name
+  this.link = link
 }
+
 var style_param_list = [
   new style_param("None", "https://i.imgur.com/HN7dRfE.jpg"),
   new style_param("Shriek", "https://cdn.glitch.com/93893683-46da-4058-829c-a05792722f2b%2Fstyle.jpg"),
@@ -22,42 +21,45 @@ var style_param_list = [
   new style_param("Zigzag", "https://i.imgur.com/XZ7EemI.jpg"),
 ]
 
+var model = new mi.ArbitraryStyleTransferNetwork()
 const MAX_TRANSFER_SIZE = 500
+const LOADING_GIF = require("../containers/images/loader.gif")
 
 export default class StyleTransfer extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       styleIndex: 0,
       styleStrength: 1.,
       styleImageLink: style_param_list[0].link,
+      buttonText: "Stylized!",
       transferStyle: false,
     }
 
-    this.selectStyle = this.selectStyle.bind(this);
-    this.changeStyleStrength = this.changeStyleStrength.bind(this);
-    this.doStylized = this.doStylized.bind(this);
+    this.selectStyle = this.selectStyle.bind(this)
+    this.changeStyleStrength = this.changeStyleStrength.bind(this)
+    this.doStylized = this.doStylized.bind(this)
   }
 
   resizeImage(link) {
     return new Promise(resolve => {
-      var img = new Image();
-      img.setAttribute('crossOrigin', 'anonymous');
-      img.src = link;
+      var img = new Image()
+      img.setAttribute('crossOrigin', 'anonymous')
+      img.src = link
       img.onload = function () {
         const rate = MAX_TRANSFER_SIZE / Math.max(img.width, img.height)
 
         var oc = document.createElement('canvas')
-        oc.width = img.width * rate;
-        oc.height = img.height * rate;
-        oc.getContext('2d').drawImage(img, 0, 0, oc.width, oc.height);
+        oc.width = img.width * rate
+        oc.height = img.height * rate
+        oc.getContext('2d').drawImage(img, 0, 0, oc.width, oc.height)
 
-        var outImage = new Image();
+        var outImage = new Image()
         outImage.id = "pic"
-        outImage.src = oc.toDataURL();
+        outImage.src = oc.toDataURL()
 
         resolve(outImage)
-      };
+      }
     })
   }
 
@@ -83,28 +85,37 @@ export default class StyleTransfer extends Component {
   }
 
   async doStylized(e) {
+    this.setState({
+      transfering: true,
+      buttonText: "Stylizing...",
+    })
     console.log(this.props.image_id)
     if (this.props.image_id === "")
       return
 
     const contentImg = await this.resizeImage(this.props.image_id)
 
-    const styleImg = new Image();
-    styleImg.crossOrigin = "anonymous";
-    styleImg.src = this.state.styleImageLink;
+    const styleImg = new Image()
+    styleImg.crossOrigin = "anonymous"
+    styleImg.src = this.state.styleImageLink
     let styleStrength = this.state.styleStrength
 
-    var stylizedCanvas = document.getElementById('stylized');
+    var stylizedCanvas = document.createElement('canvas')
     var self = this
     function stylize() {
       console.log(model)
       model.stylize(contentImg, styleImg, styleStrength).then((imageData) => {
-        stylizedCanvas.getContext('2d').putImageData(imageData, 0, 0);
-        document.getElementById('previewImage').src = stylizedCanvas.toDataURL();
-        self.setState({transferStyle: true});
-      });
+        stylizedCanvas.width = imageData.width
+        stylizedCanvas.height = imageData.height
+        stylizedCanvas.getContext('2d').putImageData(imageData, 0, 0)
+        document.getElementById('previewImage').src = stylizedCanvas.toDataURL()
+        self.setState({
+          transferStyle: true,
+          buttonText: "Stylized!",
+        })
+      })
     }
-    model.initialize().then(stylize);
+    model.initialize().then(stylize)
     console.log(stylizedCanvas.toDataURL())
     this.props.doStylized()
   }
@@ -119,9 +130,27 @@ export default class StyleTransfer extends Component {
             )}
         </Input><br />
         <div id="stylePreview">
-          <img src={this.state.styleImageLink} height="300" style={{display: this.state.styleImageLink ? "": "none"}}/>
-          <img src="https://i.imgur.com/fnn9J6T.png" height="100" style={{display: this.state.transferStyle ? "": "none"}}/>
-          <img id="previewImage" src="" height="300" style={{display: this.state.transferStyle ? "": "none"}}/>
+          <img
+            src={this.state.styleImageLink}
+            height="300"
+            style={{display: this.state.styleImageLink ? "": "none"}}
+          />
+          <img
+            src="https://i.imgur.com/fnn9J6T.png"
+            height="100"
+            style={{display: (this.state.transferStyle || this.state.transfering) ? "": "none"}}
+          />
+          <img
+            src={LOADING_GIF}
+            style={{display: this.state.transfering ? "": "none"}}
+          />
+          <img
+            id="previewImage"
+            src=""
+            height="300"
+            style={{display: (this.state.transferStyle && !this.state.transfering) ? "": "none"}}
+            onLoad={() => this.setState({transfering: false})}
+          />
         </div> <br />
         <Label for="styleStrengthLabel">Strength</Label> <br />
         <input
@@ -131,7 +160,7 @@ export default class StyleTransfer extends Component {
           step="0.01"
           value={this.state.styleStrength}
           onChange={this.changeStyleStrength}
-          disabled={this.state.styleIndex === 0  || !this.props.image_id }
+          disabled={this.state.styleIndex === 0  || !this.props.image_id || this.state.transfering}
         /> <br />
         <canvas
           id="stylized"
@@ -139,7 +168,7 @@ export default class StyleTransfer extends Component {
           height="500"
           style = {{maxWidth: "500px", maxHeight: "500px", display: "none"}}
         /> <br />
-        <Button onClick={this.doStylized} disabled={this.state.styleIndex === 0 || !this.props.image_id}> Stylized! </Button> <br />
+        <Button onClick={this.doStylized} disabled={this.state.styleIndex === 0 || !this.props.image_id || this.state.transfering}>{this.state.buttonText}</Button> <br />
       </FormGroup>
     )
   }
