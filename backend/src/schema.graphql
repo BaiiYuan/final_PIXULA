@@ -43,6 +43,7 @@ input UpdateProjectInput {
   opacity: String!
   saturate: String!
   sepia: String!
+  public: Boolean!
 }
 
 type User {
@@ -67,6 +68,7 @@ type Project {
   opacity: String!
   saturate: String!
   sepia: String!
+  public: Boolean!
 }
 
 enum MutationType {

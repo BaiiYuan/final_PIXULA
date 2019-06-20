@@ -95,6 +95,7 @@ export const UPDATE_PROJECT_MUTATION = gql`
     $opacity: String!
     $saturate: String!
     $sepia: String!
+    $public: Boolean!
   ) {
     updateProject(
       id: $id
@@ -111,6 +112,7 @@ export const UPDATE_PROJECT_MUTATION = gql`
         opacity: $opacity
         saturate: $saturate
         sepia: $sepia
+        public: $public
       }
     ) {
       id
