@@ -27,7 +27,7 @@ export default class AddRender extends Component {
     super(props)
     console.log(props)
     this.state = {
-      image_id: "",//"LZUEDmb",
+      imageOriginal: "",//"LZUEDmb",
       imageTransfer: "",
       imageFinal: "",
       title: "",
@@ -73,7 +73,7 @@ export default class AddRender extends Component {
     this.setState({uploading: true})
     const link = await this.uploadImageAndGetLink(imageFile)
     this.setState({
-      image_id: link,
+      imageOriginal: link,
     })
   }
 
@@ -91,7 +91,7 @@ export default class AddRender extends Component {
       r.onreadystatechange = function () {
         if(r.status === 200 && r.readyState === 4) {
           let res = JSON.parse(r.responseText)
-          console.log(this.state.image_id)
+          console.log(this.state.imageOriginal)
           console.log(res.data)
           resolve(res.data.link)
         }
@@ -101,21 +101,24 @@ export default class AddRender extends Component {
   }
 
   async handleCreateProject(e) {
-    if (this.state.title === "" || this.state.description === "" || this.state.image_id === "")
+    if (this.state.title === "" || this.state.description === "" || this.state.imageOriginal === "")
       return
-    var image_id = this.state.image_id
+    var imageOriginal = this.state.imageOriginal
     console.log(this.state)
     if (this.state.styleIndex !== 0 && this.state.transferStyle) {
       const imageDataURL = document.getElementById('previewImage').src
       var imageFile = dataURLtoFile(imageDataURL, 'out.png')
       const link = await this.uploadImageAndGetLink(imageFile)
       console.log(link)
-      image_id = link
-      this.setState({imageFinal: link})
+      imageOriginal = link
+      this.setState({
+        imageTransfer: "",
+        imageFinal: link,
+      })
     } else {
       this.setState({
         imageTransfer: "",
-        imageFinal: "",
+        imageFinal: this.state.imageOriginal,
       })
     }
 
@@ -124,12 +127,14 @@ export default class AddRender extends Component {
         author: this.props.user_id,
         title: this.state.title,
         description: this.state.description,
-        image_id: image_id,
+        imageOriginal: this.state.imageOriginal,
+        imageTransfer: this.state.imageTransfer,
+        imageFinal: this.state.imageOriginal,
       }}
     )
 
     console.log(this.state)
-    this.setState({submit: true, image_id: image_id})
+    this.setState({submit: true, imageOriginal: imageOriginal})
   }
 
   selectStyle(index, link) {
@@ -172,7 +177,7 @@ export default class AddRender extends Component {
                 id: data.project_id.id,
                 title: this.state.title,
                 description: this.state.description,
-                image_id: this.state.image_id
+                imageOriginal: this.state.imageOriginal
               }
 
               this.props.handleNewProject(new_project)
@@ -209,14 +214,14 @@ export default class AddRender extends Component {
 
                     <div class="col-md-12 text-center animate-box">
                       <p>
-                        <label id="largeFile" className="btn btn-secondary btn-lg btn-learn" style={{display: (this.state.image_id || this.state.uploading) ? "none": ""}}>
+                        <label id="largeFile" className="btn btn-secondary btn-lg btn-learn" style={{display: (this.state.imageOriginal || this.state.uploading) ? "none": ""}}>
                           <input type="file" id="file" className="btn btn-primary btn-lg btn-learn" className="input-image"
                           onChange={(e) => this.uploadImage(e.target.files[0])}
                           />
                         </label>
                         <img src={LOADING_GIF} style = {{display: this.state.uploading ? "": "none"}}/>
-                        <img id="image" src={this.state.image_id ? this.state.image_id: ""}
-                          style = {{maxWidth: "500px", maxHeight: "500px", display: (this.state.image_id && !this.state.uploading) ? "": "none"}}
+                        <img id="image" src={this.state.imageOriginal ? this.state.imageOriginal: ""}
+                          style = {{maxWidth: "500px", maxHeight: "500px", display: (this.state.imageOriginal && !this.state.uploading) ? "": "none"}}
                           alt="Please upload an image to start this project."
                           class="img-responsive img-rounded card-1"
                           onLoad={() => this.setState({uploading: false})}
@@ -231,7 +236,7 @@ export default class AddRender extends Component {
                     <h2>Step 2</h2>
                     <p>This is for style transfer! You may transfer the style of your image.</p>
                     <StyleTransfer
-                      image_id={this.state.image_id}
+                      imageOriginal={this.state.imageOriginal}
                       selectStyle={this.selectStyle}
                       changeStyleStrength={this.changeStyleStrength}
                       doStylized={this.doStylized}

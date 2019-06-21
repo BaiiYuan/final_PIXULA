@@ -33,7 +33,7 @@ export default class PublicRender extends Component {
 					</div>
 
 					<div class="row">
-						<Query query={PUBLIC_QUERY} variables={{author: this.props.user_id}}>
+						<Query query={PUBLIC_QUERY}>
 							{({ loading, error, data, subscribeToMore }) => {
 								if (!loading && !error) {
 									if (data.projects !== undefined) {

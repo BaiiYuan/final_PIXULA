@@ -121,8 +121,7 @@ const Mutation = {
     project.opacity = data.opacity
     project.saturate = data.saturate
     project.sepia = data.sepia
-    project.public = project.public
-
+    project.public = data.public
 
 
 
