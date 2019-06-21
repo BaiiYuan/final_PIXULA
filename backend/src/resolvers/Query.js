@@ -30,6 +30,11 @@ const Query = {
     return db.projects.find(project => {
       return project.author === args.author && project.title === args.title
     })
+  },
+  projects_public(parent, args, { db }, info) {
+    return db.projects.filter(project => {
+      return project.public === true
+    })
   }
 }
 
