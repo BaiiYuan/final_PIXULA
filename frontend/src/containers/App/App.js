@@ -21,10 +21,10 @@ import Download from "../../components/DownloadRender"
 import LoginButton from "../../components/button/login_button"
 
 const activeLink = {
-  borderBottom: "3px solid #DD356E", 
-  margin: "0 auto", 
-  color: "#000", 
-  paddingBottom: "15px" 
+  borderBottom: "3px solid #DD356E",
+  margin: "0 auto",
+  color: "#000",
+  paddingBottom: "15px"
 };
 
 class App extends Component {
@@ -54,7 +54,7 @@ class App extends Component {
 
   logout = () => {
     this.setState({
-      user_id: "", 
+      user_id: "",
       account: "",
       projects: [],
       query: false
@@ -81,6 +81,7 @@ class App extends Component {
   }
 
   handleEditProject = project => {
+    console.log(project)
     const pos = this.state.projects.map(e => e.id).indexOf(project.id)
     console.log(pos)
     this.setState((state, props) => {
@@ -108,11 +109,11 @@ class App extends Component {
                 <ul>
                   <li><NavLink activeStyle={activeLink} to="/home">Home</NavLink></li>
                   <li><NavLink activeStyle={activeLink} to="/public">Public Gallery</NavLink></li>
-                  <li><NavLink activeStyle={activeLink} to="/projects">Your Gallery</NavLink></li>
+                  <li><NavLink activeStyle={activeLink} to="/projects">My Gallery</NavLink></li>
                   <li><NavLink activeStyle={activeLink} to="/new">Add New</NavLink></li>
-          
+
                   <li class="btn-cta" style={{display: this.state.user_id == "" ? "": "none"}}>
-                    <LoginButton user_id = {this.state.user_id} account = {this.state.account}/> 
+                    <LoginButton user_id = {this.state.user_id} account = {this.state.account}/>
                   </li>
                   <li class="btn-cta" style={{display: this.state.user_id == "" ? "none": ""}}>
                     <a onClick={this.toggle}><span>Hi, {this.state.account}</span></a>
@@ -123,7 +124,7 @@ class App extends Component {
                         <DropdownItem><NavLink to="/login" style={{color: "#212529", fontWeight: "400", fontSize: "1rem"}}>switch account</NavLink></DropdownItem>
                         <DropdownItem><div onClick={() => {window.location.reload()}}>logout</div></DropdownItem>
                       </DropdownMenu>
-                    </Dropdown> 
+                    </Dropdown>
                   </li>
                 </ul>
               </div>

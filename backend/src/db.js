@@ -131,7 +131,7 @@ const projects = [
     opacity: 1,
     saturate: 1,
     sepia: 0,
-    public: false
+    public: true
   },{
     id: '7',
     author: '01',
@@ -167,7 +167,7 @@ const projects = [
     opacity: 1,
     saturate: 1,
     sepia: 0,
-    public: false
+    public: true
   }
 ]
 

@@ -65,7 +65,7 @@ export default class LoginRender extends Component {
                 </div>
                 <div class="col-md-10">
                   <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Password"  value={this.state.password} onChange={e => this.setState({password: e.target.value})}/>
+                    <input type="password" class="form-control" placeholder="Password"  value={this.state.password} onChange={e => this.setState({password: e.target.value})}/>
                   </div>
                 </div>
 

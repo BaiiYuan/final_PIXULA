@@ -7,6 +7,16 @@ export const PROJECTS_QUERY = gql`
       title
       description
       imageFinal
+      blur
+      brightness
+      contrast
+      grayscale
+      hue_rotate
+      invert
+      opacity
+      saturate
+      sepia
+      public
     }
   }
 `
@@ -55,6 +65,16 @@ export const PUBLIC_QUERY = gql`
       title
       description
       imageFinal
+      blur
+      brightness
+      contrast
+      grayscale
+      hue_rotate
+      invert
+      opacity
+      saturate
+      sepia
+      public
     }
   }
 `

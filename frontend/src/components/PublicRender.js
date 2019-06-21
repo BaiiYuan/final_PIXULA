@@ -3,7 +3,7 @@ import { Query, Mutation, renderToStringWithData } from 'react-apollo'
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 
 import {
-  PROJECTS_QUERY
+  PUBLIC_QUERY
 } from '../graphql'
 
 import "../css/style.css"
@@ -16,7 +16,7 @@ export default class PublicRender extends Component {
 			alert("Please login to see the content on this page!")
 			return <Redirect to='/login' />
 		}
-    }
+  }
 	render(){
 		// console.log(this.props.user_id)
 
@@ -33,7 +33,7 @@ export default class PublicRender extends Component {
 					</div>
 
 					<div class="row">
-						<Query query={PROJECTS_QUERY} variables={{author: this.props.user_id}}>
+						<Query query={PUBLIC_QUERY} variables={{author: this.props.user_id}}>
 							{({ loading, error, data, subscribeToMore }) => {
 								if (!loading && !error) {
 									if (data.projects !== undefined) {
@@ -68,25 +68,6 @@ export default class PublicRender extends Component {
 								return <div></div>
 							}}
 						</Query>
-
-						<div class="col-md-4">
-							<NavLink to={"/New/"}>
-								<div class="fh5co-portfolio animate-box card-2">
-									<div className="portfolio-entry" style={{backgroundImage: 'url(../images/add.png)'}}></div>
-									<div className="portfolio-text">
-										<h3>Add new</h3>
-										<h6>Click to add new project.</h6>
-										<ul class="stuff">
-											<li><i class="icon-heart2"></i>200</li>
-											<li><i class="icon-eye2"></i>248</li>
-											<li>
-												Edit
-											</li>
-										</ul>
-									</div>
-								</div>
-							</NavLink>
-						</div>
 					</div>
 				</div>
 			</div>

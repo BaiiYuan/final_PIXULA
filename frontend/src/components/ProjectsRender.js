@@ -12,7 +12,35 @@ export default class ProjectsRender extends Component {
 			alert("Please login to see the content on this page!")
 			return <Redirect to='/login' />
 		}
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = {}
+    this.getActiveState = this.getActiveState.bind(this)
+  }
+
+  getActiveState(project) {
+    let activeState = {
+      blur: ["blur", project.blur, "px"],
+      brightness: ["brightness", project.brightness, ""],
+      contrast: ["contrast", project.contrast, ""],
+      grayscale: ["grayscale", project.grayscale, ""],
+      hue_rotate: ["hue-rotate", project.hue_rotate, "deg"],
+      invert: ["invert", project.invert, ""],
+      opacity: ["opacity", project.opacity, ""],
+      saturate: ["saturate", project.saturate, ""],
+      sepia: ["sepia", project.sepia, ""],
     }
+    activeState = Object.keys(activeState).map(function(keyName, keyIndex) {
+      return activeState[keyName]
+    })
+    activeState = activeState.filter(s => s[1] && Array.isArray(s))
+    activeState = activeState.map(s => s[0]+"("+s[1]+s[2]+") ")
+    activeState = activeState.join("")
+    return activeState
+  }
+
 	render(){
 		// console.log(this.props.user_id)
 		console.log(this.props.projects)
@@ -29,10 +57,10 @@ export default class ProjectsRender extends Component {
 					</div>
 
 					<div class="row">
-						{this.props.projects.map(e => 
+						{this.props.projects.map(e =>
 							<div class="col-md-4">
 								<div class="fh5co-portfolio animate-box card-2">
-									<div className="portfolio-entry" style={{backgroundImage: 'url(' + e.imageFinal + ')'}}></div>
+									<div className="portfolio-entry" style={{backgroundImage: 'url(' + e.imageFinal + ')', filter: this.getActiveState(e)}} ></div>
 									<div className="portfolio-text ">
 										<h3>{e.title}</h3>
 										<p>{e.description}</p>

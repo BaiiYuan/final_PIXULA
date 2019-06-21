@@ -112,6 +112,7 @@ export default class Project extends Component {
     this.parseFIlterCss = this.parseFIlterCss.bind(this)
     this.uploadImage = this.uploadImage.bind(this)
     this.handleSave = this.handleSave.bind(this)
+    this.handleChecked = this.handleChecked.bind(this)
   }
 
   getOrginFilter() {
@@ -136,7 +137,7 @@ export default class Project extends Component {
     this.setState(obj)
   }
 
-  getAciveState() {
+  getActiveState() {
     var activeState = this.state
     activeState = Object.keys(activeState).map(function(keyName, keyIndex) {
       return activeState[keyName]
@@ -149,7 +150,7 @@ export default class Project extends Component {
 
   useStateOnimage() {
     var image = document.getElementById("image")
-    image.style.filter =  this.getAciveState()
+    image.style.filter =  this.getActiveState()
   }
 
   applyFilter(e) {
@@ -159,7 +160,7 @@ export default class Project extends Component {
 
   getRevisedImageFromCanvas() {
     return new Promise(resolve => {
-      const filter = this.getAciveState()
+      const filter = this.getActiveState()
 
       var img = new Image()
       img.setAttribute('crossOrigin', 'anonymous')
@@ -264,7 +265,7 @@ export default class Project extends Component {
       variables: variables
     })
 
-    const new_project = {
+    const new_project = { // why this?
       id: this.props.match.params.id,
       title: this.state.title,
       description: this.state.description,
@@ -274,8 +275,13 @@ export default class Project extends Component {
     console.log(new_project)
     await this.refetch({id: this.props.match.params.id})
     this.setState({save: true, imageOriginal: undefined})
-    
-    this.props.handleEditProject(new_project)
+
+    this.props.handleEditProject(variables)
+  }
+
+  handleChecked(checked){
+    console.log(checked)
+    this.setState({public: checked})
   }
 
   renderLoginRedirect = () => {
@@ -294,7 +300,7 @@ export default class Project extends Component {
         <Query query={PROJECT_INFO_QUERY} variables={{id: id}}>
           {({ loading, error, data, refetch }) => {
             if (!loading && !error) {
-              console.log(data)
+              console.log("Project.js -> ", data)
               let { project } = data
 
               let new_state = {
@@ -323,6 +329,7 @@ export default class Project extends Component {
 
               return (
                 <div>
+                <button onClick={(e) => {console.log(this.state)}}>test</button>
                   <Mutation mutation={UPDATE_PROJECT_MUTATION}>
                     {updateProject => {
                       this.updateProject = updateProject
@@ -348,8 +355,7 @@ export default class Project extends Component {
                           <div class="col-md-12 text-center animate-box">
                               <p>
                                   <img id="image" src={this.state.imageOriginal ? this.state.imageOriginal: ""}
-
-                                    style = {{maxWidth: "400px", maxHeight: "400px", display: this.state.imageOriginal ? "": "none"}}
+                                    style = {{maxWidth: "400px", maxHeight: "400px", display: (this.state.imageOriginal && !this.state.loading) ? "": "none"}}
                                     alt="Please upload an image to start this project."
                                     class="img-responsive img-rounded card-2"
                                     onLoad={() => this.setState({loading: false})}
@@ -387,7 +393,7 @@ export default class Project extends Component {
                         <p></p>
                         <label class="checkbox-container">
                           <h4 style={{marginBottom: "2px"}}>Make Public</h4>
-                          <input type="checkbox"/>
+                          <input type="checkbox" defaultChecked={this.state.public} onClick={(e) => this.handleChecked(e.target.checked)}/>
                           <span class="checkmark"></span>
                           <p>If you made something public, people can see them through public gallery.</p>
                         </label>
@@ -409,7 +415,6 @@ export default class Project extends Component {
                       <NavLink to="/projects">
                         <button class="btn btn-default btn-sm" onClick={this.handleSave}>Save</button>
                       </NavLink>
-                      }
                     </div>
                   </div>
                 </div>
@@ -419,10 +424,10 @@ export default class Project extends Component {
             return <div></div>
           }}
       </Query>
-    
-        
+
+
       </div>
     )
-    
+
   }
 }
