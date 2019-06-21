@@ -25,6 +25,7 @@ function dataURLtoFile(dataurl, filename) {
 export default class AddRender extends Component {
   constructor(props) {
     super(props)
+    console.log(props)
     this.state = {
       image_id: "",//"LZUEDmb",
       imageTransfer: "",
@@ -126,8 +127,9 @@ export default class AddRender extends Component {
         image_id: image_id,
       }}
     )
+
     console.log(this.state)
-    this.setState({submit: true})
+    this.setState({submit: true, image_id: image_id})
   }
 
   selectStyle(index, link) {
@@ -156,6 +158,7 @@ export default class AddRender extends Component {
   }
 
   render(){
+    console.log(this.props.newProject)
     return (
       <div>
         {this.renderLoginRedirect()}
@@ -164,6 +167,15 @@ export default class AddRender extends Component {
             {({loading, error, data}) => {
               if (loading || error)
                 return <div></div>
+
+              const new_project = {
+                id: data.project_id.id,
+                title: this.state.title,
+                description: this.state.description,
+                image_id: this.state.image_id
+              }
+
+              this.props.newProject(new_project)
 
               return <Redirect push to={"/Projects/" + data.project_id.id} />
             }}

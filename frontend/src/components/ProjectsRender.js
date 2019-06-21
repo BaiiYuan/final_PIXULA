@@ -2,10 +2,6 @@ import React, { Component } from 'react'
 import { Query, Mutation, renderToStringWithData } from 'react-apollo'
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 
-import {
-  PROJECTS_QUERY
-} from '../graphql'
-
 import "../css/style.css"
 import { BrowserRouter } from 'react-router-dom'
 
@@ -19,7 +15,7 @@ export default class ProjectsRender extends Component {
     }
 	render(){
 		// console.log(this.props.user_id)
-
+		console.log(this.props.projects)
 		return(
 			<div id="fh5co-portfolio">
 				{this.renderLoginRedirect()}
@@ -33,41 +29,26 @@ export default class ProjectsRender extends Component {
 					</div>
 
 					<div class="row">
-						<Query query={PROJECTS_QUERY} variables={{author: this.props.user_id}}>
-							{({ loading, error, data, subscribeToMore }) => {
-								if (!loading && !error) {
-									if (data.projects !== undefined) {
-										return (
-											data.projects.map(e => {
-												// console.log(e)
-												return (
-												<div class="col-md-4">
-													<div class="fh5co-portfolio animate-box card-2">
-														<div className="portfolio-entry" style={{backgroundImage: 'url(' + e.image_id + ')'}}></div>
-														<div className="portfolio-text ">
-															<h3>{e.title}</h3>
-															<p>{e.description}</p>
-															<ul class="stuff">
-																<li><i class="icon-heart2"></i>Made by: </li>
-																<li><i class="icon-eye2"></i>you</li>
-																<li>
-																<NavLink key={e.id} to={"/Projects/" + e.id} class="icon-arrow-right22">
-																	Edit<i class="icon-arrow-right22"></i>
-																</NavLink>
-																</li>
-															</ul>
-														</div>
-													</div>
-												</div>
-												)
-											}
-										)
-									)
-								}
-							}
-								return <div></div>
-							}}
-						</Query>
+						{this.props.projects.map(e => 
+							<div class="col-md-4">
+								<div class="fh5co-portfolio animate-box card-2">
+									<div className="portfolio-entry" style={{backgroundImage: 'url(' + e.image_id + ')'}}></div>
+									<div className="portfolio-text ">
+										<h3>{e.title}</h3>
+										<p>{e.description}</p>
+										<ul class="stuff">
+											<li><i class="icon-heart2"></i>Made by: </li>
+											<li><i class="icon-eye2"></i>you</li>
+											<li>
+											<NavLink key={e.id} to={"/Projects/" + e.id} class="icon-arrow-right22">
+												Edit<i class="icon-arrow-right22"></i>
+											</NavLink>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						)}
 
 						<div class="col-md-4">
 							<NavLink to={"/New/"}>

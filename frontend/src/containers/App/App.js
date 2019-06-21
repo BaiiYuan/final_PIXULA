@@ -5,7 +5,7 @@ import ScrollToTop from "../../components/util/ScrollToTop"
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import ScrollUpButton from "react-scroll-up-button";
 import {
-  IMAGES_QUERY, LOGIN_QUERY
+  PROJECTS_QUERY
 } from '../../graphql'
 
 import "../../css/style.css"
@@ -40,7 +40,8 @@ class App extends Component {
       authorId: 1,
       user_id: '',
       account: '',
-      dropdownOpen: false
+      dropdownOpen: false,
+      projects: []
     };
   }
 
@@ -53,7 +54,9 @@ class App extends Component {
   logout = () => {
     this.setState({
       user_id: "", 
-      account: ""
+      account: "",
+      projects: [],
+      query: false
     })
     console.log("logout!")
   }
@@ -67,6 +70,13 @@ class App extends Component {
 			// alert("Please login first!")
 			return <Redirect to='/login' />
 		}
+  }
+
+  newProject = project => {
+    this.setState((state, props) => {
+      state.projects.unshift(project)
+      return state
+    })
   }
 
   render() {
@@ -113,13 +123,28 @@ class App extends Component {
         </div>
       </nav>
 
+      {this.state.user_id !== '' && !this.state.query &&
+        <Query query={PROJECTS_QUERY} variables={{author: this.state.user_id}}>
+          {({ loading, error, data, subscribeToMore }) => {
+            if (!loading && !error)
+              if (data.projects !== undefined) {
+                this.setState({projects: data.projects, query: true})
+              }
+
+            console.log(this.state.projects)
+
+            return <div></div>
+          }}
+        </Query>
+      }
+
       <Switch>
-        <Route exact path="/projects" component={() => <ProjectsRender user_id={this.state.user_id} account={this.state.account}/>} />
+        <Route exact path="/projects" component={() => <ProjectsRender user_id={this.state.user_id} account={this.state.account} projects={this.state.projects}/>} />
         <Route path="/projects/:id?" component={(props) => <Project {...props} user_id={this.state.user_id}/>} />
         <Route exact path="/public" component={() => <PublicRender user_id={this.state.user_id} account={this.state.account}/>} />
         <Route path="/public/:id?" component={(props) => <PublicProject {...props} user_id={this.state.user_id}/>} />
         <Route path="/home" component={HomeRender} />
-        <Route path="/new" component={(props) => <AddRender {...props} user_id={this.state.user_id} />} />
+        <Route path="/new" component={(props) => <AddRender {...props} user_id={this.state.user_id} newProject={this.newProject} />} />
         <Route path="/download/:id"  component={(props) => <Download {...props} user_id={this.state.user_id}/>} />
         <Route path="/login" component={(props) => <LoginRender {...props} login_action_handler={(user_id, account) => {this.setState({user_id: user_id, account: account})}} />} />
         <Redirect from="/" to="/home" />
