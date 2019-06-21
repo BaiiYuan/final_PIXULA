@@ -122,7 +122,7 @@ export const UPDATE_PROJECT_MUTATION = gql`
       }
     ) {
       id
-      image_id
+      imageFinal
     }
   }
 `

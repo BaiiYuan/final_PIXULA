@@ -21,6 +21,7 @@ const Query = {
     })
   },
   project(parent, args, { db }, info) {
+    console.log("fetch")
     return db.projects.find(project => {
       return project.id === args.id
     })

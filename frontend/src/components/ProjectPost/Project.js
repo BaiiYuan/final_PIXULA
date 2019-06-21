@@ -242,9 +242,7 @@ export default class Project extends Component {
     console.log(imageFile)
 
     // this.uploadImage(imageFile)
-    console.log("one")
-    this.updateProject({
-      variables: {
+    const variables = {
         id: this.props.match.params.id,
         title: this.state.title,
         description: this.state.description,
@@ -261,19 +259,23 @@ export default class Project extends Component {
         imageTransfer: this.state.imageTransfer,
         imageFinal: this.state.imageFinal
       }
+    console.log(variables)
+    await this.updateProject({
+      variables: variables
     })
-    console.log("two")
 
     const new_project = {
       id: this.props.match.params.id,
       title: this.state.title,
       description: this.state.description,
-      imageOriginal: this.state.imageOriginal
+      imageFinal: this.state.imageFinal
     }
 
+    console.log(new_project)
+    await this.refetch({id: this.props.match.params.id})
+    this.setState({save: true, imageOriginal: undefined})
+    
     this.props.handleEditProject(new_project)
-    // this.setState({save: true})
-    console.log("good")
   }
 
   renderLoginRedirect = () => {
@@ -285,12 +287,12 @@ export default class Project extends Component {
 
   render(){
     const { id } = this.props.match.params
-    console.log(id)
-
-    if (this.state.imageOriginal === undefined) {
-      return(
+    console.log(this.state.imageOriginal)
+    return (
+      <div>
+        {this.renderLoginRedirect()}
         <Query query={PROJECT_INFO_QUERY} variables={{id: id}}>
-          {({ loading, error, data, subscribeToMore }) => {
+          {({ loading, error, data, refetch }) => {
             if (!loading && !error) {
               console.log(data)
               let { project } = data
@@ -312,111 +314,115 @@ export default class Project extends Component {
                 imageFinal: project.imageFinal,
                 public: project.public
               }
+              this.refetch = refetch
 
-              this.setState(new_state, this.useStateOnimage)
+              if (this.state.imageOriginal === undefined) {
+                this.setState(new_state, this.useStateOnimage)
+                return <div></div>
+              }
+
+              return (
+                <div>
+                  <Mutation mutation={UPDATE_PROJECT_MUTATION}>
+                    {updateProject => {
+                      this.updateProject = updateProject
+                      return <div></div>
+                    }}
+                  </Mutation>
+                  <div id="fh5co-header">
+                      <div class="container">
+                          <div class="row animate-box">
+                              <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+                                  <input type="text" className="our_input_text_h2"
+                                    placeholder={this.state.title}
+                                    value={this.state.title}
+                                    onChange={e => this.setState({title: e.target.value})} />
+                                    <input type="text" class="our_input_text_p"
+                                      placeholder={this.state.description}
+                                      value={this.state.description}
+                                      onChange={e => this.setState({description: e.target.value})}/>
+
+                              </div>
+                          </div>
+
+                          <div class="col-md-12 text-center animate-box">
+                              <p>
+                                  <img id="image" src={this.state.imageOriginal ? this.state.imageOriginal: ""}
+
+                                    style = {{maxWidth: "400px", maxHeight: "400px", display: this.state.imageOriginal ? "": "none"}}
+                                    alt="Please upload an image to start this project."
+                                    class="img-responsive img-rounded card-2"
+                                    onLoad={() => this.setState({loading: false})}
+                                  />
+                                  <img src={LOADING_GIF} style = {{display: this.state.loading ? "": "none"}}/>
+                              </p>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div className="container">
+                    <div className="row">
+                      <div className="card-2 col-md-6" style={{padding: "40px"}}>
+                        <div className="portfolio-text ">
+                         <h2> Style Sliders</h2>
+                        </div>
+                        {input_param_list.map(e =>
+                        <BasicInput
+                            name={e.name} min={e.min} max={e.max} value={this.state[e.name][1]} step={e.step}
+                            datafilter={e.name} datascale="" onChange={(i) => this.applyFilter(i)}
+                        />
+                        )}
+                      </div>
+
+                      <div class="card-2 col-md-5 col-md-offset-1  " style={{padding: "40px"}}>
+                        <div className="portfolio-text ">
+                          <h2>Style Buttons</h2>
+                        </div>
+                        <div style={{overflowX : 'auto', maxHeight: "200px"}}>
+                          <button class="btn btn-primary btn-lg" onClick={() => this.resetFilter()}>Origin</button>
+                          {Object.keys(css_filters).map(e =>
+                            <button class="btn btn-primary btn-lg" onClick={(i) => this.parseFIlterCss(i, css_filters[e])}>{e}</button>
+                          )}
+                        </div>
+                        <p></p>
+                        <label class="checkbox-container">
+                          <h4 style={{marginBottom: "2px"}}>Make Public</h4>
+                          <input type="checkbox"/>
+                          <span class="checkmark"></span>
+                          <p>If you made something public, people can see them through public gallery.</p>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <br />
+
+
+                  <div id="fh5co-started">
+
+                    <div class="overlay"></div>
+                    <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+                      <h2>Save progress or Download!</h2>
+                      <NavLink key={id} to={"/download/" + id} class="icon-arrow-right22">
+                        <button class="btn btn-default btn-sm" >Download</button>
+                      </NavLink>
+                      <NavLink to="/projects">
+                        <button class="btn btn-default btn-sm" onClick={this.handleSave}>Save</button>
+                      </NavLink>
+                      }
+                    </div>
+                  </div>
+                </div>
+              )
             }
 
             return <div></div>
           }}
       </Query>
-      )
-    } else {
-      if (this.state.save)
-        return <Redirect push to={"/projects"} />
-
-      return (
-        <div>
-          {this.renderLoginRedirect()}
-          <Mutation mutation={UPDATE_PROJECT_MUTATION}>
-            {updateProject => {
-              this.updateProject = updateProject
-              return <div></div>
-            }}
-          </Mutation>
-          <div id="fh5co-header">
-              <div class="container">
-                  <div class="row animate-box">
-                      <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-                          <input type="text" className="our_input_text_h2"
-                            placeholder={this.state.title}
-                            value={this.state.title}
-                            onChange={e => this.setState({title: e.target.value})} />
-                            <input type="text" class="our_input_text_p"
-                              placeholder={this.state.description}
-                              value={this.state.description}
-                              onChange={e => this.setState({description: e.target.value})}/>
-
-                      </div>
-                  </div>
-
-                  <div class="col-md-12 text-center animate-box">
-                      <p>
-                          <img id="image" src={this.state.imageOriginal ? this.state.imageOriginal: ""}
-
-                            style = {{maxWidth: "400px", maxHeight: "400px", display: this.state.imageOriginal ? "": "none"}}
-                            alt="Please upload an image to start this project."
-                            class="img-responsive img-rounded card-2"
-                            onLoad={() => this.setState({loading: false})}
-                          />
-                          <img src={LOADING_GIF} style = {{display: this.state.loading ? "": "none"}}/>
-                      </p>
-                  </div>
-              </div>
-          </div>
-
-          <div className="container">
-            <div className="row">
-              <div className="card-2 col-md-6" style={{padding: "40px"}}>
-								<div className="portfolio-text ">
-                 <h2> Style Sliders</h2>
-                </div>
-                {input_param_list.map(e =>
-                <BasicInput
-                    name={e.name} min={e.min} max={e.max} value={this.state[e.name][1]} step={e.step}
-                    datafilter={e.name} datascale="" onChange={(i) => this.applyFilter(i)}
-                />
-                )}
-              </div>
-
-              <div class="card-2 col-md-5 col-md-offset-1  " style={{padding: "40px"}}>
-                <div className="portfolio-text ">
-                  <h2>Style Buttons</h2>
-                </div>
-                <div style={{overflowX : 'auto', maxHeight: "200px"}}>
-                  <button class="btn btn-primary btn-lg" onClick={() => this.resetFilter()}>Origin</button>
-                  {Object.keys(css_filters).map(e =>
-                    <button class="btn btn-primary btn-lg" onClick={(i) => this.parseFIlterCss(i, css_filters[e])}>{e}</button>
-                  )}
-                </div>
-                <p></p>
-                <label class="checkbox-container">
-                  <h4 style={{marginBottom: "2px"}}>Make Public</h4>
-                  <input type="checkbox"/>
-                  <span class="checkmark"></span>
-                  <p>If you made something public, people can see them through public gallery.</p>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <br />
-
-
-          <div id="fh5co-started">
-
-            <div class="overlay"></div>
-            <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-              <h2>Save progress or Download!</h2>
-              <NavLink key={id} to={"/download/" + id} class="icon-arrow-right22">
-                <button class="btn btn-default btn-sm" >Download</button>
-					    </NavLink>
-              <NavLink to={"/projects"}>
-                <button class="btn btn-default btn-sm" onClick={this.handleSave}>Save</button>
-              </NavLink>
-            </div>
-          </div>
-        </div>
-      )
-    }
+    
+        
+      </div>
+    )
+    
   }
 }

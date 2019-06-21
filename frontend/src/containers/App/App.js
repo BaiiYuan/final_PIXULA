@@ -160,9 +160,6 @@ class App extends Component {
         <Redirect from="/" to="/home" />
       </Switch>
 
-
-
-
       <footer id="fh5co-footer" role="contentinfo">
         <div class="row copyright">
           <div class="col-md-12 text-center">

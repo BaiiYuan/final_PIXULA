@@ -56,7 +56,6 @@ const Mutation = {
     if (titleTaken) {
       throw new Error('Title has been used')
     }
-    
     const project = {
       id: uuidv4(),
       blur: 0,
@@ -123,6 +122,8 @@ const Mutation = {
     project.saturate = data.saturate
     project.sepia = data.sepia
     project.public = project.public
+
+
 
 
     pubsub.publish(`project ${project.author}`, {
