@@ -32,15 +32,47 @@ var input_param_list = [
   new input_param("sepia", "0", "1", "0.01", ""),
 ]
 var css_filters = {
-  "1997": "sepia(.5) hue-rotate(-30) saturate(1.40)",
-  "aden": "sepia(.2) brightness(1.15) saturate(1.4)",
-  "amaro": "sepia(.35) contrast(1.1) brightness(1.2) saturate(1.3)",
-  "earlybird": "sepia(.25) contrast(1.25) brightness(1.15) saturate(.9) hue-rotate(-5)",
-  "moon": "brightness(1.4) contrast(.95) saturate(0) sepia(.35)",
-  "toaster": "sepia(.25) contrast(1.5) brightness(.95) hue-rotate(-15)",
-  "xpro-ii": "sepia(.45) contrast(1.25) brightness(1.75) saturate(1.3) hue-rotate(-5)",
-  "clarendon": "sepia(.15) contrast(1.25) brightness(1.25) hue-rotate(5)",
-  "rise": "sepia(.25) contrast(1.25) brightness(1.2) saturate(.9)"
+  "Inkwell": "brightness(1.25) contrast(.85) grayscale(1)",
+  "X-Pro": "sepia(.45) contrast(1.25) brightness(1.75) saturate(1.3) hue-rotate(-5)",
+  "Skyline": "sepia(.15) contrast(1.25) brightness(1.25) saturate(1.2)",
+  "Poprocket": "sepia(.15) brightness(1.2)",
+  "Reyes": "sepia(.75) contrast(.75) brightness(1.25) saturate(1.4)",
+  "Sierra": "sepia(.25) contrast(1.5) brightness(.9) hue-rotate(-15)",
+  "Charmes": "sepia(.25) contrast(1.25) brightness(1.25) saturate(1.35) hue-rotate(-5)",
+  "Hudson": "sepia(.25) contrast(1.2) brightness(1.2) saturate(1.05) hue-rotate(-15)",
+  "Walden": "sepia(.35) contrast(.8) brightness(1.25) saturate(1.4)",
+  "Perpetua": "contrast(1.1) brightness(1.25) saturate(1.1)",
+  "Earlybird": "sepia(.25) contrast(1.25) brightness(1.15) saturate(.9) hue-rotate(-5)",
+  "Clarendon": "sepia(.15) contrast(1.25) brightness(1.25) hue-rotate(5)",
+  "Ginza": "sepia(.25) contrast(1.15) brightness(1.2) saturate(1.35) hue-rotate(-5)",
+  "Brannan": "sepia(.4) contrast(1.25) brightness(1.1) saturate(.9) hue-rotate(-2)",
+  "Willow": "brightness(1.2) contrast(.85) saturate(.05) sepia(.2)",
+  "Amaro": "sepia(.35) contrast(1.1) brightness(1.2) saturate(1.3)",
+  "Hefe": "sepia(.4) contrast(1.5) brightness(1.2) saturate(1.4) hue-rotate(-10)",
+  "Sutro": "sepia(.4) contrast(1.2) brightness(.9) saturate(1.4) hue-rotate(-10)",
+  "Vesper": "sepia(.35) contrast(1.15) brightness(1.2) saturate(1.3)",
+  "Dogpatch": "sepia(.35) saturate(1.1) contrast(1.5)",
+  "Valencia": "sepia(.25) contrast(1.1) brightness(1.1)",
+  "Crema": "sepia(.5) contrast(1.25) brightness(1.15) saturate(.9) hue-rotate(-2)",
+  "1977": "sepia(.5) hue-rotate(-30) saturate(1.4)",
+  "Toaster": "sepia(.25) contrast(1.5) brightness(.95) hue-rotate(-15)",
+  "Rise": "sepia(.25) contrast(1.25) brightness(1.2) saturate(.9)",
+  "Brooklyn": "sepia(.25) contrast(1.25) brightness(1.25) hue-rotate(5)",
+  "Nashville": "sepia(.25) contrast(1.5) brightness(.9) hue-rotate(-15)",
+  "Helena": "sepia(.5) contrast(1.05) brightness(1.05) saturate(1.35)",
+  "Moon": "brightness(1.4) contrast(.95) saturate(0) sepia(.35)",
+  "Ludwig": "sepia(.25) contrast(1.05) brightness(1.05) saturate(2)",
+  "Aden": "sepia(.2) brightness(1.15) saturate(1.4)",
+  "Lo-Fi": "saturate(1.1) contrast(1.5)",
+  "Slumber": "sepia(.35) contrast(1.25) saturate(1.25)",
+  "Gingham": "contrast(1.1) brightness(1.1)",
+  "Juno": "sepia(.35) contrast(1.15) brightness(1.15) saturate(1.8)",
+  "Ashby": "sepia(.5) contrast(1.2) saturate(1.8)",
+  "Maven": "sepia(.35) contrast(1.05) brightness(1.05) saturate(1.75)",
+  "Kelvin": "sepia(.15) contrast(1.5) brightness(1.1) hue-rotate(-10)",
+  "Stinson": "sepia(.35) contrast(1.25) brightness(1.1) saturate(1.25)",
+  "Mayfair": "contrast(1.1) brightness(1.15) saturate(1.1)",
+  "Lark": "sepia(.25) contrast(1.2) brightness(1.3) saturate(1.25)",
 }
 
 function dataURLtoFile(dataurl, filename) {
@@ -328,7 +360,7 @@ export default class Project extends Component {
                   </div>
               </div>
           </div>
-          
+
           <div className="container">
             <div className="row">
               <div className="card-2 col-md-6" style={{padding: "40px"}}>
@@ -347,15 +379,17 @@ export default class Project extends Component {
                 <div className="portfolio-text ">
                   <h2>Style Buttons</h2>
                 </div>
-                <button class="btn btn-primary btn-lg" onClick={() => this.resetFilter()}>Origin</button>
-                {Object.keys(css_filters).map(e =>
-                  <button class="btn btn-primary btn-lg" onClick={(i) => this.parseFIlterCss(i, css_filters[e])}>{e}</button>
-                )}
+                <div style={{overflowX : 'auto', maxHeight: "200px"}}>
+                  <button class="btn btn-primary btn-lg" onClick={() => this.resetFilter()}>Origin</button>
+                  {Object.keys(css_filters).map(e =>
+                    <button class="btn btn-primary btn-lg" onClick={(i) => this.parseFIlterCss(i, css_filters[e])}>{e}</button>
+                  )}
+                </div>
                 <p></p>
-                <label class="checkbox-container"> 
+                <label class="checkbox-container">
                   <h4 style={{marginBottom: "2px"}}>Make Public</h4>
                   <input type="checkbox"/>
-                  <span class="checkmark"></span> 
+                  <span class="checkmark"></span>
                   <p>If you made something public, people can see them through public gallery.</p>
                 </label>
               </div>
