@@ -175,7 +175,7 @@ export default class AddRender extends Component {
                 image_id: this.state.image_id
               }
 
-              this.props.newProject(new_project)
+              this.props.handleNewProject(new_project)
 
               return <Redirect push to={"/Projects/" + data.project_id.id} />
             }}

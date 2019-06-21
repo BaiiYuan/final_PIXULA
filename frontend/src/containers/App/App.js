@@ -72,9 +72,18 @@ class App extends Component {
 		}
   }
 
-  newProject = project => {
+  handleNewProject = project => {
     this.setState((state, props) => {
       state.projects.unshift(project)
+      return state
+    })
+  }
+
+  handleEditProject = project => {
+    const pos = this.state.projects.map(e => e.id).indexOf(project.id)
+    console.log(pos)
+    this.setState((state, props) => {
+      state.projects[pos] = project
       return state
     })
   }
@@ -140,13 +149,13 @@ class App extends Component {
 
       <Switch>
         <Route exact path="/projects" component={() => <ProjectsRender user_id={this.state.user_id} account={this.state.account} projects={this.state.projects}/>} />
-        <Route path="/projects/:id?" component={(props) => <Project {...props} user_id={this.state.user_id}/>} />
+        <Route path="/projects/:id?" component={(props) => <Project {...props} user_id={this.state.user_id} handleEditProject={this.handleEditProject} />} />
         <Route exact path="/public" component={() => <PublicRender user_id={this.state.user_id} account={this.state.account}/>} />
         <Route path="/public/:id?" component={(props) => <PublicProject {...props} user_id={this.state.user_id}/>} />
         <Route path="/home" component={HomeRender} />
-        <Route path="/new" component={(props) => <AddRender {...props} user_id={this.state.user_id} newProject={this.newProject} />} />
+        <Route path="/new" component={(props) => <AddRender {...props} user_id={this.state.user_id} handleNewProject={this.handleNewProject} />} />
         <Route path="/download/:id"  component={(props) => <Download {...props} user_id={this.state.user_id}/>} />
-        <Route path="/login" component={(props) => <LoginRender {...props} login_action_handler={(user_id, account) => {this.setState({user_id: user_id, account: account})}} />} />
+        <Route path="/login" component={(props) => <LoginRender {...props} login_action_handler={(user_id, account) => {this.setState({user_id: user_id, account: account, query: false})}} />} />
         <Redirect from="/" to="/home" />
       </Switch>
 

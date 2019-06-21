@@ -58,19 +58,20 @@ export default class Project extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      blur: ["blur", 0, "px"],
-      brightness: ["brightness", 1, ""],
-      contrast: ["contrast", 1, ""],
-      grayscale: ["grayscale", 0, ""],
-      hue_rotate: ["hue-rotate", 0, "deg"],
-      invert: ["invert", 0, ""],
-      opacity: ["opacity", 1, ""],
-      saturate: ["saturate", 1, ""],
-      sepia: ["sepia", 0, ""],
-      styleIndex: 0,
-      styleStrength: 1.,
+      blur: ["blur", "0", "px"],
+      brightness: ["brightness", "1", ""],
+      contrast: ["contrast", "1", ""],
+      grayscale: ["grayscale", "0", ""],
+      hue_rotate: ["hue-rotate", "0", "deg"],
+      invert: ["invert", "0", ""],
+      opacity: ["opacity", "1", ""],
+      saturate: ["saturate", "1", ""],
+      sepia: ["sepia", "0", ""],
+      styleIndex: "0",
+      styleStrength: "1.",
       transferStyle: false,
-      loading: true
+      loading: true,
+      save: false
     }
 
     this.applyFilter = this.applyFilter.bind(this)
@@ -83,15 +84,15 @@ export default class Project extends Component {
 
   getOrginFilter() {
     return {
-      blur: ["blur", 0, "px"],
-      brightness: ["brightness", 1, ""],
-      contrast: ["contrast", 1, ""],
-      grayscale: ["grayscale", 0, ""],
-      hue_rotate: ["hue-rotate", 0, "deg"],
-      invert: ["invert", 0, ""],
-      opacity: ["opacity", 1, ""],
-      saturate: ["saturate", 1, ""],
-      sepia: ["sepia", 0, ""],
+      blur: ["blur", "0", "px"],
+      brightness: ["brightness", "1", ""],
+      contrast: ["contrast", "1", ""],
+      grayscale: ["grayscale", "0", ""],
+      hue_rotate: ["hue-rotate", "0", "deg"],
+      invert: ["invert", "0", ""],
+      opacity: ["opacity", "1", ""],
+      saturate: ["saturate", "1", ""],
+      sepia: ["sepia", "0", ""],
     }
   }
 
@@ -209,6 +210,7 @@ export default class Project extends Component {
     console.log(imageFile)
 
     // this.uploadImage(imageFile)
+    console.log("one")
     this.updateProject({
       variables: {
         id: this.props.match.params.id,
@@ -223,9 +225,22 @@ export default class Project extends Component {
         opacity: this.state.opacity[1],
         saturate: this.state.saturate[1],
         sepia: this.state.sepia[1],
-        public: this.state.public
+        public: this.state.public,
+        image_id: this.state.image_id
       }
     })
+    console.log("two")
+
+    const new_project = {
+      id: this.props.match.params.id,
+      title: this.state.title,
+      description: this.state.description,
+      image_id: this.state.image_id
+    }
+
+    this.props.handleEditProject(new_project)
+    // this.setState({save: true})
+    console.log("good")
   }
 
   renderLoginRedirect = () => {
@@ -271,6 +286,9 @@ export default class Project extends Component {
       </Query>
       )
     } else {
+      if (this.state.save)
+        return <Redirect push to={"/projects"} />
+
       return (
         <div>
           {this.renderLoginRedirect()}
@@ -355,8 +373,9 @@ export default class Project extends Component {
               <NavLink key={id} to={"/download/" + id} class="icon-arrow-right22">
                 <button class="btn btn-default btn-sm" >Download</button>
 					    </NavLink>
-              <button class="btn btn-default btn-sm" onClick={this.handleSave}>Save</button>
-              
+              <NavLink to={"/projects"}>
+                <button class="btn btn-default btn-sm" onClick={this.handleSave}>Save</button>
+              </NavLink>
             </div>
           </div>
         </div>
