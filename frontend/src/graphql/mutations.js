@@ -50,18 +50,22 @@ export const CREATE_PROJECT_MUTATION = gql`
     $author: ID!
     $title: String!
     $description: String!
-    $image_id: String!
+    $imageOriginal: String!
+    $imageTransfer: String!
+    $imageFinal: String!
   ) {
     createProject(
       data: {
         author: $author
         title: $title
         description: $description
-        image_id: $image_id
+        imageOriginal: $imageOriginal
+        imageTransfer: $imageTransfer
+        imageFinal: $imageFinal
       }
     ) {
       id
-      image_id
+      imageOriginal
     }
   }
 `
@@ -85,7 +89,8 @@ export const UPDATE_PROJECT_MUTATION = gql`
     $id: ID!
     $title: String!
     $description: String!
-    $image_id: String!
+    $imageTransfer: String!
+    $imageFinal: String!
     $blur: String!
     $brightness: String!
     $contrast: String!
@@ -102,7 +107,8 @@ export const UPDATE_PROJECT_MUTATION = gql`
       data: {
         title: $title
         description: $description
-        image_id: $image_id
+        imageTransfer: $imageTransfer
+        imageFinal: $imageFinal
         blur: $blur
         brightness: $brightness
         contrast: $contrast

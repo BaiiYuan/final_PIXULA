@@ -111,7 +111,8 @@ const Mutation = {
 
     project.title = data.title
     project.description = data.description
-    project.image_id = data.image_id
+    project.imageTransfer = data.imageTransfer
+    project.imageFinal = data.imageFinal
     project.blur = data.blur
     project.brightness = data.brightness
     project.contrast = data.contrast

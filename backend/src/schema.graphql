@@ -3,6 +3,7 @@ type Query {
   projects(author: ID!): [Project!]!
   project(id: ID!): Project!
   project_id(author: ID!, title: String!): Project!
+  projects_public: [Project!]!
 }
 
 type Mutation {
@@ -27,13 +28,16 @@ input CreateProjectInput {
   author: ID!
   title: String!
   description: String!
-  image_id: String!
+  imageOriginal: String!
+  imageTransfer: String!
+  imageFinal: String!
 }
 
 input UpdateProjectInput {
   title: String!
   description: String!
-  image_id: String!
+  imageTransfer: String!
+  imageFinal: String!
   blur: String!
   brightness: String!
   contrast: String!
@@ -58,7 +62,9 @@ type Project {
   author: User!
   title: String!
   description: String!
-  image_id: String!
+  imageOriginal: String!
+  imageTransfer: String!
+  imageFinal: String!
   blur: String!
   brightness: String!
   contrast: String!

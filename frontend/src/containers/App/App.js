@@ -37,11 +37,12 @@ class App extends Component {
     this.state = {
       formTitle: '',
       formBody: '',
-      authorId: 1,
+      authorId: null,
       user_id: '',
       account: '',
       dropdownOpen: false,
-      projects: []
+      projects: [],
+      query: false
     };
   }
 

@@ -163,7 +163,7 @@ export default class Project extends Component {
 
       var img = new Image()
       img.setAttribute('crossOrigin', 'anonymous')
-      img.src = this.state.image_id
+      img.src = this.state.imageOriginal
       // console.log(image.style)
 
       img.onload = function() {
@@ -228,9 +228,9 @@ export default class Project extends Component {
       if(r.status === 200 && r.readyState === 4) {
         let res = JSON.parse(r.responseText)
 
-        console.log(this.state.image_id)
+        console.log(this.state.imageOriginal)
         console.log(res.data)
-        this.setState({image_id: res.data.link})
+        this.setState({imageOriginal: res.data.link})
       }
     }.bind(this)
     r.send(d)
@@ -258,7 +258,8 @@ export default class Project extends Component {
         saturate: this.state.saturate[1],
         sepia: this.state.sepia[1],
         public: this.state.public,
-        image_id: this.state.image_id
+        imageTransfer: this.state.imageTransfer,
+        imageFinal: this.state.imageFinal
       }
     })
     console.log("two")
@@ -267,7 +268,7 @@ export default class Project extends Component {
       id: this.props.match.params.id,
       title: this.state.title,
       description: this.state.description,
-      image_id: this.state.image_id
+      imageOriginal: this.state.imageOriginal
     }
 
     this.props.handleEditProject(new_project)
@@ -286,7 +287,7 @@ export default class Project extends Component {
     const { id } = this.props.match.params
     console.log(id)
 
-    if (this.state.image_id === undefined) {
+    if (this.state.imageOriginal === undefined) {
       return(
         <Query query={PROJECT_INFO_QUERY} variables={{id: id}}>
           {({ loading, error, data, subscribeToMore }) => {
@@ -306,7 +307,9 @@ export default class Project extends Component {
                 opacity: ["opacity", project.opacity, ""],
                 saturate: ["saturate", project.saturate, ""],
                 sepia: ["sepia", project.sepia, ""],
-                image_id: project.image_id,
+                imageOriginal: project.imageOriginal,
+                imageTransfer: project.imageTransfer,
+                imageFinal: project.imageFinal,
                 public: project.public
               }
 
@@ -348,9 +351,9 @@ export default class Project extends Component {
 
                   <div class="col-md-12 text-center animate-box">
                       <p>
-                          <img id="image" src={this.state.image_id ? this.state.image_id: ""}
+                          <img id="image" src={this.state.imageOriginal ? this.state.imageOriginal: ""}
 
-                            style = {{maxWidth: "400px", maxHeight: "400px", display: this.state.image_id ? "": "none"}}
+                            style = {{maxWidth: "400px", maxHeight: "400px", display: this.state.imageOriginal ? "": "none"}}
                             alt="Please upload an image to start this project."
                             class="img-responsive img-rounded card-2"
                             onLoad={() => this.setState({loading: false})}
