@@ -122,6 +122,7 @@ export default class AddRender extends Component {
         imageFinal: this.state.imageOriginal,
       })
     }
+    const date = new Date()
 
     this.createProject(
       {variables: {
@@ -131,6 +132,7 @@ export default class AddRender extends Component {
         imageOriginal: this.state.imageOriginal,
         imageTransfer: this.state.imageTransfer,
         imageFinal: this.state.imageFinal,
+        date: date.valueOf().toString()
       }}
     )
 

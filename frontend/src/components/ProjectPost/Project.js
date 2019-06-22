@@ -242,6 +242,7 @@ export default class Project extends Component {
     var imageFile = dataURLtoFile(imageDataURL, 'out.png')
     console.log(imageFile)
 
+    const date = new Date()
     // this.uploadImage(imageFile)
     const variables = {
         id: this.props.match.params.id,
@@ -258,9 +259,10 @@ export default class Project extends Component {
         sepia: this.state.sepia[1],
         public: this.state.public,
         imageTransfer: this.state.imageTransfer,
-        imageFinal: this.state.imageFinal
+        imageFinal: this.state.imageFinal,
+        date: date.valueOf().toString()
       }
-    console.log(variables)
+    console.log(date.valueOf().toString())
     await this.updateProject({
       variables: variables
     })

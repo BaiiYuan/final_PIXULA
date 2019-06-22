@@ -16,12 +16,12 @@ const Query = {
 
   },
   projects(parent, args, { db }, info) {
+    console.log("fetch")
     return db.projects.filter(project => {
       return project.author === args.author
     })
   },
   project(parent, args, { db }, info) {
-    console.log("fetch")
     return db.projects.find(project => {
       return project.id === args.id
     })

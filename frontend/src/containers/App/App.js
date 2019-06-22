@@ -73,21 +73,14 @@ class App extends Component {
 		}
   }
 
-  handleNewProject = project => {
-    this.setState((state, props) => {
-      state.projects.unshift(project)
-      return state
-    })
+  handleNewProject = async project => {
+    await this.refetch()
+    this.setState({query: false})
   }
 
-  handleEditProject = project => {
-    console.log(project)
-    const pos = this.state.projects.map(e => e.id).indexOf(project.id)
-    console.log(pos)
-    this.setState((state, props) => {
-      state.projects[pos] = project
-      return state
-    })
+  handleEditProject = async project => {
+    await this.refetch()
+    this.setState({query: false})
   }
 
   render() {
@@ -134,21 +127,25 @@ class App extends Component {
         </div>
       </nav>
 
-      {this.state.user_id !== '' && !this.state.query &&
+      {this.state.user_id !== '' &&
         <Query query={PROJECTS_QUERY} variables={{author: this.state.user_id}}>
-          {({ loading, error, data, subscribeToMore }) => {
-            if (!loading && !error)
+          {({ loading, error, data, refetch }) => {
+            if (!loading && !error) {
               if (data.projects !== undefined) {
-                this.setState({projects: data.projects, query: true})
+
+                if (!this.state.query) {
+                  const projects = data.projects.sort((a, b) => a.date < b.date ? 1 : a.date > b.date ? -1 : 0)
+                  console.log(projects)
+                  console.log(data.projects)
+                  this.setState({projects: projects, query: true})
+                }
               }
-
-            console.log(this.state.projects)
-
+            }
+            this.refetch = refetch
             return <div></div>
           }}
         </Query>
       }
-
       <Switch>
         <Route exact path="/projects" component={() => <ProjectsRender user_id={this.state.user_id} account={this.state.account} projects={this.state.projects}/>} />
         <Route path="/projects/:id?" component={(props) => <Project {...props} user_id={this.state.user_id} handleEditProject={this.handleEditProject} />} />

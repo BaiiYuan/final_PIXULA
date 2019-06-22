@@ -53,6 +53,7 @@ export const CREATE_PROJECT_MUTATION = gql`
     $imageOriginal: String!
     $imageTransfer: String!
     $imageFinal: String!
+    $date: String!
   ) {
     createProject(
       data: {
@@ -62,6 +63,7 @@ export const CREATE_PROJECT_MUTATION = gql`
         imageOriginal: $imageOriginal
         imageTransfer: $imageTransfer
         imageFinal: $imageFinal
+        date: $date
       }
     ) {
       id
@@ -101,6 +103,7 @@ export const UPDATE_PROJECT_MUTATION = gql`
     $saturate: String!
     $sepia: String!
     $public: Boolean!
+    $date: String!
   ) {
     updateProject(
       id: $id
@@ -119,6 +122,7 @@ export const UPDATE_PROJECT_MUTATION = gql`
         saturate: $saturate
         sepia: $sepia
         public: $public
+        date: $date
       }
     ) {
       id

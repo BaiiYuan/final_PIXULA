@@ -36,14 +36,14 @@ export default class PublicRender extends Component {
 						<Query query={PUBLIC_QUERY}>
 							{({ loading, error, data, subscribeToMore }) => {
 								if (!loading && !error) {
-									if (data.projects !== undefined) {
+									if (data.projects_public !== undefined) {
 										return (
-											data.projects.map(e => {
+											data.projects_public.map(e => {
 												// console.log(e)
 												return (
 												<div class="col-md-4">
 													<div class="fh5co-portfolio animate-box card-2">
-														<div className="portfolio-entry" style={{backgroundImage: 'url(' + e.image_id + ')'}}></div>
+														<div className="portfolio-entry" style={{backgroundImage: 'url(' + e.imageFinal + ')'}}></div>
 														<div className="portfolio-text ">
 															<h3>{e.title}</h3>
 															<p>{e.description}</p>

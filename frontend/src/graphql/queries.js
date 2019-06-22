@@ -17,6 +17,7 @@ export const PROJECTS_QUERY = gql`
       saturate
       sepia
       public
+      date
     }
   }
 `

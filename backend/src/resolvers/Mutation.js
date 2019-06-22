@@ -122,6 +122,7 @@ const Mutation = {
     project.saturate = data.saturate
     project.sepia = data.sepia
     project.public = data.public
+    project.date = data.date
 
 
 

@@ -31,6 +31,7 @@ input CreateProjectInput {
   imageOriginal: String!
   imageTransfer: String!
   imageFinal: String!
+  date: String!
 }
 
 input UpdateProjectInput {
@@ -48,6 +49,7 @@ input UpdateProjectInput {
   saturate: String!
   sepia: String!
   public: Boolean!
+  date: String!
 }
 
 type User {
@@ -75,6 +77,7 @@ type Project {
   saturate: String!
   sepia: String!
   public: Boolean!
+  date: String!
 }
 
 enum MutationType {
