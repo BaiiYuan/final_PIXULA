@@ -18,9 +18,9 @@ export default class HomeRender extends Component {
             <div class="col-md-8 col-md-offset-2 text-center" style={{height: "900px"}}>
               <div class="display-t js-fullheight">
                 <div class="display-tc js-fullheight animate-box" data-animate-effect="fadeIn" style={{height: "900px"}}>
-                  <h1>Creativity Is A Wild Mind &amp; A Disciplined Eye</h1>
+                  <h1>Create your own filter, own style,  &amp; share them!</h1>
                   <p><a class="btn btn-primary btn-lg btn-demo" href="#"> View Demo</a>
-                  <a class="btn btn-primary btn-lg btn-learn">Learn More</a></p>
+                  <a class="btn btn-primary btn-lg btn-learn">Register</a></p>
                 </div>
               </div>
             </div>
