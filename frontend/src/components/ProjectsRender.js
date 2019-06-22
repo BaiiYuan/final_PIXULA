@@ -21,7 +21,7 @@ export default class ProjectsRender extends Component {
   }
 
   getActiveState(project) {
-  	console.log("project -> ", project)
+  	// console.log("project -> ", project)
   	if (!project) { return "" }
     let activeState = {
       blur: ["blur", project.blur, "px"],
@@ -45,7 +45,7 @@ export default class ProjectsRender extends Component {
 
 	render(){
 		// console.log(this.props.user_id)
-		console.log(this.props.projects)
+		// console.log(this.props.projects)
 		return(
 			<div id="fh5co-portfolio">
 				{this.renderLoginRedirect()}

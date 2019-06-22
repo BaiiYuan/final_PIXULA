@@ -76,6 +76,7 @@ export const PUBLIC_QUERY = gql`
       saturate
       sepia
       public
+      date
     }
   }
 `

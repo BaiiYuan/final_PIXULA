@@ -5,7 +5,8 @@ import ScrollToTop from "../../components/util/ScrollToTop"
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import ScrollUpButton from "react-scroll-up-button";
 import {
-  PROJECTS_QUERY
+  PROJECTS_QUERY,
+  PUBLIC_QUERY
 } from '../../graphql'
 
 import "../../css/style.css"
@@ -42,7 +43,9 @@ class App extends Component {
       account: '',
       dropdownOpen: false,
       projects: [],
-      query: false
+      projects_public: [],
+      query: false,
+      public_query:false
     };
   }
 
@@ -74,13 +77,14 @@ class App extends Component {
   }
 
   handleNewProject = async project => {
-    await this.refetch()
+    await this.refetch_user()
     this.setState({query: false})
   }
 
   handleEditProject = async project => {
-    await this.refetch()
-    this.setState({query: false})
+    await this.refetch_user()
+    await this.refetch_public()
+    this.setState({query: false, public_query: false})
   }
 
   render() {
@@ -128,28 +132,46 @@ class App extends Component {
       </nav>
 
       {this.state.user_id !== '' &&
-        <Query query={PROJECTS_QUERY} variables={{author: this.state.user_id}}>
-          {({ loading, error, data, refetch }) => {
-            if (!loading && !error) {
-              if (data.projects !== undefined) {
+        <div>
+          <Query query={PROJECTS_QUERY} variables={{author: this.state.user_id}}>
+            {({ loading, error, data, refetch }) => {
+              if (!loading && !error) {
+                if (data.projects !== undefined) {
 
-                if (!this.state.query) {
-                  const projects = data.projects.sort((a, b) => a.date < b.date ? 1 : a.date > b.date ? -1 : 0)
-                  console.log(projects)
-                  console.log(data.projects)
-                  this.setState({projects: projects, query: true})
+                  if (!this.state.query) {
+                    const projects = data.projects.sort((a, b) => a.date < b.date ? 1 : a.date > b.date ? -1 : 0)
+                    this.setState({projects: projects, query: true})
+                  }
                 }
               }
-            }
-            this.refetch = refetch
-            return <div></div>
-          }}
-        </Query>
+              this.refetch_user = refetch
+              return <div></div>
+            }}
+          </Query>
+
+          <Query query={PUBLIC_QUERY}>
+            {({ loading, error, data, refetch }) => {
+              if (!loading && !error) {
+                if (data.projects_public !== undefined) {
+
+                  if (!this.state.public_query) {
+                    console.log("public!")
+                    const projects_public = data.projects_public.sort((a, b) => a.date < b.date ? 1 : a.date > b.date ? -1 : 0)
+                    this.setState({projects_public: projects_public, public_query: true})
+                  }
+                }
+              }
+              this.refetch_public = refetch
+              return <div></div>
+            }}
+          </Query>
+        </div>
       }
+
       <Switch>
         <Route exact path="/projects" component={() => <ProjectsRender user_id={this.state.user_id} account={this.state.account} projects={this.state.projects}/>} />
         <Route path="/projects/:id?" component={(props) => <Project {...props} user_id={this.state.user_id} handleEditProject={this.handleEditProject} />} />
-        <Route exact path="/public" component={() => <PublicRender user_id={this.state.user_id} account={this.state.account}/>} />
+        <Route exact path="/public" component={() => <PublicRender user_id={this.state.user_id} account={this.state.account} projects={this.state.projects_public} />} />
         <Route path="/public/:id?" component={(props) => <PublicProject {...props} user_id={this.state.user_id}/>} />
         <Route path="/home" component={HomeRender} />
         <Route path="/new" component={(props) => <AddRender {...props} user_id={this.state.user_id} handleNewProject={this.handleNewProject} />} />
