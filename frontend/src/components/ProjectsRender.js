@@ -43,6 +43,8 @@ export default class ProjectsRender extends Component {
     return activeState
   }
 
+
+
 	render(){
 		// console.log(this.props.user_id)
 		// console.log(this.props.projects)
@@ -72,7 +74,7 @@ export default class ProjectsRender extends Component {
 													Edit<i class="icon-arrow-right22"></i>
 												</NavLink>
 											</li>
-											<li>
+											<li onClick={() => this.props.handleDeleteProject(e.id)}>
 												Delete<i class="icon-arrow-right22"></i>
 											</li>
 										</ul>

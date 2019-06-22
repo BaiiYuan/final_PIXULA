@@ -89,7 +89,8 @@ class App extends Component {
   }
 
   handleDeleteProject = async id => {
-    await this.deleteProject(id)
+    console.log("delete")
+    await this.deleteProject({variables: {id: id}})
     await this.refetch_user()
     await this.refetch_public()
     this.setState({query: false, public_query: false})
