@@ -21,6 +21,8 @@ export default class ProjectsRender extends Component {
   }
 
   getActiveState(project) {
+  	console.log("project -> ", project)
+  	if (!project) { return "" }
     let activeState = {
       blur: ["blur", project.blur, "px"],
       brightness: ["brightness", project.brightness, ""],

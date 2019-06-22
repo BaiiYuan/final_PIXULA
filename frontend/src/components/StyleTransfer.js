@@ -89,11 +89,11 @@ export default class StyleTransfer extends Component {
       transfering: true,
       buttonText: "Stylizing...",
     })
-    console.log(this.props.image_id)
-    if (this.props.image_id === "")
+    console.log(this.props.imageOriginal)
+    if (this.props.imageOriginal === "")
       return
 
-    const contentImg = await this.resizeImage(this.props.image_id)
+    const contentImg = await this.resizeImage(this.props.imageOriginal)
 
     const styleImg = new Image()
     styleImg.crossOrigin = "anonymous"
@@ -123,6 +123,7 @@ export default class StyleTransfer extends Component {
   render() {
     return (
       <FormGroup width="400">
+      <button onClick={(e) => {console.log(this.state)}}>test</button>
         <Label for="styleRangeLabel"><h4>Choose your style</h4></Label>
         <Input style={{width: "50%", margin: "auto"}} type="select" name="styleSelect" id="exampleSelect" onChange={(e) => this.selectStyle(e)}>
             {style_param_list.map((e, index) =>
@@ -164,7 +165,7 @@ export default class StyleTransfer extends Component {
           step="0.01"
           value={this.state.styleStrength}
           onChange={this.changeStyleStrength}
-          disabled={this.state.styleIndex === 0  || !this.props.image_id || this.state.transfering}
+          disabled={this.state.styleIndex === 0  || !this.props.imageOriginal || this.state.transfering}
           style={{margin: "auto"}}
         /> <br />
         <canvas
@@ -173,7 +174,7 @@ export default class StyleTransfer extends Component {
           height="500"
           style = {{maxWidth: "500px", maxHeight: "500px", display: "none"}}
         /> <br />
-        <button className="btn btn-primary btn-lg" onClick={this.doStylized} disabled={this.state.styleIndex === 0 || !this.props.image_id || this.state.transfering}>{this.state.buttonText}</button> <br />
+        <button className="btn btn-primary btn-lg" onClick={this.doStylized} disabled={this.state.styleIndex === 0 || !this.props.imageOriginal || this.state.transfering}>{this.state.buttonText}</button> <br />
       </FormGroup>
     )
   }

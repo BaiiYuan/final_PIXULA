@@ -129,7 +129,7 @@ export default class AddRender extends Component {
         description: this.state.description,
         imageOriginal: this.state.imageOriginal,
         imageTransfer: this.state.imageTransfer,
-        imageFinal: this.state.imageOriginal,
+        imageFinal: this.state.imageFinal,
       }}
     )
 
