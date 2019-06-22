@@ -67,12 +67,13 @@ export default class ProjectsRender extends Component {
 										<h3>{e.title}</h3>
 										<p>{e.description}</p>
 										<ul class="stuff">
-											<li><i class="icon-heart2"></i>Made by: </li>
-											<li><i class="icon-eye2"></i>you</li>
 											<li>
-											<NavLink key={e.id} to={"/Projects/" + e.id} class="icon-arrow-right22">
-												Edit<i class="icon-arrow-right22"></i>
-											</NavLink>
+												<NavLink key={e.id} to={"/Projects/" + e.id} class="icon-arrow-right22">
+													Edit<i class="icon-arrow-right22"></i>
+												</NavLink>
+											</li>
+											<li>
+												Delete<i class="icon-arrow-right22"></i>
 											</li>
 										</ul>
 									</div>
