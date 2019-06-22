@@ -5,7 +5,7 @@ import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
 
 import {
   PROJECT_INFO_QUERY,
-  UPDATE_PROJECT_MUTATION
+  COPY_PROJECT_MUTATION
 } from '../../graphql'
 
 import "../../css/style.css"
@@ -70,7 +70,8 @@ export default class PublicProject extends Component {
     styleIndex: 0,
     styleStrength: 1.,
     transferStyle: false,
-    loading: true
+    loading: true,
+    copy: false
   }
 
   this.applyFilter = this.applyFilter.bind(this)
@@ -78,7 +79,6 @@ export default class PublicProject extends Component {
   this.getOrginFilter = this.getOrginFilter.bind(this)
   this.parseFIlterCss = this.parseFIlterCss.bind(this)
   this.uploadImage = this.uploadImage.bind(this)
-  this.handleSave = this.handleSave.bind(this)
   }
 
   getOrginFilter() {
@@ -203,8 +203,34 @@ export default class PublicProject extends Component {
   r.send(d)
   }
 
-  handleSave = () => {
-  console.log("There should be some mutation here.")
+  handleCopy = async () => {
+    const date = new Date()
+
+    await this.copyProject({
+      variables: {
+        author: this.props.user_id,
+        title: this.state.title,
+        description: this.state.description,
+        imageOriginal: this.state.imageOriginal,
+        imageTransfer: this.state.imageTransfer,
+        imageFinal: this.state.imageFinal,
+        blur: this.state.blur[1],
+        brightness: this.state.brightness[1],
+        contrast: this.state.contrast[1],
+        grayscale: this.state.grayscale[1],
+        hue_rotate: this.state.hue_rotate[1],
+        invert: this.state.invert[1],
+        opacity: this.state.opacity[1],
+        saturate: this.state.saturate[1],
+        sepia: this.state.sepia[1],
+        date: date.valueOf().toString()
+      }
+    })
+  }
+
+  handleCopyComplete = data => {
+    this.props.handleCopyProject()
+    this.setState({copy: true, copy_id: data.copyProject.id})
   }
 
   renderLoginRedirect = () => {
@@ -218,7 +244,9 @@ export default class PublicProject extends Component {
   const { id } = this.props.match.params
   console.log(id)
 
-  if (this.state.imageFinal === undefined) {
+  if (this.state.copy) {
+    return <Redirect to={`/projects/${this.state.copy_id}`} />
+  } else if (this.state.imageFinal === undefined) {
     return(
     <Query query={PROJECT_INFO_QUERY} variables={{id: id}}>
       {({ loading, error, data, subscribeToMore }) => {
@@ -255,6 +283,14 @@ export default class PublicProject extends Component {
     return (
     <div>
       {this.renderLoginRedirect()}
+
+      <Mutation mutation={COPY_PROJECT_MUTATION} onCompleted={this.handleCopyComplete}>
+      {copyProject => {
+        this.copyProject = copyProject
+
+        return <div></div>
+      }}
+      </Mutation>
       <div id="fh5co-header">
         <div class="container">
           <div class="row animate-box">

@@ -266,15 +266,7 @@ export default class Project extends Component {
     await this.updateProject({
       variables: variables
     })
-
-    const new_project = { // why this?
-      id: this.props.match.params.id,
-      title: this.state.title,
-      description: this.state.description,
-      imageFinal: this.state.imageFinal
-    }
-
-    console.log(new_project)
+    
     await this.refetch({id: this.props.match.params.id})
     this.setState({save: true, imageOriginal: undefined})
 

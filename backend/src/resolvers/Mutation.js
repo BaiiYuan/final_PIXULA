@@ -13,7 +13,7 @@ const Mutation = {
       ...args.data
     }
 
-    db.users.push(user)
+    db.users.unshift(user)
 
     return user
   },
@@ -71,7 +71,37 @@ const Mutation = {
       ...args.data
     }
 
-    db.projects.push(project)
+    db.projects.unshift(project)
+
+    pubsub.publish(`project ${project.author}`, {
+      project: {
+        mutation: 'CREATED',
+        data: project
+      }
+    })
+
+    return project
+  },
+  copyProject(parent, args, { db, pubsub }, info) {
+    const { author, title } = args.data
+    const userExists = db.users.some(user => user.id === author)
+    if (!userExists) {
+      throw new Error('User not found')
+    }
+
+    const titleTaken = db.projects.some(project => project.title === title && project.author === author)
+
+    if (titleTaken) {
+      throw new Error('Title has been used')
+    }
+
+    const project = {
+      id: uuidv4(),
+      public: false,
+      ...args.data
+    }
+
+    db.projects.unshift(project)
 
     pubsub.publish(`project ${project.author}`, {
       project: {

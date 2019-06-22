@@ -67,7 +67,6 @@ export const CREATE_PROJECT_MUTATION = gql`
       }
     ) {
       id
-      imageOriginal
     }
   }
 `
@@ -127,6 +126,48 @@ export const UPDATE_PROJECT_MUTATION = gql`
     ) {
       id
       imageFinal
+    }
+  }
+`
+
+export const COPY_PROJECT_MUTATION = gql`
+  mutation copyProject(
+    $author: ID!
+    $title: String!
+    $description: String!
+    $imageOriginal: String!
+    $imageTransfer: String!
+    $imageFinal: String!
+    $blur: String!
+    $brightness: String!
+    $contrast: String!
+    $grayscale: String!
+    $hue_rotate: String!
+    $invert: String!
+    $opacity: String!
+    $saturate: String!
+    $sepia: String!
+    $date: String!
+  ) {
+    copyProject(data: {
+      author: $author
+      title: $title
+      description: $description
+      imageOriginal: $imageOriginal
+      imageTransfer: $imageTransfer
+      imageFinal: $imageFinal
+      blur: $blur
+      brightness: $brightness
+      contrast: $contrast
+      grayscale: $grayscale
+      hue_rotate: $hue_rotate
+      invert: $invert
+      opacity: $opacity
+      saturate: $saturate
+      sepia: $sepia
+      date: $date
+    }) {
+      id
     }
   }
 `

@@ -11,6 +11,7 @@ type Mutation {
   deleteUser(id: ID!): User!
   updateUser(id: ID!, password: String!): User!
   createProject(data: CreateProjectInput!): Project!
+  copyProject(data: copyProjectInput!): Project!
   deleteProject(id: ID!): Project!
   updateProject(id: ID!, data: UpdateProjectInput!): Project!
 }
@@ -31,6 +32,25 @@ input CreateProjectInput {
   imageOriginal: String!
   imageTransfer: String!
   imageFinal: String!
+  date: String!
+}
+
+input copyProjectInput {
+  author: ID!
+  title: String!
+  description: String!
+  imageOriginal: String!
+  imageTransfer: String!
+  imageFinal: String!
+  blur: String!
+  brightness: String!
+  contrast: String!
+  grayscale: String!
+  hue_rotate: String!
+  invert: String!
+  opacity: String!
+  saturate: String!
+  sepia: String!
   date: String!
 }
 

@@ -96,6 +96,11 @@ class App extends Component {
     this.setState({query: false, public_query: false})
   }
 
+  handleCopyProject = async () => {
+    await this.refetch_user()
+    this.setState({query: false})
+  }
+
   render() {
     return (
       <BrowserRouter>
@@ -189,7 +194,7 @@ class App extends Component {
         <Route exact path="/projects" component={() => <ProjectsRender user_id={this.state.user_id} account={this.state.account} projects={this.state.projects} handleDeleteProject={this.handleDeleteProject}/>} />
         <Route path="/projects/:id?" component={(props) => <Project {...props} user_id={this.state.user_id} handleEditProject={this.handleEditProject} />} />
         <Route exact path="/public" component={() => <PublicRender user_id={this.state.user_id} account={this.state.account} projects={this.state.projects_public} />} />
-        <Route path="/public/:id?" component={(props) => <PublicProject {...props} user_id={this.state.user_id}/>} />
+        <Route path="/public/:id?" component={(props) => <PublicProject {...props} user_id={this.state.user_id} handleCopyProject={this.handleCopyProject} />} />
         <Route path="/home" component={HomeRender} />
         <Route path="/new" component={(props) => <AddRender {...props} user_id={this.state.user_id} handleNewProject={this.handleNewProject} />} />
         <Route path="/download/:id"  component={(props) => <Download {...props} user_id={this.state.user_id}/>} />

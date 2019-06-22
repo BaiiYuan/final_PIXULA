@@ -135,9 +135,11 @@ export default class AddRender extends Component {
         date: date.valueOf().toString()
       }}
     )
+  }
 
-    console.log(this.state)
-    this.setState({submit: true, imageOriginal: imageOriginal})
+  handleCreateCompleted = data => {
+    this.props.handleNewProject()
+    this.setState({submit: true, project_id: data.createProject.id})
   }
 
   selectStyle(index, link) {
@@ -166,23 +168,13 @@ export default class AddRender extends Component {
   }
 
   render(){
-    console.log(this.props.newProject)
+    if (this.state.submit) {
+      return <Redirect to={`/projects/${this.state.project_id}`} />
+    }
     return (
       <div>
         {this.renderLoginRedirect()}
-        {this.state.submit &&
-          <Query query={PROJECT_ID_QUERY} variables={{author: this.props.user_id, title: this.state.title}}>
-            {({loading, error, data}) => {
-              if (loading || error)
-                return <div></div>
-
-              this.props.handleNewProject()
-
-              return <Redirect push to={"/Projects/" + data.project_id.id} />
-            }}
-          </Query>
-        }
-        <Mutation mutation={CREATE_PROJECT_MUTATION}>
+        <Mutation mutation={CREATE_PROJECT_MUTATION} onCompleted={this.handleCreateCompleted}>
           {createProject => {
             this.createProject = createProject
 

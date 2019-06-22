@@ -45,7 +45,7 @@ export default class PublicRender extends Component {
 
 	render(){
 		// console.log(this.props.user_id)
-
+		console.log(this.props.projects)
 		return(
 			<div id="fh5co-portfolio">
 				{this.renderLoginRedirect()}

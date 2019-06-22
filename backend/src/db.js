@@ -38,7 +38,7 @@ const projects = [
     opacity: 1,
     saturate: 1,
     sepia: 0,
-    public: false,
+    public: true,
     date: "1561192943005"
   },
   {
@@ -78,7 +78,7 @@ const projects = [
     opacity: 1,
     saturate: 1,
     sepia: 0,
-    public: false,
+    public: true,
     date: "1561192943019"
   },
   {
