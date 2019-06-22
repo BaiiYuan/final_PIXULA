@@ -63,6 +63,7 @@ export const PROJECT_ID_QUERY = gql`
 export const PUBLIC_QUERY = gql`
   query {
     projects_public {
+      id
       title
       description
       imageFinal
@@ -75,7 +76,6 @@ export const PUBLIC_QUERY = gql`
       opacity
       saturate
       sepia
-      public
       date
     }
   }
