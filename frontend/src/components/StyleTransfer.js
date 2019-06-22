@@ -123,7 +123,6 @@ export default class StyleTransfer extends Component {
   render() {
     return (
       <FormGroup width="400">
-      <button onClick={(e) => {console.log(this.state)}}>test</button>
         <Label for="styleRangeLabel"><h4>Choose your style</h4></Label>
         <Input style={{width: "50%", margin: "auto"}} type="select" name="styleSelect" id="exampleSelect" onChange={(e) => this.selectStyle(e)}>
             {style_param_list.map((e, index) =>

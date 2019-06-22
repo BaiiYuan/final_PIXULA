@@ -114,7 +114,7 @@ class App extends Component {
           <div class="container">
             <div class="row">
               <div class="col-xs-2">
-                <div id="fh5co-logo"><NavLink to="/home">Baiyuan<span>.</span></NavLink></div>
+                <div id="fh5co-logo"><NavLink to="/home">Pixula<span>.</span></NavLink></div>
               </div>
               <div class="col-xs-10 text-right menu-1">
                 <ul>

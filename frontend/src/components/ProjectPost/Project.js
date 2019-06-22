@@ -323,7 +323,6 @@ export default class Project extends Component {
 
               return (
                 <div>
-                <button onClick={(e) => {console.log(this.state)}}>test</button>
                   <Mutation mutation={UPDATE_PROJECT_MUTATION}>
                     {updateProject => {
                       this.updateProject = updateProject
@@ -348,7 +347,7 @@ export default class Project extends Component {
 
                           <div class="col-md-12 text-center animate-box">
                               <p>
-                                  <img id="image" src={this.state.imageOriginal ? this.state.imageOriginal: ""}
+                                  <img id="image" src={this.state.imageFinal ? this.state.imageFinal: ""}
                                     style = {{maxWidth: "400px", maxHeight: "400px", display: (this.state.imageOriginal && !this.state.loading) ? "": "none"}}
                                     alt="Please upload an image to start this project."
                                     class="img-responsive img-rounded card-2"
