@@ -56,6 +56,7 @@ export default class Download extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loadingFirst: false,
       blur: ["blur", 0, "px"],
       brightness: ["brightness", 1, ""],
       contrast: ["contrast", 1, ""],
@@ -106,7 +107,7 @@ export default class Download extends Component {
     return new Promise(resolve => {
       var img = new Image();
       img.setAttribute('crossOrigin', 'anonymous');
-      img.src = this.state.image_id;
+      img.src = this.state.imageFinal;
 
       img.onload = async function() {
         console.log(img.width, img.height)
@@ -189,6 +190,7 @@ export default class Download extends Component {
 
   useStateOnimage() {
     var image = document.getElementById("image")
+    if (!image) { return ""}
     image.style.filter =  this.getAciveState();
   }
 
@@ -264,7 +266,7 @@ export default class Download extends Component {
     const { id } = this.props.match.params
     console.log(id)
 
-    if (this.state.image_id === undefined) {
+    if (this.state.imageFinal === undefined) {
       return(
         <Query query={PROJECT_INFO_QUERY} variables={{id: id}}>
           {({ loading, error, data, subscribeToMore }) => {
@@ -284,9 +286,14 @@ export default class Download extends Component {
                 opacity: ["opacity", project.opacity, ""],
                 saturate: ["saturate", project.saturate, ""],
                 sepia: ["sepia", project.sepia, ""],
-                image_id: project.image_id
+                imageFinal: project.imageFinal
               }
-              this.setState(new_state, this.useStateOnimage)
+              if (!this.state.loadingFirst) {
+                this.setState({loadingFirst: true})
+                this.setState(new_state, this.useStateOnimage)
+                console.log(new_state)
+              }
+
             }
             return <div></div>
           }}
@@ -319,16 +326,16 @@ export default class Download extends Component {
 
               <div class="col-md-12 text-center animate-box">
                 <p>
-                  <img id="image" src={this.state.image_id ? this.state.image_id: ""}
+                  <img id="image" src={this.state.imageFinal ? this.state.imageFinal: ""}
                     style = {{maxWidth: "500px", maxHeight: "500px", display: "none"}}
                     alt="Please upload an image to start this project."
                     className="img-responsive img-rounded card-1"/>
                   <ReactCrop
-                    src={this.state.image_id ? this.state.image_id: ""}
+                    src={this.state.imageFinal ? this.state.imageFinal: ""}
                     style = {{
                       maxWidth: "500px",
                       maxHeight: "500px",
-                      display: this.state.image_id ? "": "none",
+                      display: this.state.imageFinal ? "": "none",
                       filter: this.getAciveState(),
                     }}
                     crop={this.state.crop}
@@ -357,11 +364,11 @@ export default class Download extends Component {
                           style = {{
                             maxWidth: "500px",
                             maxHeight: "500px",
-                            display: this.state.image_id ? "": "none",
+                            display: this.state.imageFinal ? "": "none",
                             filter: this.getAciveState(),
                           }}
                         />
-                      )} 
+                      )}
                     </p>
                     <button class="btn btn-primary btn-lg btn-learn" onClick={this.download_img}>Download</button>
                   </div>
