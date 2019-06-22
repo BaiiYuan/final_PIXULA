@@ -6,7 +6,8 @@ import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap
 import ScrollUpButton from "react-scroll-up-button";
 import {
   PROJECTS_QUERY,
-  PUBLIC_QUERY
+  PUBLIC_QUERY,
+  DELETE_PROJECT_MUTATION
 } from '../../graphql'
 
 import "../../css/style.css"
@@ -76,12 +77,19 @@ class App extends Component {
 		}
   }
 
-  handleNewProject = async project => {
+  handleNewProject = async () => {
     await this.refetch_user()
     this.setState({query: false})
   }
 
-  handleEditProject = async project => {
+  handleEditProject = async () => {
+    await this.refetch_user()
+    await this.refetch_public()
+    this.setState({query: false, public_query: false})
+  }
+
+  handleDeleteProject = async id => {
+    await this.deleteProject(id)
     await this.refetch_user()
     await this.refetch_public()
     this.setState({query: false, public_query: false})
@@ -168,8 +176,16 @@ class App extends Component {
         </div>
       }
 
+      <Mutation mutation={DELETE_PROJECT_MUTATION}>
+      {deleteProject => {
+        this.deleteProject = deleteProject
+
+        return <div></div>
+      }}
+      </Mutation>
+
       <Switch>
-        <Route exact path="/projects" component={() => <ProjectsRender user_id={this.state.user_id} account={this.state.account} projects={this.state.projects}/>} />
+        <Route exact path="/projects" component={() => <ProjectsRender user_id={this.state.user_id} account={this.state.account} projects={this.state.projects} handleDeleteProject={this.handleDeleteProject}/>} />
         <Route path="/projects/:id?" component={(props) => <Project {...props} user_id={this.state.user_id} handleEditProject={this.handleEditProject} />} />
         <Route exact path="/public" component={() => <PublicRender user_id={this.state.user_id} account={this.state.account} projects={this.state.projects_public} />} />
         <Route path="/public/:id?" component={(props) => <PublicProject {...props} user_id={this.state.user_id}/>} />

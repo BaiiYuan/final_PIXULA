@@ -2,10 +2,6 @@ import React, { Component } from 'react'
 import { Query, Mutation, renderToStringWithData } from 'react-apollo'
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 
-import {
-  PUBLIC_QUERY
-} from '../graphql'
-
 import "../css/style.css"
 import { BrowserRouter } from 'react-router-dom'
 

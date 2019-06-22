@@ -80,8 +80,8 @@ export const DELETE_PROJECT_MUTATION = gql`
       id: $id
     ) {
       id
-      author
-      filename
+      title
+      description
     }
   }
 `

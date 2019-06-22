@@ -278,7 +278,7 @@ export default class Project extends Component {
     await this.refetch({id: this.props.match.params.id})
     this.setState({save: true, imageOriginal: undefined})
 
-    this.props.handleEditProject(variables)
+    this.props.handleEditProject()
   }
 
   handleChecked(checked){

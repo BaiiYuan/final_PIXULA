@@ -176,14 +176,7 @@ export default class AddRender extends Component {
               if (loading || error)
                 return <div></div>
 
-              const new_project = {
-                id: data.project_id.id,
-                title: this.state.title,
-                description: this.state.description,
-                imageOriginal: this.state.imageOriginal
-              }
-
-              this.props.handleNewProject(new_project)
+              this.props.handleNewProject()
 
               return <Redirect push to={"/Projects/" + data.project_id.id} />
             }}
