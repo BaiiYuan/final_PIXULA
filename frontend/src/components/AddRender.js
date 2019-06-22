@@ -111,12 +111,13 @@ export default class AddRender extends Component {
       const link = await this.uploadImageAndGetLink(imageFile)
       console.log(link)
       imageOriginal = link
-      this.setState({
+      await this.setState({
         imageTransfer: "",
         imageFinal: link,
       })
     } else {
-      this.setState({
+      console.log(this.state.imageOriginal)
+      await this.setState({
         imageTransfer: "",
         imageFinal: this.state.imageOriginal,
       })
