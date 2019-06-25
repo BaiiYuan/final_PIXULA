@@ -1,63 +1,40 @@
 import uuidv4 from 'uuid/v4'
 
+const { User, Project } = require('./../models');
+
 const Mutation = {
-  createUser(parent, args, { db }, info) {
-    const accountTaken = db.users.some(user => user.account === args.data.account)
-
-    if (accountTaken) {
-      throw new Error('Account taken')
+  createUser: async (parent, args, { db }, info) => {
+    let u = await User.find({account: args.data.account}).exec()
+    if (u.length > 0) {
+      return {id: 'accountTaken', account: '', password: ''}
     }
-
-    const user = {
-      id: uuidv4(),
-      ...args.data
-    }
-
-    db.users.unshift(user)
+    
+    let user = await User.create(args.data)
 
     return user
   },
-  deleteUser(parent, args, { db }, info) {
-    const userIndex = db.users.findIndex(user => user.id === args.id)
-
-    if (userIndex === -1) {
-      throw new Error('User not found')
-    }
-
-    const deletedUsers = db.users.splice(userIndex, 1)
-
-    db.projects = db.projects.filter(project => project.author !== args.id)
-
-    return deletedUsers[0]
+  deleteUser: async (parent, args, { db }, info) => {
+    let user = await User.findByIdAndDelete(args.id).exec()
+    return user
   },
-  updateUser(parent, args, { db }, info) {
+  updateUser: async (parent, args, { db }, info) => {
     const { id, password } = args
-    const user = db.users.find(user => user.id === id)
+    let user = await User.findById(args.id).exec()
+    
+    if (!user) throw new Error('user not found')
 
-    if (!user) {
-      throw new Error('User not found')
-    }
-
-    if (typeof password !== 'string') {
-      user.password = password
-    }
+    user.password = password
+    await user.save()
 
     return user
   },
-  createProject(parent, args, { db, pubsub }, info) {
+  createProject: async (parent, args, { db, pubsub }, info) => {
     const { author, title } = args.data
-    const userExists = db.users.some(user => user.id === author)
-    if (!userExists) {
-      throw new Error('User not found')
-    }
 
-    const titleTaken = db.projects.some(project => project.title === title && project.author === author)
+    let u = await User.findById(author).exec()
+    if (!u) throw new Error('user not found')
 
-    if (titleTaken) {
-      throw new Error('Title has been used')
-    }
-    const project = {
-      id: uuidv4(),
+    const data_args = {
       blur: 0,
       brightness: 1,
       contrast: 1,
@@ -70,73 +47,30 @@ const Mutation = {
       public: false,
       ...args.data
     }
+    let project = await Project.create(data_args)
 
-    db.projects.unshift(project)
-
-    pubsub.publish(`project ${project.author}`, {
-      project: {
-        mutation: 'CREATED',
-        data: project
-      }
-    })
+    console.log(project)
 
     return project
   },
-  copyProject(parent, args, { db, pubsub }, info) {
+  copyProject: async (parent, args, { db, pubsub }, info) => {
     const { author, title } = args.data
-    const userExists = db.users.some(user => user.id === author)
-    if (!userExists) {
-      throw new Error('User not found')
-    }
 
-    const titleTaken = db.projects.some(project => project.title === title && project.author === author)
-
-    if (titleTaken) {
-      throw new Error('Title has been used')
-    }
-
-    const project = {
-      id: uuidv4(),
-      public: false,
-      ...args.data
-    }
-
-    db.projects.unshift(project)
-
-    pubsub.publish(`project ${project.author}`, {
-      project: {
-        mutation: 'CREATED',
-        data: project
-      }
-    })
+    let project = await Project.create({public: false, ...args.data})
 
     return project
   },
-  deleteProject(parent, args, { db, pubsub }, info) {
-    const projectIndex = db.projects.findIndex(project => project.id === args.id)
-
-    if (projectIndex === -1) {
-      throw new Error('Project not found')
-    }
-
-    const [project] = db.projects.splice(projectIndex, 1)
-
-    pubsub.publish(`project ${project.author}`, {
-      project: {
-        mutation: 'DELETED',
-        data: project
-      }
-    })
-
+  deleteProject: async (parent, args, { db, pubsub }, info) => {
+    let project = await Project.findByIdAndDelete(args.id).exec()
     return project
   },
-  updateProject(parent, args, { db, pubsub }, info) {
+  updateProject: async (parent, args, { db, pubsub }, info) => {
     const { id, data } = args
-    const project = db.projects.find(project => project.id === id)
 
-    if (!project) {
+    let project = await Project.findById(id).exec()
+
+    if (!project)
       throw new Error('project not found')
-    }
 
     project.title = data.title
     project.description = data.description
@@ -154,14 +88,7 @@ const Mutation = {
     project.public = data.public
     project.date = data.date
 
-
-
-    pubsub.publish(`project ${project.author}`, {
-      project: {
-        mutation: 'UPDATED',
-        data: project
-      }
-    })
+    await project.save()
 
     return project
   }

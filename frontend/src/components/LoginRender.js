@@ -17,10 +17,11 @@ export default class LoginRender extends Component {
   }
 
   render(){
+    console.log(this.state.login_button_on)
     return(
       <div id="fh5co-contact" onKeyPress={this.handleEnterKey}>
       <div class="container">
-        <Mutation mutation={CREATE_USER_MUTATION} onCompleted={() => this.setState({login_button_on: true})}>
+        <Mutation mutation={CREATE_USER_MUTATION} onCompleted={this.handleSignupComplete}>
           {createUser => {
             this.createUser = createUser
             return <div></div>
@@ -40,9 +41,9 @@ export default class LoginRender extends Component {
                 if(data.users[0] !== undefined){
                   this.props.login_action_handler(data.users[0].id, this.state.account)
                   return <Redirect push to={{pathname: "/projects", state: { some_state: "asdf"}}}/>
-                }else{
+                } else {
                   alert("Wrong password or username!")
-                  window.location.reload();
+                  this.setState({account: '', password: '', login_button_on: false})
                 }
               }
               return <div></div>
@@ -109,6 +110,15 @@ export default class LoginRender extends Component {
           password: this.state.password
         }
       })
+    }
+  }
+
+  handleSignupComplete = data => {
+    if (data.createUser.id === 'accountTaken') {
+      alert("Account Taken! Please use anothor one")
+      this.setState({account: '', password: '', login_button_on: false})
+    } else {
+      this.setState({login_button_on: true})
     }
   }
 }

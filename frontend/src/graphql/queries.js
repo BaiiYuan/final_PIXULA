@@ -52,14 +52,6 @@ export const PROJECT_INFO_QUERY = gql`
   }
 `
 
-export const PROJECT_ID_QUERY = gql`
-  query Project_id($author: ID!, $title: String!) {
-    project_id(author: $author, title: $title) {
-      id
-    }
-  }
-`
-
 export const PUBLIC_QUERY = gql`
   query {
     projects_public {

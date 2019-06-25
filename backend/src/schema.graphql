@@ -76,7 +76,7 @@ type User {
   id: ID!
   account: String!
   password: String!
-  projects: [Project!]!
+  projects: [Project!]
 }
 
 type Project {

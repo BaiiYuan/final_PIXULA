@@ -6,6 +6,8 @@ import Subscription from './resolvers/Subscription'
 import User from './resolvers/User'
 import Project from './resolvers/Project'
 
+require("./config")
+
 const pubsub = new PubSub()
 
 const server = new GraphQLServer({

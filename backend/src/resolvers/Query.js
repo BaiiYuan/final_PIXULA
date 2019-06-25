@@ -1,41 +1,33 @@
+const { User, Project } = require('./../models');
+
 const Query = {
-  users(parent, args, { db }, info) {
+  users: async (parent, args, { db }, info) => {
+
     if (args.id) {
-      return db.users.filter(user => {
-        return user.id === args.id
-      })
+      let user = await User.findById(args.id).exec()
+      return user
     }
 
     if (!args.account && !args.password) {
-      return db.users
+      let users = await User.find({}).exec()
+      return users
     }
 
-    return db.users.filter(user => {
-      return user.account === args.account && user.password === args.password
-    })
+    let user = await User.find({account: args.account, password: args.password}).exec()
+    return user
+  },
+  projects: async (parent, args, { db }, info) => {
 
+    let projects = await Project.find({author: args.author}).exec()
+    return projects
   },
-  projects(parent, args, { db }, info) {
-    console.log("fetch")
-    return db.projects.filter(project => {
-      return project.author === args.author
-    })
+  project: async (parent, args, { db }, info) => {
+    let project = await Project.findById(args.id).exec()
+    return project
   },
-  project(parent, args, { db }, info) {
-    return db.projects.find(project => {
-      return project.id === args.id
-    })
-  },
-  project_id(parent, args, { db }, info) {
-    console.log(args)
-    return db.projects.find(project => {
-      return project.author === args.author && project.title === args.title
-    })
-  },
-  projects_public(parent, args, { db }, info) {
-    return db.projects.filter(project => {
-      return project.public === true
-    })
+  projects_public: async (parent, args, { db }, info) => {
+    let projects = await Project.find({public: true}).exec()
+    return projects
   }
 }
 

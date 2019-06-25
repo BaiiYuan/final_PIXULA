@@ -5,8 +5,7 @@ import StyleTransfer from "./StyleTransfer.js"
 import * as mi from '@magenta/image'
 
 import {
-  CREATE_PROJECT_MUTATION,
-  PROJECT_ID_QUERY
+  CREATE_PROJECT_MUTATION
 } from '../graphql'
 
 import "../css/style.css"
