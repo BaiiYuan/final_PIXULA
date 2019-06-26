@@ -1,6 +1,6 @@
 const Subscription = {
   project: {
-    subscribe(parent, args, { db, pubsub }, info) {
+    subscribe(parent, args) {
       const author = db.users.find(author => author.id === args.author)
 
       if (!author) {

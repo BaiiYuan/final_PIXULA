@@ -1,7 +1,7 @@
 const { User, Project } = require('./../models');
 
 const Query = {
-  users: async (parent, args, { db }, info) => {
+  users: async (parent, args) => {
 
     if (args.id) {
       let user = await User.findById(args.id).exec()
@@ -16,16 +16,16 @@ const Query = {
     let user = await User.find({account: args.account, password: args.password}).exec()
     return user
   },
-  projects: async (parent, args, { db }, info) => {
+  projects: async (parent, args) => {
 
     let projects = await Project.find({author: args.author}).exec()
     return projects
   },
-  project: async (parent, args, { db }, info) => {
+  project: async (parent, args) => {
     let project = await Project.findById(args.id).exec()
     return project
   },
-  projects_public: async (parent, args, { db }, info) => {
+  projects_public: async (parent, args) => {
     let projects = await Project.find({public: true}).exec()
     return projects
   }

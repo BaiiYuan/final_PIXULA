@@ -1,8 +1,9 @@
+const { Project } = require("./../models")
+
 const User = {
-  projects(parent, args, { db }, info) {
-    return db.projects.filter(project => {
-      return project.author === parent.id
-    })
+  projects: async (parent, args) => {
+  	let projects = await Project.find({author: parent.id}).exec()
+  	return projects
   }
 }
 

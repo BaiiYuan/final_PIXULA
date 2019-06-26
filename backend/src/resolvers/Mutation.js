@@ -3,7 +3,7 @@ import uuidv4 from 'uuid/v4'
 const { User, Project } = require('./../models');
 
 const Mutation = {
-  createUser: async (parent, args, { db }, info) => {
+  createUser: async (parent, args) => {
     let u = await User.find({account: args.data.account}).exec()
     if (u.length > 0) {
       return {id: 'accountTaken', account: '', password: ''}
@@ -13,11 +13,11 @@ const Mutation = {
 
     return user
   },
-  deleteUser: async (parent, args, { db }, info) => {
+  deleteUser: async (parent, args) => {
     let user = await User.findByIdAndDelete(args.id).exec()
     return user
   },
-  updateUser: async (parent, args, { db }, info) => {
+  updateUser: async (parent, args) => {
     const { id, password } = args
     let user = await User.findById(args.id).exec()
     
@@ -28,7 +28,7 @@ const Mutation = {
 
     return user
   },
-  createProject: async (parent, args, { db, pubsub }, info) => {
+  createProject: async (parent, args) => {
     const { author, title } = args.data
 
     let u = await User.findById(author).exec()
@@ -53,18 +53,18 @@ const Mutation = {
 
     return project
   },
-  copyProject: async (parent, args, { db, pubsub }, info) => {
+  copyProject: async (parent, args) => {
     const { author, title } = args.data
 
     let project = await Project.create({public: false, ...args.data})
 
     return project
   },
-  deleteProject: async (parent, args, { db, pubsub }, info) => {
+  deleteProject: async (parent, args) => {
     let project = await Project.findByIdAndDelete(args.id).exec()
     return project
   },
-  updateProject: async (parent, args, { db, pubsub }, info) => {
+  updateProject: async (parent, args) => {
     const { id, data } = args
 
     let project = await Project.findById(id).exec()
