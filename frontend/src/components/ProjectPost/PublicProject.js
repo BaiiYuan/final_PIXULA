@@ -209,6 +209,7 @@ export default class PublicProject extends Component {
     await this.copyProject({
       variables: {
         author: this.props.user_id,
+        account: this.props.account,
         title: this.state.title,
         description: this.state.description,
         imageOriginal: this.state.imageOriginal,
@@ -254,8 +255,11 @@ export default class PublicProject extends Component {
         console.log(data)
         let { project } = data
 
+        console.log(project.imageTansfer)
+        
         let new_state = {
           title: project.title,
+          account: project.account,
           description: project.description,
           blur: ["blur", project.blur, "px"],
           brightness: ["brightness", project.brightness, ""],
@@ -329,8 +333,8 @@ export default class PublicProject extends Component {
         {input_param_list.map(e =>
           <div><b>{e.name}</b>: {this.state[e.name][1]}</div>
         )}
-        <div><b>Made by</b>: query the author</div>
-        <div><b>Used Style</b>: query the style</div>
+        <div><b>Made by</b>: {this.state.account}</div>
+        <div><b>Used Style</b>: {this.state.imageTransfer}</div>
         </div>
       
       </div>

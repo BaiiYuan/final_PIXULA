@@ -48,6 +48,7 @@ export const UPDATE_USER_MUTATION = gql`
 export const CREATE_PROJECT_MUTATION = gql`
   mutation createProject(
     $author: ID!
+    $account: String!
     $title: String!
     $description: String!
     $imageOriginal: String!
@@ -58,6 +59,7 @@ export const CREATE_PROJECT_MUTATION = gql`
     createProject(
       data: {
         author: $author
+        account: $account
         title: $title
         description: $description
         imageOriginal: $imageOriginal

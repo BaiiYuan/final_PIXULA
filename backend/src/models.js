@@ -9,6 +9,7 @@ const userSchema = new Schema({
 
 const projectSchema = new Schema({
   author: String,
+  account: String,
   title: String,
   description: String,
   imageOriginal: String,

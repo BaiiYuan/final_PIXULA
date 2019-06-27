@@ -33,6 +33,7 @@ export const PROJECT_INFO_QUERY = gql`
   query Project($id: ID!) {
     project(id: $id) {
       id
+      account
       title
       description
       imageOriginal
@@ -56,6 +57,7 @@ export const PUBLIC_QUERY = gql`
   query {
     projects_public {
       id
+      account
       title
       description
       imageFinal

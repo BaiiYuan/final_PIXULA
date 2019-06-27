@@ -194,9 +194,9 @@ class App extends Component {
         <Route exact path="/projects" component={() => <ProjectsRender user_id={this.state.user_id} account={this.state.account} projects={this.state.projects} handleDeleteProject={this.handleDeleteProject}/>} />
         <Route path="/projects/:id?" component={(props) => <Project {...props} user_id={this.state.user_id} handleEditProject={this.handleEditProject} />} />
         <Route exact path="/public" component={() => <PublicRender user_id={this.state.user_id} account={this.state.account} projects={this.state.projects_public} />} />
-        <Route path="/public/:id?" component={(props) => <PublicProject {...props} user_id={this.state.user_id} handleCopyProject={this.handleCopyProject} />} />
+        <Route path="/public/:id?" component={(props) => <PublicProject {...props} user_id={this.state.user_id} handleCopyProject={this.handleCopyProject} />} account={this.state.account} />
         <Route path="/home" component={HomeRender} />
-        <Route path="/new" component={(props) => <AddRender {...props} user_id={this.state.user_id} handleNewProject={this.handleNewProject} />} />
+        <Route path="/new" component={(props) => <AddRender {...props} user_id={this.state.user_id} handleNewProject={this.handleNewProject} account={this.state.account}/>} />
         <Route path="/download/:id"  component={(props) => <Download {...props} user_id={this.state.user_id}/>} />
         <Route path="/login" component={(props) => <LoginRender {...props} login_action_handler={(user_id, account) => {this.setState({user_id: user_id, account: account, query: false})}} />} />
         <Redirect from="/" to="/home" />
@@ -206,16 +206,8 @@ class App extends Component {
         <div class="row copyright">
           <div class="col-md-12 text-center">
             <p>
-              <small class="block">If you're seeing this, you are probably viewing a half-completed website.</small>
-              <small class="block">Designed by <a href="http://freehtml5.co/" target="_blank">FreeHTML5.co</a> Demo Images: <a href="http://unsplash.co/" target="_blank">Unsplash</a></small>
-            </p>
-            <p>
-              <ul class="fh5co-social-icons">
-                <li><a href="#"><i class="icon-twitter"></i></a></li>
-                <li><a href="#"><i class="icon-facebook"></i></a></li>
-                <li><a href="#"><i class="icon-linkedin"></i></a></li>
-                <li><a href="#"><i class="icon-dribbble"></i></a></li>
-              </ul>
+              <small class="block">Demo Video: <a href="http://unsplash.co/" target="_blank">Link</a></small>
+              <small>Github: <a href="https://github.com/BaiiYuan/final_PIXULA" target="_blank">https://github.com/BaiiYuan/final_PIXULA</a></small>
             </p>
           </div>
         </div>

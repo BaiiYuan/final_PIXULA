@@ -70,7 +70,7 @@ export default class StyleTransfer extends Component {
       styleIndex: index,
       styleImageLink: style_param_list[e.target.value].link
     })
-    this.props.selectStyle(index, style_param_list[e.target.value].link)
+    this.props.selectStyle(index, style_param_list[e.target.value].name)
     if (index === 0) {
       this.setState({transferStyle: false})
       document.getElementById('previewImage').src = ""

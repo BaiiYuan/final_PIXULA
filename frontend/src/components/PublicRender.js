@@ -73,7 +73,7 @@ export default class PublicRender extends Component {
 												View<i class="icon-arrow-right22"></i>
 											</NavLink>
 											</li>
-											<li><i class="icon-eye2"></i>Made by: somebody</li>
+											<li><i class="icon-eye2"></i>Made by: {e.account}</li>
 										</ul>
 									</div>
 								</div>

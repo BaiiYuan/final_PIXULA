@@ -27,7 +27,7 @@ export default class AddRender extends Component {
     console.log(props)
     this.state = {
       imageOriginal: "",//"LZUEDmb",
-      imageTransfer: "",
+      imageTransfer: "None",
       imageFinal: "",
       title: "",
       description: "",
@@ -111,21 +111,19 @@ export default class AddRender extends Component {
       console.log(link)
       imageOriginal = link
       await this.setState({
-        imageTransfer: "",
         imageFinal: link,
       })
     } else {
       console.log(this.state.imageOriginal)
       await this.setState({
-        imageTransfer: "",
         imageFinal: this.state.imageOriginal,
       })
     }
     const date = new Date()
-
     this.createProject(
       {variables: {
         author: this.props.user_id,
+        account: this.props.account,
         title: this.state.title,
         description: this.state.description,
         imageOriginal: this.state.imageOriginal,
@@ -141,10 +139,10 @@ export default class AddRender extends Component {
     this.setState({submit: true, project_id: data.createProject.id})
   }
 
-  selectStyle(index, link) {
+  selectStyle(index, name) {
     this.setState({
       styleIndex: index,
-      imageTransfer: link,
+      imageTransfer: name
     })
     if (index === 0) {
       this.setState({transferStyle: false})
