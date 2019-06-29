@@ -70,7 +70,7 @@ export default class ProjectsRender extends Component {
 										<p>{e.description}</p>
 										<ul class="stuff">
 											<li>
-												<NavLink key={e.id} to={"/Projects/" + e.id} class="icon-arrow-right22">
+												<NavLink key={e.id} to={"/projects/" + e.id} class="icon-arrow-right22">
 													Edit<i class="icon-arrow-right22"></i>
 												</NavLink>
 											</li>

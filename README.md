@@ -7,7 +7,7 @@
 
 * 這是一個可以供使用者註冊登入、上傳自己的照片、編輯、分享、下載的app
 * GitHub： <https://github.com/BaiiYuan/final_PIXULA>
-* Demo影片連結：
+* Demo影片連結：https://youtu.be/cCLkKoNSR24
 
 ### Usage
 
@@ -27,6 +27,7 @@
 
 * <https://pixula.herokuapp.com/>
 * **由於伺服器在長時間閒置會進入休眠，所以有時開啟要等很久（真的很久）**
+* **當畫面跑很久之後會出現error，此時再重新整理就好**
 
 
 
@@ -43,13 +44,18 @@
 
 
 
-### 使用、參考之第三方套件、框架、程式碼
+### 使用與參考之框架、模組、原始碼
 
 * **css**: <https://freehtml5.co/>
 * **imgur**: <https://github.com/MiguhRuiz/react-imgur-upload>
 * **style-transform** <https://github.com/reiinakano/arbitrary-image-stylization-tfjs>
 * **filter**: <https://github.com/picturepan2/instagram.css>
 * **image crop**: <https://github.com/DominicTobias/react-image-crop>
+
+
+
+### 使用、參考之第三方套件、框架、程式碼
+
 * **backend**: graphql-yoga, babel, mongoose, nodemon
 * **frontend**: React, bootstrap, magenta, apollo
 * **db**: mongodb
@@ -64,10 +70,3 @@
 * 李栢淵：前端、filter、style transform
 
 * 蔡青邑：前端、功能整合、demo影片
-
-
-
-### 心得
-
-
-

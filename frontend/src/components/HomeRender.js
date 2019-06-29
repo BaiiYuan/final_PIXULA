@@ -19,7 +19,7 @@ export default class HomeRender extends Component {
               <div class="display-t js-fullheight">
                 <div class="display-tc js-fullheight animate-box" data-animate-effect="fadeIn" style={{height: "900px"}}>
                   <h1>Create your own filter, own style,  &amp; share them!</h1>
-                  <p><a class="btn btn-primary btn-lg btn-demo" href="#"> View Demo</a>
+                  <p><a class="btn btn-primary btn-lg btn-demo" target="_blank" href="https://youtu.be/cCLkKoNSR24"> View Demo</a>
                   <NavLink to="/login" class="btn btn-primary btn-lg btn-learn">Register</NavLink></p>
                 </div>
               </div>

@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import { Query, Mutation, renderToStringWithData } from 'react-apollo'
-import { NavLink, Switch, Route, Redirect } from "react-router-dom";
+import { Query } from 'react-apollo'
+import { Redirect } from "react-router-dom";
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 
 import {
-  PROJECT_INFO_QUERY,
-  UPDATE_PROJECT_MUTATION
+  PROJECT_INFO_QUERY
 } from '../graphql'
 
 import "../css/style.css"
@@ -303,12 +302,6 @@ export default class Download extends Component {
       return (
         <div>
           {this.renderLoginRedirect()}
-          <Mutation mutation={UPDATE_PROJECT_MUTATION}>
-            {updateProject => {
-              this.updateProject = updateProject
-              return <div></div>
-            }}
-          </Mutation>
           <div id="fh5co-header">
             <div class="container">
               <div class="row animate-box">

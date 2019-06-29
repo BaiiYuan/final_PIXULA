@@ -206,7 +206,7 @@ class App extends Component {
         <div class="row copyright">
           <div class="col-md-12 text-center">
             <p>
-              <small class="block">Demo Video: <a href="http://unsplash.co/" target="_blank">Link</a></small>
+              <small class="block">Demo Video: <a href="https://youtu.be/cCLkKoNSR24" target="_blank">Link</a></small>
               <small>Github: <a href="https://github.com/BaiiYuan/final_PIXULA" target="_blank">https://github.com/BaiiYuan/final_PIXULA</a></small>
             </p>
           </div>
